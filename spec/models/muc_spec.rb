@@ -1,0 +1,57 @@
+require 'spec_helper'
+
+describe Jubjub::Muc do
+  
+  describe "instance method" do
+    
+    describe "inspect" do
+      
+      it "should not show connection information" do
+        m = Jubjub::Muc.new(Jubjub::Jid.new("hello@conference.foo.com"),nil,"SHHHH CONNECTION OBJECT")
+        m.inspect.should_not match 'SHHHH CONNECTION OBJECT'
+      end
+      
+      it "should show string version of jid" do
+        m = Jubjub::Muc.new(Jubjub::Jid.new("hello@conference.foo.com"),nil,mock)
+        m.inspect.should match 'hello@conference.foo.com'
+      end
+      
+      it "should show name" do
+        m = Jubjub::Muc.new(Jubjub::Jid.new("hello@conference.foo.com"),nil,mock)
+        m.inspect.should match '@name=nil'
+        
+        m = Jubjub::Muc.new(Jubjub::Jid.new("hello@conference.foo.com"),"Hey there",mock)
+        m.inspect.should match '@name="Hey there"'
+      end
+      
+    end
+    
+    describe "jid" do
+      it "should return the jid object" do
+        Jubjub::Muc.new("hello@conference.foo.com",nil,mock).jid.should == Jubjub::Jid.new("hello@conference.foo.com")
+      end
+    end
+    
+    describe "name" do
+      it "should return the name" do
+        Jubjub::Muc.new("hello@conference.foo.com",nil,mock).name.should be_nil
+        Jubjub::Muc.new("hello@conference.foo.com","bar",mock).name.should eql("bar")
+      end
+    end
+    
+    describe "destroy" do
+      
+      it "should call muc.destroy on connection" do
+        mock_connection = mock
+        mock_connection.stub_chain :muc, :destroy
+        mock_connection.muc.should_receive(:destroy).with( Jubjub::Jid.new 'hello@conference.foo.com' )
+        
+        m = Jubjub::Muc.new('hello@conference.foo.com',nil,mock_connection)
+        m.destroy
+      end
+      
+    end
+    
+  end
+  
+end

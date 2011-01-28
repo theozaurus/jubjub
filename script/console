@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.join( File.dirname(File.dirname(__FILE__)), 'lib' )
+
+require 'rubygems'
+require 'irb'
+require 'jubjub'
+
+class User
+  
+  include Jubjub::User
+  
+  attr_accessor :jid, :password
+  
+  jubjub_client :jid => :jid, :password => :password
+
+end
+
+IRB.start

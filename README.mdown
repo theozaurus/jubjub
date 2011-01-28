@@ -1,0 +1,74 @@
+Description
+===========
+
+Jubjub is an object to XMPP mapping library designed to be used inside of a web app to simplify the administration of XMPP resources. It aims to provide a very simple interface which hides the complexity of the XMPP protocol allowing your code to communicate intent rather than implementation details. This also makes the code significantly easier to mock and test.
+
+Currently it uses [xmpp_gateway](https://github.com/theozaurus/xmpp_gateway) to communicate to the XMPP server. This allows Jubjub to be used within non evented web servers like [Phusion Passenger](http://www.modrails.com).
+
+It is currently alpha software and merely a proof of concept.
+
+Requirements
+============
+
+It is currently fully tested against:
+
+ - Ruby 1.8.7
+ - Ruby 1.9.2
+ 
+Examples
+========
+
+    require 'jubjub'
+    class User
+  
+      attr_accessor :xmpp_jid, :xmpp_password
+  
+      # :jid and :password are used to point to methods that contain
+      # the credentials required to login as a user
+      include Jubjub::User
+      jubjub_client :jid => :xmpp_jid, :password => :xmpp_password
+  
+    end
+
+    u = User.new
+    u.xmpp_jid = "theozaurus@jabber.org"
+    u.xmpp_password = "ruby"
+
+    # Sensibly defaults to conference.YOUR_CONNECTION_JID
+    u.mucs
+    => [
+      #<Jubjub::Muc:0x1027222b8 @jid="all@conference.jabber.org" @name="all">,
+      #<Jubjub::Muc:0x102722038 @jid="all-linux-ru@conference.jabber.org" @name="all-linux-ru">,
+      #<Jubjub::Muc:0x102721b60 @jid="allgorithmus@conference.jabber.org" @name="Allgorithmus Project">,
+    ...
+
+    # Fancy a list from a different service?
+    u.mucs('conference.jabber.ru')
+    => [
+      #<Jubjub::Muc:0x10166e930 @jid="tota-room@conference.jabber.ru" @name="tota-room (5)">,
+      #<Jubjub::Muc:0x10166e6b0 @jid="friends_room@conference.jabber.ru" @name="Friends (6)">,
+      #<Jubjub::Muc:0x10166dcb0 @jid="think_linux@conference.jabber.ru" @name="think_linux (n/a)">
+    ...
+
+    # Create a room
+    room = u.mucs.create('jubjub')
+    => #<Jubjub::Muc:0x101532f58 @jid="jubjub@conference.jabber.org" @name=nil>
+
+    # Create a room somewhere else
+    room = u.mucs('chat.test.com').create('jubjub')
+    => #<Jubjub::Muc:0x10161c3b0 @jid="jubjub@chat.test.com" @name=nil>
+
+    # Destroy a room
+    room.destroy
+    => true
+    
+TODO
+====
+
+ - Error handling
+ - MUC Configuration
+ - MUC user role and affiliation control
+ - Service discovery
+ - Pubsub / PEP
+ - Operations that are not IQ based, such as rosters and two way messaging
+ - Other backends (for servers that are evented)

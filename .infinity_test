@@ -1,0 +1,35 @@
+infinity_test do
+
+  notifications :growl do
+    show_images :mode => :mario_bros
+  end
+
+  use :rubies => %w(1.9.2 ree), :test_framework => :rspec
+
+  # use :specific_options => {'jruby' => 'J-cp bar/whisky-in-the.jar:.'}
+
+  before(:each_ruby) do |environment|
+    # ...
+  end
+
+  after(:each_ruby) do |environment|
+    # ...
+  end
+
+  before_run do
+    clear :terminal
+  end
+
+  after_run do
+    # ...
+  end
+
+  #heuristics('my_pattern') do |file|
+    # ...
+  #end
+
+  replace_patterns do |application|
+    # ...
+  end
+
+end

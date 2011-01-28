@@ -3,30 +3,6 @@
   request: !ruby/struct:VCR::Request 
     method: :post
     uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3Ciq%20to%3D%27conference%2Etheo%2Dtemplate%2Elocal%27%20%20%20%20type%3D%27get%27%3E%20%20%3Cquery%20xmlns%3D%27http%3A%2F%2Fjabber%2Eorg%2Fprotocol%2Fdisco%23items%27%2F%3E%3C%2Fiq%3E
-    headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
-      code: 200
-      message: ...
-    headers: 
-      content-type: 
-      - application/xml
-      content-length: 
-      - "429"
-    body: |
-      <iq type="result" id="blather0013" from="conference.theo-template.local" to="theozaurus@theo-template.local/17270958381296211655360060">
-        <query xmlns="http://jabber.org/protocol/disco#items">
-          <item jid="test_1@conference.theo-template.local" name="test_1 (1)"/>
-          <item jid="test_2@conference.theo-template.local" name="test_2 (1)"/>
-        </query>
-      </iq>
-
-    http_version: "1.1"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
     body: stanza=%3cpresence%20to%3d%27test_1%40conference.theo-template.local%2fnick%27%3e%20%20%3cx%20xmlns%3d%27http%3a%2f%2fjabber.org%2fprotocol%2fmuc%27%2f%3e%3c%2fpresence%3e
     headers: 
       content-type: 
@@ -41,7 +17,7 @@
       content-length: 
       - "40"
     body: |
-      #<EventMachine::Timer:0x000001010f3500>
+      #<EventMachine::Timer:0x00000100aec0f8>
 
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
@@ -60,9 +36,9 @@
       content-type: 
       - application/xml
       content-length: 
-      - "205"
+      - "206"
     body: |
-      <iq type="result" id="blather0025" from="test_1@conference.theo-template.local" to="theozaurus@theo-template.local/5882873291296222534142876">
+      <iq type="result" id="blather0055" from="test_1@conference.theo-template.local" to="theozaurus@theo-template.local/23583348631296224068193605">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -85,7 +61,7 @@
       content-length: 
       - "40"
     body: |
-      #<EventMachine::Timer:0x00000100c0aed0>
+      #<EventMachine::Timer:0x00000100ac4468>
 
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
@@ -104,9 +80,9 @@
       content-type: 
       - application/xml
       content-length: 
-      - "205"
+      - "206"
     body: |
-      <iq type="result" id="blather0027" from="test_2@conference.theo-template.local" to="theozaurus@theo-template.local/5882873291296222534142876">
+      <iq type="result" id="blather0057" from="test_2@conference.theo-template.local" to="theozaurus@theo-template.local/23583348631296224068193605">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -127,9 +103,9 @@
       content-type: 
       - application/xml
       content-length: 
-      - "428"
+      - "429"
     body: |
-      <iq type="result" id="blather0029" from="conference.theo-template.local" to="theozaurus@theo-template.local/5882873291296222534142876">
+      <iq type="result" id="blather0059" from="conference.theo-template.local" to="theozaurus@theo-template.local/23583348631296224068193605">
         <query xmlns="http://jabber.org/protocol/disco#items">
           <item jid="test_1@conference.theo-template.local" name="test_1 (1)"/>
           <item jid="test_2@conference.theo-template.local" name="test_2 (1)"/>

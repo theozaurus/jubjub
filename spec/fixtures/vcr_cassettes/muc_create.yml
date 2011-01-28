@@ -3,46 +3,6 @@
   request: !ruby/struct:VCR::Request 
     method: :post
     uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3Cpresence%20to%3D%27room%40conference%2Etheo%2Dtemplate%2Elocal%2Fnick%27%3E%20%20%3Cx%20xmlns%3D%27http%3A%2F%2Fjabber%2Eorg%2Fprotocol%2Fmuc%27%2F%3E%3C%2Fpresence%3E
-    headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
-      code: 200
-      message: ...
-    headers: 
-      content-type: 
-      - application/xml
-      content-length: 
-      - "40"
-    body: |
-      #<EventMachine::Timer:0x000001010aff30>
-
-    http_version: "1.1"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3Ciq%20to%3D%27room%40conference%2Etheo%2Dtemplate%2Elocal%27%20%20%20%20type%3D%27set%27%3E%20%20%3Cquery%20xmlns%3D%27http%3A%2F%2Fjabber%2Eorg%2Fprotocol%2Fmuc%23owner%27%3E%20%20%20%20%3Cx%20xmlns%3D%27jabber%3Ax%3Adata%27%20type%3D%27submit%27%2F%3E%20%20%3C%2Fquery%3E%3C%2Fiq%3E
-    headers: 
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
-      code: 200
-      message: ...
-    headers: 
-      content-type: 
-      - application/xml
-      content-length: 
-      - "204"
-    body: |
-      <iq type="result" id="blather0011" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/17270958381296211655360060">
-        <query xmlns="http://jabber.org/protocol/muc#owner"/>
-      </iq>
-
-    http_version: "1.1"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
     body: stanza=%3cpresence%20to%3d%27room%40conference.theo-template.local%2fnick%27%3e%20%20%3cx%20xmlns%3d%27http%3a%2f%2fjabber.org%2fprotocol%2fmuc%27%2f%3e%3c%2fpresence%3e
     headers: 
       content-type: 
@@ -57,7 +17,7 @@
       content-length: 
       - "40"
     body: |
-      #<EventMachine::Timer:0x00000101181d28>
+      #<EventMachine::Timer:0x00000100b18d38>
 
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
@@ -76,9 +36,9 @@
       content-type: 
       - application/xml
       content-length: 
-      - "203"
+      - "204"
     body: |
-      <iq type="result" id="blather0023" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/5882873291296222534142876">
+      <iq type="result" id="blather0053" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/23583348631296224068193605">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 

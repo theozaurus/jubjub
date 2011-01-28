@@ -1,4 +1,4 @@
-require "curb"
+require "net/http"
 require "nokogiri"
 require "jubjub/connection/xmpp_gateway/muc"
 
@@ -19,22 +19,27 @@ module Jubjub
       end
       
       def write(stanza)
-        decode(Curl::Easy.perform(url){|e|
-          e.username = @jid.to_s
-          e.password = @password
-          e.post_body = Curl::PostField.content('stanza',stanza).to_s
-          e.http_auth_types = :basic
-        })
+        req = Net::HTTP::Post.new( url.path )
+        req.basic_auth( @jid.to_s, @password )
+        req.set_form_data( { 'stanza'=> stanza }, ';' )
+        res = Net::HTTP.new(url.host, url.port).start {|http| http.request req }
+        case res
+        when Net::HTTPSuccess
+          # OK
+        else
+          #res.error!
+        end      
+        decode res.body
       end
 
     private
     
       def url
-        "http://#{@settings[:host]}:#{@settings[:port]}"
+        URI.parse "http://#{@settings[:host]}:#{@settings[:port]}/"
       end
       
-      def decode(curl_response)
-        Nokogiri::XML::Document.parse curl_response.body_str
+      def decode(http_body)
+        Nokogiri::XML::Document.parse http_body
       end
 
     end

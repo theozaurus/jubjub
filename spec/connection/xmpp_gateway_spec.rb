@@ -24,6 +24,11 @@ describe Jubjub::Connection::XmppGateway do
       
       use_vcr_cassette 'muc list', :record => :new_episodes
       
+      before do
+        @connection.muc.create Jubjub::Jid.new( 'test_1@conference.theo-template.local/nick' )
+        @connection.muc.create Jubjub::Jid.new( 'test_2@conference.theo-template.local/nick' )
+      end
+      
       it "return an array of Jubjub::Muc" do
         list = @connection.muc.list( Jubjub::Jid.new 'conference.theo-template.local' )
         list.should be_a_kind_of Array

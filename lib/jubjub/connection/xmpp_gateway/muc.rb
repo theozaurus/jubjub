@@ -37,13 +37,13 @@ module Jubjub
           room_jid = Jubjub::Jid.new full_jid.node, full_jid.domain
           
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.iq(:type => 'set', :to => room_jid) {
-              xml.query('xmlns' => 'http://jabber.org/protocol/muc#owner'){
-                xml.x('xmlns' => 'jabber:x:data', :type => 'submit') {
+            xml.iq_(:type => 'set', :to => room_jid) {
+              xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner'){
+                xml.x_('xmlns' => 'jabber:x:data', :type => 'submit') {
                   configuration.settings.each{|name,values|
-                    xml.field('var' => name){
+                    xml.field_('var' => name){
                       values.each {|v|
-                        xml.value v
+                        xml.value_ v
                       }
                     }
                   } if configuration
@@ -214,8 +214,8 @@ module Jubjub
           room_jid = Jubjub::Jid.new full_jid.node, full_jid.domain
           
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.iq(:to => room_jid, :type => 'get') {
-              xml.query('xmlns' => 'http://jabber.org/protocol/muc#owner')
+            xml.iq_(:to => room_jid, :type => 'get') {
+              xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner')
             }
           end
           
@@ -267,9 +267,9 @@ module Jubjub
         #     type='result'/>
         def destroy(jid)
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.iq(:to => jid, :type => 'set') {
-              xml.query('xmlns' => 'http://jabber.org/protocol/muc#owner'){
-                xml.destroy
+            xml.iq_(:to => jid, :type => 'set') {
+              xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner'){
+                xml.destroy_
               }
             }
           end
@@ -309,8 +309,8 @@ module Jubjub
         # </iq>
         def list(jid)
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.iq(:to => jid, :type => 'get') {
-              xml.query('xmlns' => 'http://jabber.org/protocol/disco#items')
+            xml.iq_(:to => jid, :type => 'get') {
+              xml.query_('xmlns' => 'http://jabber.org/protocol/disco#items')
             }
           end
           
@@ -331,8 +331,8 @@ module Jubjub
       
         def presence(full_jid)
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.presence(:to => full_jid) {
-              xml.x('xmlns' => 'http://jabber.org/protocol/muc')
+            xml.presence_(:to => full_jid) {
+              xml.x_('xmlns' => 'http://jabber.org/protocol/muc')
             }
           end
           

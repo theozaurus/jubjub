@@ -17,14 +17,14 @@
       content-length: 
       - "40"
     body: |
-      #<EventMachine::Timer:0x0000010118fce8>
+      #<EventMachine::Timer:0x00000100a06288>
 
     http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
     uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22room%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22room%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%3e%0a%20%20%20%20%20%20%3cfield%20var%3d%22allow_query_users%22%3e%0a%20%20%20%20%20%20%20%20%3cvalue%3etrue%3c%2fvalue%3e%0a%20%20%20%20%20%20%3c%2ffield%3e%0a%20%20%20%20%3c%2fx%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -36,9 +36,9 @@
       content-type: 
       - application/xml
       content-length: 
-      - "204"
+      - "203"
     body: |
-      <iq type="result" id="blather0027" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/34112166161296558195646897">
+      <iq type="result" id="blather001d" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/9294273861296560773995396">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -59,9 +59,9 @@
       content-type: 
       - application/xml
       content-length: 
-      - "204"
+      - "203"
     body: |
-      <iq type="result" id="blather0029" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/34112166161296558195646897">
+      <iq type="result" id="blather001f" from="room@conference.theo-template.local" to="theozaurus@theo-template.local/9294273861296560773995396">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 

@@ -6,13 +6,27 @@ describe Jubjub::MucCollection do
     
     describe "create" do
       
+      before do
+        @mock_connection = mock
+        @mock_connection.stub(:jid).and_return( Jubjub::Jid.new 'admin@foo.com' )
+        @mock_connection.stub_chain :muc, :create
+      end
+      
       it "should call muc.create on connection" do
-        mock_connection = mock
-        mock_connection.stub(:jid).and_return( Jubjub::Jid.new 'admin@foo.com' )
-        mock_connection.stub_chain :muc, :create
-        mock_connection.muc.should_receive(:create).with( Jubjub::Jid.new 'hello@conference.foo.com/admin' )
+        @mock_connection.muc.should_receive(:create).with( Jubjub::Jid.new 'hello@conference.foo.com/admin' )
         
-        Jubjub::MucCollection.new("conference.foo.com", mock_connection).create("hello")
+        Jubjub::MucCollection.new("conference.foo.com", @mock_connection).create("hello")
+      end
+      
+      it "should yield a MucConfiguration if a block is given" do
+        @config = Jubjub::MucConfiguration.new( "allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
+        
+        @mock_connection.muc.should_receive( :configuration ).with( Jubjub::Jid.new( 'hello@conference.foo.com/admin' )).and_return( @config )
+        @mock_connection.muc.should_receive( :create        ).with( Jubjub::Jid.new( 'hello@conference.foo.com/admin' ), @config )
+        
+        Jubjub::MucCollection.new("conference.foo.com", @mock_connection).create("hello"){|config|
+          config.should == @config
+        }
       end
       
     end

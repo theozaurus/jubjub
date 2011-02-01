@@ -58,6 +58,11 @@ Examples
     room = u.mucs('chat.test.com').create('jubjub')
     => #<Jubjub::Muc:0x10161c3b0 @jid="jubjub@chat.test.com" @name=nil>
 
+    # Create a room with a custom configuration
+    room = u.mucs.create('customjub'){|c|
+      c['muc#roomconfig_allowinvites'] = false
+    }
+
     # Destroy a room
     room.destroy
     => true
@@ -66,7 +71,6 @@ TODO
 ====
 
  - Error handling
- - MUC Configuration
  - MUC user role and affiliation control
  - Service discovery
  - Pubsub / PEP

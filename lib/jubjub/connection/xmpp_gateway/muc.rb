@@ -327,11 +327,23 @@ module Jubjub
           }
         end
         
+        # http://xmpp.org/extensions/xep-0045.html#exit
+        # <presence
+        #     from='hag66@shakespeare.lit/pda'
+        #     to='darkcave@chat.shakespeare.lit/thirdwitch'
+        #     type='unavailable'/>
+        def exit(full_jid)
+          presence full_jid, :unavailable
+        end
+        
       private
       
-        def presence(full_jid)
+        def presence(full_jid, availability = :available)
+          options = { :to => full_jid }
+          options[:type] = availability unless availability == :available
+          
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.presence_(:to => full_jid) {
+            xml.presence_(options) {
               xml.x_('xmlns' => 'http://jabber.org/protocol/muc')
             }
           end

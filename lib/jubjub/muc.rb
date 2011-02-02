@@ -9,6 +9,13 @@ module Jubjub
       @connection = connection
     end 
     
+    def exit(nick = nil)
+      full_jid = Jubjub::Jid.new @jid.node, @jid.domain, nick || @connection.jid.node
+      
+      @connection.muc.exit(full_jid)
+      self
+    end
+    
     def destroy
       @connection.muc.destroy(@jid)
     end

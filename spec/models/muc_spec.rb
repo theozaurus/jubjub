@@ -39,6 +39,34 @@ describe Jubjub::Muc do
       end
     end
     
+    describe "exit" do
+      before do
+        muc_mock = mock
+        muc_mock.stub(:exit) # exit doesn't work in a stub chain, manually build it
+        
+        @mock_connection = mock
+        @mock_connection.stub(:jid).and_return( Jubjub::Jid.new 'nick@foo.com' )
+        @mock_connection.stub(:muc).and_return( muc_mock )
+      end
+      
+      it "should call muc.exit on connection" do
+        @mock_connection.muc.should_receive(:exit).with( Jubjub::Jid.new 'room@conference.foo.com/nick' )
+        
+        Jubjub::Muc.new("room@conference.foo.com",nil,@mock_connection).exit
+      end
+      
+      it "should support custom nick name" do
+        @mock_connection.muc.should_receive(:exit).with( Jubjub::Jid.new 'room@conference.foo.com/custom_nick' )
+        
+        Jubjub::Muc.new("room@conference.foo.com",nil,@mock_connection).exit('custom_nick')
+      end
+      
+      it "should be chainable" do
+        room = Jubjub::Muc.new("room@conference.foo.com",nil,@mock_connection)
+        room.exit.should eql room
+      end
+    end
+    
     describe "destroy" do
       
       it "should call muc.destroy on connection" do

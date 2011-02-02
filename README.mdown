@@ -62,10 +62,15 @@ Examples
     room = u.mucs.create('customjub'){|c|
       c['muc#roomconfig_allowinvites'] = false
     }
-
+    
     # Destroy a room
     room.destroy
     => true
+    
+    # Create a persistent room and exit it
+    u.mucs.create('persistent'){|c|
+      c['muc#roomconfig_persistentroom'] = true
+    }.exit
     
 TODO
 ====

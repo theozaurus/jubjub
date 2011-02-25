@@ -60,14 +60,12 @@ module Jubjub
       list.inspect
     end
     
-  protected
+  private
   
     def method_missing(name, *args, &block)
       list.send(name, *args, &block)
     end
-    
-  private
-  
+      
     def list
       @list ||= @connection.muc.list @jid
     end

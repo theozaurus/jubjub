@@ -1,6 +1,7 @@
 require "net/http"
 require "nokogiri"
 require "jubjub/connection/xmpp_gateway/muc"
+require "jubjub/connection/xmpp_gateway/pubsub"
 
 module Jubjub
   module Connection
@@ -16,6 +17,10 @@ module Jubjub
       
       def muc
         @muc ||= Muc.new(self)
+      end
+      
+      def pubsub
+        @pubsub ||= Pubsub.new(self)
       end
       
       def write(stanza)

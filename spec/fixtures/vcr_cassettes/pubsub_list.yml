@@ -1,0 +1,119 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%22%3e%0a%20%20%20%20%3ccreate%20node%3d%22node_1%22%2f%3e%0a%20%20%3c%2fpubsub%3e%0a%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "231"
+    body: |
+      <iq type="result" id="blather00db" from="pubsub.theo-template.local" to="theozaurus@theo-template.local/3334638571298641302447941">
+        <pubsub xmlns="http://jabber.org/protocol/pubsub">
+          <create node="node_1"/>
+        </pubsub>
+      </iq>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%22%3e%0a%20%20%20%20%3ccreate%20node%3d%22node_2%22%2f%3e%0a%20%20%3c%2fpubsub%3e%0a%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "231"
+    body: |
+      <iq type="result" id="blather00dd" from="pubsub.theo-template.local" to="theozaurus@theo-template.local/3334638571298641302447941">
+        <pubsub xmlns="http://jabber.org/protocol/pubsub">
+          <create node="node_2"/>
+        </pubsub>
+      </iq>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22get%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fdisco%23items%22%2f%3e%0a%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "1502"
+    body: |
+      <iq type="result" id="blather00df" from="pubsub.theo-template.local" to="theozaurus@theo-template.local/3334638571298641302447941">
+        <query xmlns="http://jabber.org/protocol/disco#items">
+          <item jid="pubsub.theo-template.local" name="node_1" node="node_1"/>
+          <item jid="pubsub.theo-template.local" name="node_2" node="node_2"/>
+        </query>
+      </iq>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%23owner%22%3e%0a%20%20%20%20%3cdelete%20node%3d%22node_1%22%2f%3e%0a%20%20%3c%2fpubsub%3e%0a%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "133"
+    body: |
+      <iq type="result" id="blather00e1" from="pubsub.theo-template.local" to="theozaurus@theo-template.local/3334638571298641302447941"/>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%23owner%22%3e%0a%20%20%20%20%3cdelete%20node%3d%22node_2%22%2f%3e%0a%20%20%3c%2fpubsub%3e%0a%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "133"
+    body: |
+      <iq type="result" id="blather00e3" from="pubsub.theo-template.local" to="theozaurus@theo-template.local/3334638571298641302447941"/>
+
+    http_version: "1.1"

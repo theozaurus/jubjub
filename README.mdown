@@ -72,6 +72,47 @@ Examples
       c['muc#roomconfig_persistentroom'] = true
     }.exit
     
+    # List pubsub nodes
+    u.pubsub
+    => [
+      #<Jubjub::Pubsub:0x101f23c88 @service="pubsub.jabber.org" @node="facts">,
+      #<Jubjub::Pubsub:0x101f23a30 @service="pubsub.jabber.org" @node="news">
+    ]
+    
+    # List from a different service?
+    u.pubsub('pubsub.jabber.ru')
+    => [
+      ...
+    ]
+    
+    # Create a pubsub node
+    node = u.pubsub.create('node_1')
+    => #<Jubjub::Pubsub:0x101f3bae0 @service="pubsub.jabber.org" @node="node_1">
+    
+    # Subscribe to node
+    subscription = node.subscribe
+    => #<Jubjub::PubsubSubscription:0x101effd60 @service="pubsub.jabber.org" @node="node_1" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
+    
+    # Subscribe to something else
+    u.pubsub.subscribe('new_thing')
+    => #<Jubjub::PubsubSubscription:0x101effd60 @service="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
+    
+    # Unsubscribe
+    subscription.unsubscribe
+    => true
+    
+    # Destroy a node directly
+    node.destroy
+    => true
+    
+    # Destroy another node
+    u.pubsub.destroy('spare_node')
+    => true
+    
+    # Destroy another node with redirect
+    u.pubsub.destroy('old_node', 'pubsub.jabber.ru', 'new_new')
+    => true
+    
 TODO
 ====
 

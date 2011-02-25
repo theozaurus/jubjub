@@ -131,6 +131,22 @@ describe Jubjub::User do
         @user.mucs('wibble.com').jid.should == Jubjub::Jid.new('wibble.com')
       end
     end
+    
+    describe 'pubsub' do
+      before do
+        mock_jubjub_connection
+      end
+         
+      it 'should return Jubjub::PubsubCollection for conference.biggles.com when no service specified' do        
+        @user.pubsub.should be_a Jubjub::PubsubCollection
+        @user.pubsub.jid.should == Jubjub::Jid.new('pubsub.biggles.com')
+      end
+      
+      it 'should return Jubjub::PubsubCollection for service when specified' do
+        @user.pubsub('wibble.com').should be_a Jubjub::PubsubCollection
+        @user.pubsub('wibble.com').jid.should == Jubjub::Jid.new('wibble.com')
+      end
+    end
 
   end
   

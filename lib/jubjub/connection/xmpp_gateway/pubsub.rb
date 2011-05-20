@@ -217,7 +217,67 @@ module Jubjub
             '//iq[@type="result"]'
           ).any?
         end
-      
+        
+        # http://xmpp.org/extensions/xep-0060.html#publisher-publish
+        # <iq type='set'
+        #     from='hamlet@denmark.lit/blogbot'
+        #     to='pubsub.shakespeare.lit'
+        #     id='publish1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+        #     <publish node='princely_musings'>
+        #       <item id='ae890ac52d0df67ed7cfdf51b644e901'>
+        #         ...
+        #       </item>
+        #     </publish>
+        #   </pubsub>
+        # </iq>
+        # 
+        # Expected
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     to='hamlet@denmark.lit/blogbot'
+        #     id='publish1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+        #     <publish node='princely_musings'>
+        #       <item id='ae890ac52d0df67ed7cfdf51b644e901'/>
+        #     </publish>
+        #   </pubsub>
+        # </iq>
+        def publish(jid, node, data, item_id = nil)
+          item_options = {}
+          item_options[:id] = item_id if item_id
+          
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'set') {
+              xml.pubsub_('xmlns' => namespaces['pubsub']) {
+                xml.publish_(:node => node){
+                  xml.item_(item_options){
+                    if data.respond_to?( :to_builder )
+                      data.to_builder(xml.parent)
+                    else
+                      xml << data
+                    end
+                  }
+                }
+              }
+            }
+          end
+          
+          result = write(
+            # Generate stanza
+            request.to_xml
+          ).xpath(
+            # Pull out required parts
+            '//iq[@type="result"]/pubsub:pubsub/pubsub:publish/pubsub:item',
+            namespaces
+          )
+          if result.any?
+            item_id = result.first.attr('id')
+            data = request.doc.xpath("//pubsub:item/*", namespaces).to_s
+            Jubjub::PubsubItem.new jid, node, item_id, data, @connection
+          end
+        end
+        
       private
       
         def subscriber

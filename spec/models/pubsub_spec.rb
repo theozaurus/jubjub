@@ -76,6 +76,33 @@ describe Jubjub::Pubsub do
       
     end
     
+    describe "publish" do
+      
+      before do
+        @mock_connection = mock
+        @mock_connection.stub_chain :pubsub, :publish
+      end
+      
+      describe "with item id" do
+        it "should call pubsub.publish on connection" do
+          @mock_connection.pubsub.should_receive(:publish).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', 'data', '123' )
+
+          m = Jubjub::Pubsub.new 'pubsub.foo.com', 'node', @mock_connection
+          m.publish 'data', '123'
+        end
+      end
+      
+      describe "without item id" do
+        it "should call pubsub.publish on connection" do
+          @mock_connection.pubsub.should_receive(:publish).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', 'data', nil )
+
+          m = Jubjub::Pubsub.new 'pubsub.foo.com', 'node', @mock_connection
+          m.publish 'data'
+        end
+      end
+      
+    end
+    
     describe "destroy" do
       
       before do

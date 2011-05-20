@@ -105,6 +105,10 @@ Examples
     u.pubsub.subscribe('new_thing')
     => #<Jubjub::PubsubSubscription:0x101effd60 @service="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
     
+    # Publish to a node
+    u.pubsub['node_1'].publish(Jubjub::DataForm.new({:foo => {:type => 'boolean', :value => 'bar'}}))
+    => #<Jubjub::PubsubItem:0x101f2e9f8 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>false</value>\n  </field>\n</x>"> 
+    
     # Unsubscribe
     subscription.unsubscribe
     => true

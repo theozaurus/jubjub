@@ -148,6 +148,57 @@ describe Jubjub::Connection::XmppGateway do
       
     end
     
+    describe "publish" do
+      use_vcr_cassette 'pubsub setup node', :record => :new_episodes
+      
+      before do
+        @connection.pubsub.create 'pubsub.theo-template.local', 'node_1'
+      end
+      
+      describe "with id" do
+        use_vcr_cassette 'pubsub publish with id', :record => :new_episodes
+        
+        it "should return a Jubjub::PubsubItem" do
+          i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new, '123'
+          i.should be_a_kind_of Jubjub::PubsubItem
+          i.item_id.should == '123'
+          i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\"/>"
+        end
+        
+      end
+      
+      describe "with string payload" do
+        use_vcr_cassette 'pubsub publish with string payload', :record => :new_episodes
+        
+        it "should return a Jubjub::PubsubItem" do
+          item = "<x xmlns=\"jabber:x:data\" type=\"submit\"><field var=\"foo\"><value>true</value></field></x>"
+          i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', item
+          i.should be_a_kind_of Jubjub::PubsubItem
+          i.item_id.should be_a_kind_of String
+          i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
+        end
+        
+      end
+      
+      describe "with dataform payload" do
+        use_vcr_cassette 'pubsub publish with dataform payload', :record => :new_episodes
+        
+        it "should return a Jubjub::PubsubItem" do
+          i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new({ :foo => {:type => "boolean", :value => true }})
+          i.should be_a_kind_of Jubjub::PubsubItem
+          i.item_id.should be_a_kind_of String
+          i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
+        end
+        
+      end
+      
+      after do
+        # Clean up the node
+        @connection.pubsub.destroy 'pubsub.theo-template.local', 'node_1'
+      end      
+
+    end
+    
   end
   
 end

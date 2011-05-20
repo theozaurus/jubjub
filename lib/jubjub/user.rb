@@ -1,6 +1,9 @@
 require 'jubjub/errors'
 require 'jubjub/jid'
 require 'jubjub/connection/xmpp_gateway'
+require 'jubjub/pubsub'
+require 'jubjub/muc'
+require 'jubjub/data_form'
 
 module Jubjub
   

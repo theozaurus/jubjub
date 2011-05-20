@@ -33,21 +33,13 @@ module Jubjub
         #     to='crone1@shakespeare.lit/desktop'
         #     type='result'/>
         #
-        def create(full_jid, configuration = nil)
+        def create(full_jid, configuration = Jubjub::MucConfiguration.new)
           room_jid = Jubjub::Jid.new full_jid.node, full_jid.domain
           
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:type => 'set', :to => room_jid) {
               xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner'){
-                xml.x_('xmlns' => 'jabber:x:data', :type => 'submit') {
-                  configuration.settings.each{|name,values|
-                    xml.field_('var' => name){
-                      values.each {|v|
-                        xml.value_ v
-                      }
-                    }
-                  } if configuration
-                }
+                configuration.to_builder(xml.parent)
               }
             }
           end

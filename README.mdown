@@ -50,6 +50,10 @@ Examples
       #<Jubjub::Muc:0x10166dcb0 @jid="think_linux@conference.jabber.ru" @name="think_linux (n/a)">
     ...
 
+    # Find a room
+    u.mucs('conference.jabber.ru')['tota-room']
+    => #<Jubjub::Muc:0x10166e930 @jid="tota-room@conference.jabber.ru" @name="tota-room (5)">
+
     # Create a room
     room = u.mucs.create('jubjub')
     => #<Jubjub::Muc:0x101532f58 @jid="jubjub@conference.jabber.org" @name=nil>

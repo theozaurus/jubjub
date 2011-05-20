@@ -37,13 +37,42 @@ describe Jubjub::MucCollection do
       end
     end
     
+    describe "[]" do
+      before do
+        @mock_connection = mock
+        @rooms = [
+          Jubjub::Muc.new('room_1@conference.foo.com', nil, @mock_connection),
+          Jubjub::Muc.new('room_2@conference.foo.com', nil, @mock_connection)
+        ]
+        @mock_connection.stub_chain( :muc, :list ).and_return(@rooms)
+      end
+      
+      subject { Jubjub::MucCollection.new('conference.foo.com', @mock_connection) }
+      
+      it "should work like a normal array when passed a Fixnum" do
+        subject[1].should == @rooms[1]
+      end
+      
+      it "should search by node if a String" do
+        subject["room_1"].should == @rooms[0]
+      end
+      
+      it "should search by jid if a Jubjub::Jid" do
+        subject[Jubjub::Jid.new("room_1@conference.foo.com")].should == @rooms[0]
+      end
+      
+      it "should return nil if nothing found" do
+        subject['made-up'].should be_nil
+      end
+    end
+    
     describe "that are proxied like" do
       
       before do
         @mock_connection = mock
         @rooms = [
-          Jubjub::Muc.new('room_1', nil, @mock_connection),
-          Jubjub::Muc.new('room_2', nil, @mock_connection)        
+          Jubjub::Muc.new('room_1@conference.foo.com', nil, @mock_connection),
+          Jubjub::Muc.new('room_2@conference.foo.com', nil, @mock_connection)
         ]
         @mock_connection.stub_chain( :muc, :list ).and_return(@rooms)
       end
@@ -60,7 +89,7 @@ describe Jubjub::MucCollection do
 
         it "should pass the block to the rooms" do
           c = Jubjub::MucCollection.new('conference.foo.com', @mock_connection)
-          c.map{|r| r.jid.to_s }.should eql(['room_1', 'room_2'])
+          c.map{|r| r.jid.to_s }.should eql(['room_1@conference.foo.com', 'room_2@conference.foo.com'])
         end
 
       end

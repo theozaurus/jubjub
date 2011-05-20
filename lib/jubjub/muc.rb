@@ -55,6 +55,18 @@ module Jubjub
       
     end
     
+    def [](jid_node_num)
+      case jid_node_num
+      when Fixnum
+        list[jid_node_num]
+      when Jubjub::Jid
+        list.find{|m| m.jid == jid_node_num }
+      else
+        j = Jubjub::Jid.new jid_node_num, jid.domain
+        list.find{|m| m.jid == j }        
+      end
+    end
+    
     # Hint that methods are actually applied to list using method_missing
     def inspect
       list.inspect

@@ -87,6 +87,15 @@ module Jubjub
       @connection.pubsub.unsubscribe jid, node, subid
     end
     
+    def [](node_num)
+      case node_num
+      when Fixnum
+        list[node_num]
+      else
+        list.find{|p| p.node == node_num }        
+      end
+    end
+    
     # Hint that methods are actually applied to list using method_missing
     def inspect
       list.inspect

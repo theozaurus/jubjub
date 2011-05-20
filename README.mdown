@@ -83,6 +83,10 @@ Examples
       #<Jubjub::Pubsub:0x101f23a30 @service="pubsub.jabber.org" @node="news">
     ]
     
+    # Find a pubsub node
+    u.pubsub['facts']
+    => #<Jubjub::Pubsub:0x101f23c88 @service="pubsub.jabber.org" @node="facts">
+    
     # List from a different service?
     u.pubsub('pubsub.jabber.ru')
     => [

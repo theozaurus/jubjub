@@ -85,6 +85,32 @@ describe Jubjub::PubsubCollection do
       end
     end
     
+    describe "[]" do
+      before do
+        @mock_connection = mock
+        @nodes = [
+          Jubjub::Pubsub.new('pubsub.foo.com', 'node_1', @mock_connection),
+          Jubjub::Pubsub.new('pubsub.foo.com', 'node_2', @mock_connection)        
+        ]
+        @mock_connection.stub_chain( :pubsub, :list ).and_return(@nodes)
+      end
+      
+      subject { Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection }
+      
+      it "should work like a normal array when passed a Fixnum" do
+        subject[1].should == @nodes[1]
+      end
+      
+      it "should search by node if a String" do
+        subject["node_1"].should == @nodes[0]
+      end
+      
+      it "should return nil if nothing found" do
+        subject['made-up'].should be_nil
+      end
+    end
+    
+    
     describe "destroy" do
       it "with redirect should call pubsub.destroy on connection" do
         @mock_connection = mock

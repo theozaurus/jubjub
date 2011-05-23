@@ -117,6 +117,17 @@ Examples
     u.pubsub['node_1'].retract('abc')
     => true
     
+    # List items on a node
+    u.pubsub['node_1'].items
+    => [
+      #<Jubjub::PubsubItem:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">,
+      ...
+    ]
+    
+    # Retrieve an item from a node
+    u.pubsub['node_1'].items['519DCAA72FFD6']
+    => #<Jubjub::PubsubItem:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">
+    
     # Unsubscribe
     subscription.unsubscribe
     => true
@@ -138,7 +149,7 @@ TODO
 
  - Error handling
  - MUC user role and affiliation control
+ - Pubsub configuration
  - Service discovery
- - Pubsub / PEP
  - Operations that are not IQ based, such as rosters and two way messaging
  - Other backends (for servers that are evented)

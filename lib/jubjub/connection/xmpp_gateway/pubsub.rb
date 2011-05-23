@@ -312,6 +312,64 @@ module Jubjub
           ).xpath('//iq[@type="result"]').any?
         end
         
+        # http://xmpp.org/extensions/xep-0060.html#subscriber-retrieve
+        # <iq type='get'
+        #     from='francisco@denmark.lit/barracks'
+        #     to='pubsub.shakespeare.lit'
+        #     id='items1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+        #     <items node='princely_musings'/>
+        #   </pubsub>
+        # </iq>
+        # 
+        # Expected
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     to='francisco@denmark.lit/barracks'
+        #     id='items1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+        #     <items node='princely_musings'>
+        #       <item id='368866411b877c30064a5f62b917cffe'>
+        #         <entry xmlns='http://www.w3.org/2005/Atom'>
+        #           <title>The Uses of This World</title>
+        #           <summary>
+        # O, that this too too solid flesh would melt
+        # Thaw and resolve itself into a dew!
+        #           </summary>
+        #           <link rel='alternate' type='text/html'
+        #                 href='http://denmark.lit/2003/12/13/atom03'/>
+        #           <id>tag:denmark.lit,2003:entry-32396</id>
+        #           <published>2003-12-12T17:47:23Z</published>
+        #           <updated>2003-12-12T17:47:23Z</updated>
+        #         </entry>
+        #       </item>
+        #       ...
+        #     </items>
+        #   </pubsub>
+        # </iq>
+        def retrieve_items(jid, node)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'get') {
+              xml.pubsub_(:xmlns => namespaces['pubsub']){
+                xml.items_(:node => node)
+              }
+            }
+          end
+          
+          write(
+            # Generate stanza
+            request.to_xml
+          ).xpath(
+            # Pull out required parts
+            '//iq[@type="result"]/pubsub:pubsub/pubsub:items/pubsub:item',
+            namespaces
+          ).map{|item|
+            item_id = item.attr('id')
+            data = item.xpath('./*').to_xml
+            Jubjub::PubsubItem.new jid, node, item_id, data, @connection
+          }
+        end
+        
       private
       
         def subscriber

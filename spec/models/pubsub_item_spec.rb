@@ -61,6 +61,27 @@ describe Jubjub::PubsubItem do
       end
     end
     
+    describe "==" do
+      it "should match equivalent objects" do
+        pubsub_item_factory.should == pubsub_item_factory
+      end
+      
+      it "should not distinguish between connections" do
+        pubsub_item_factory(:connection => 'wibble').should == pubsub_item_factory(:connection => 'wobble')
+      end
+      
+      it "should still match no matter how jid is initialized" do
+        pubsub_item_factory(:jid => 'foo@bar.com').should == pubsub_item_factory(:jid => Jubjub::Jid.new('foo@bar.com'))
+      end
+      
+      it "should not match objects with different attributes" do
+        pubsub_item_factory(:jid     => 'a.b.com').should_not == pubsub_item_factory   
+        pubsub_item_factory(:node    => 'adsafsd').should_not == pubsub_item_factory
+        pubsub_item_factory(:item_id => '23').should_not == pubsub_item_factory
+        pubsub_item_factory(:data    => '<wibble></wibble').should_not == pubsub_item_factory
+      end
+    end
+    
   end
   
 end

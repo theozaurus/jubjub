@@ -222,6 +222,34 @@ describe Jubjub::Connection::XmppGateway do
       end
     end
     
+    describe "retrieve_items" do
+      use_vcr_cassette 'pubsub retrieve items', :record => :new_episodes
+      
+      before do
+        @connection.pubsub.create 'pubsub.theo-template.local', 'node_retrieve_items'
+        @connection.pubsub.publish 'pubsub.theo-template.local', 'node_retrieve_items', Jubjub::DataForm.new(:bar => {:type => :boolean, :value => true}), 'efg'
+        @connection.pubsub.publish 'pubsub.theo-template.local', 'node_retrieve_items', Jubjub::DataForm.new(:foo => {:type => :boolean, :value => false}), 'abc'
+      end
+      
+      it "should return array of PubsubItem when successful" do
+        expected = [
+          Jubjub::PubsubItem.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'abc', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"foo\">\n            <value>false</value>\n          </field>\n        </x>", @connection ),
+          Jubjub::PubsubItem.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'efg', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"bar\">\n            <value>true</value>\n          </field>\n        </x>", @connection )
+        ]
+        
+        @connection.pubsub.retrieve_items( 'pubsub.theo-template.local', 'node_retrieve_items' ).should == expected
+      end
+      
+      it "should return empty array when not successful" do
+        @connection.pubsub.retrieve_items( 'pubsub.theo-template.local', 'node_retrieve_items_wibble' ).should == []
+      end
+      
+      after do
+        # Clean up the node
+        @connection.pubsub.destroy 'pubsub.theo-template.local', 'node_retrieve_items'
+      end
+    end
+    
   end
   
 end

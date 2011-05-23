@@ -141,6 +141,21 @@ describe Jubjub::Pubsub do
       
     end
     
+    describe "items" do
+      
+      before do
+        @mock_connection = mock
+      end
+      
+      it 'should return Jubjub::PubsubItemCollection' do
+        @pubsub_node = Jubjub::Pubsub.new 'pubsub.foo.com', 'node', @mock_connection
+        @pubsub_node.items.should be_a Jubjub::PubsubItemCollection
+        @pubsub_node.items.jid.should  == Jubjub::Jid.new('pubsub.foo.com')
+        @pubsub_node.items.node.should == 'node'
+      end
+      
+    end
+    
   end
   
 end

@@ -278,6 +278,40 @@ module Jubjub
           end
         end
         
+        # http://xmpp.org/extensions/xep-0060.html#publisher-delete
+        # <iq type='set'
+        #     from='hamlet@denmark.lit/elsinore'
+        #     to='pubsub.shakespeare.lit'
+        #     id='retract1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub'>
+        #     <retract node='princely_musings'>
+        #       <item id='ae890ac52d0df67ed7cfdf51b644e901'/>
+        #     </retract>
+        #   </pubsub>
+        # </iq>
+        # 
+        # Expected
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     to='hamlet@denmark.lit/elsinore'
+        #     id='retract1'/>
+        def retract(jid, node, item_id)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'set') {
+              xml.pubsub_('xmlns' => namespaces['pubsub']) {
+                xml.retract_(:node => node){
+                  xml.item_ :id => item_id
+                }
+              }
+            }
+          end
+          
+          write(
+            # Generate stanza
+            request.to_xml
+          ).xpath('//iq[@type="result"]').any?
+        end
+        
       private
       
         def subscriber

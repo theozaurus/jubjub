@@ -29,6 +29,10 @@ module Jubjub
       @connection.pubsub.publish jid, node, data, item_id
     end
     
+    def retract(item_id)
+      @connection.pubsub.retract jid, node, item_id
+    end
+    
     # Hide the connection details and show jid as string for compactness
     def inspect
       obj_id = "%x" % (object_id << 1)
@@ -53,6 +57,10 @@ module Jubjub
     def inspect
       obj_id = "%x" % (object_id << 1)
       "#<#{self.class}:0x#{obj_id} @jid=\"#{jid}\" @node=#{node.inspect} @item_id=#{item_id.inspect} @data=#{data.inspect}>"
+    end
+    
+    def retract
+      @connection.pubsub.retract jid, node, item_id
     end
     
   end

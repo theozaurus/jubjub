@@ -103,6 +103,17 @@ describe Jubjub::Pubsub do
       
     end
     
+    describe "retract" do
+      it "should call pubsub.retract on connection" do
+        @mock_connection = mock
+        @mock_connection.stub_chain :pubsub, :retract
+        @mock_connection.pubsub.should_receive(:retract).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', '123' )
+    
+        m = Jubjub::Pubsub.new 'pubsub.foo.com', 'node', @mock_connection
+        m.retract('123')
+      end
+    end
+    
     describe "destroy" do
       
       before do

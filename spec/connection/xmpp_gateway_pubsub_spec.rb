@@ -195,8 +195,31 @@ describe Jubjub::Connection::XmppGateway do
       after do
         # Clean up the node
         @connection.pubsub.destroy 'pubsub.theo-template.local', 'node_1'
-      end      
+      end
 
+    end
+    
+    describe "retract" do
+      use_vcr_cassette 'pubsub retract', :record => :new_episodes
+      
+      before do
+        @connection.pubsub.create 'pubsub.theo-template.local', 'node_pubsub_retract'
+      end
+      
+      it "should return true when successful" do
+        item = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_pubsub_retract', Jubjub::DataForm.new()
+        
+        @connection.pubsub.retract( 'pubsub.theo-template.local', 'node_pubsub_retract', item.item_id ).should be_true
+      end
+      
+      it "should return false when not successful" do
+        @connection.pubsub.retract( 'pubsub.theo-template.local', 'node_pubsub_retract', "wibble" ).should be_false        
+      end
+      
+      after do
+        # Clean up the node
+        @connection.pubsub.destroy 'pubsub.theo-template.local', 'node_pubsub_retract'
+      end
     end
     
   end

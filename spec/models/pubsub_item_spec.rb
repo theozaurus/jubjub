@@ -50,6 +50,17 @@ describe Jubjub::PubsubItem do
       end
     end
     
+    describe "retract" do
+      it "should call pubsub.retract on connection" do
+        @mock_connection = mock
+        @mock_connection.stub_chain :pubsub, :retract
+        @mock_connection.pubsub.should_receive(:retract).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', '123' )
+    
+        p = pubsub_item_factory :jid => 'pubsub.foo.com', :node => 'node', :item_id => '123', :connection => @mock_connection
+        p.retract
+      end
+    end
+    
   end
   
 end

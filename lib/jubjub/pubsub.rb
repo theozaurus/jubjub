@@ -17,6 +17,10 @@ module Jubjub
       @connection.pubsub.destroy jid, node, redirect_jid, redirect_node
     end
     
+    def purge
+      @connection.pubsub.purge jid, node
+    end
+    
     def subscribe
       @connection.pubsub.subscribe jid, node
     end
@@ -163,6 +167,10 @@ module Jubjub
     def destroy(node, redirect_jid = nil, redirect_node = nil)
       redirect_jid = Jubjub::Jid.new(redirect_jid) if redirect_jid
       @connection.pubsub.destroy jid, node, redirect_jid, redirect_node
+    end
+    
+    def purge(node)
+      @connection.pubsub.purge jid, node
     end
     
     def subscribe(node)

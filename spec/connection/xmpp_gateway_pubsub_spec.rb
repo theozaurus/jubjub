@@ -40,6 +40,24 @@ describe Jubjub::Connection::XmppGateway do
       end
     end
     
+    describe "purge" do
+      use_vcr_cassette 'pubsub purge', :record => :new_episodes
+      
+      before do
+        @connection.pubsub.create 'pubsub.theo-template.local', 'node_pubsub_purge'
+      end
+      
+      it "should send correct stanza" do
+        # will attempt to create new vcr cassette if the stanza is wrong
+        # relies on cassette being manually checked
+        @connection.pubsub.purge('pubsub.theo-template.local', 'node_pubsub_purge').should be_true
+      end
+      
+      after do
+        @connection.pubsub.destroy 'pubsub.theo-template.local', 'node_pubsub_purge'
+      end
+    end
+    
     describe "list" do
       
       use_vcr_cassette 'pubsub list', :record => :new_episodes

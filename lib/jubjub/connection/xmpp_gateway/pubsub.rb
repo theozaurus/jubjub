@@ -130,6 +130,38 @@ module Jubjub
           ).any?
         end
         
+        # http://xmpp.org/extensions/xep-0060.html#owner-purge
+        # <iq type='set'
+        #     from='hamlet@denmark.lit/elsinore'
+        #     to='pubsub.shakespeare.lit'
+        #     id='purge1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <purge node='princely_musings'/>
+        #   </pubsub>
+        # </iq>
+        #
+        # Expected
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     id='purge1'/>
+        def purge(jid,node)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'set') {
+              xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
+                xml.purge_('node' => node)
+              }
+            }
+          end
+          
+          success = write(
+            # Generate stanza
+            request.to_xml
+          ).xpath(
+            # Pull out required parts
+            '//iq[@type="result"]'
+          ).any?
+        end
+        
         # http://xmpp.org/extensions/xep-0060.html#subscriber-subscribe
         # <iq type='set'
         #     from='francisco@denmark.lit/barracks'

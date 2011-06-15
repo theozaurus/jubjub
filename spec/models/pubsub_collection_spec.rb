@@ -143,6 +143,25 @@ describe Jubjub::PubsubCollection do
       end
     end
     
+    describe "purge" do
+      
+      before do
+        @mock_connection = mock
+        @mock_connection.stub_chain :pubsub, :purge
+      end
+      
+      it "should call pubsub.purge on connection" do
+        @mock_connection.pubsub.should_receive(:purge).with(
+          Jubjub::Jid.new('pubsub.foo.com'),
+          'node'
+        )
+        
+        m = Jubjub::PubsubCollection.new 'pubsub.foo.com', @mock_connection
+        m.purge('node')
+      end
+      
+    end
+    
   end
   
 end

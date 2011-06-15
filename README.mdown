@@ -128,6 +128,14 @@ Examples
     u.pubsub['node_1'].items['519DCAA72FFD6']
     => #<Jubjub::PubsubItem:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">
     
+    # Purge a node
+    node.purge
+    => true
+    
+    # Or
+    u.pubsub.purge('node_1')
+    => true
+    
     # Unsubscribe
     subscription.unsubscribe
     => true

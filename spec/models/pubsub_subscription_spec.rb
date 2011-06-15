@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Jubjub::PubsubSubscription do
+describe Jubjub::Pubsub::Subscription do
   
   def pubsub_subscription_factory(override = {})
     options = {
@@ -12,7 +12,7 @@ describe Jubjub::PubsubSubscription do
       :connection   => "SHHHH CONNECTION OBJECT"
     }.merge( override )
     
-    Jubjub::PubsubSubscription.new(
+    Jubjub::Pubsub::Subscription.new(
       options[:jid],
       options[:node],
       options[:subscriber],

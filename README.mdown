@@ -99,15 +99,15 @@ Examples
     
     # Subscribe to node
     subscription = node.subscribe
-    => #<Jubjub::PubsubSubscription:0x101effd60 @service="pubsub.jabber.org" @node="node_1" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
+    => #<Jubjub::Pubsub::Subscription:0x101effd60 @service="pubsub.jabber.org" @node="node_1" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
     
     # Subscribe to something else
     u.pubsub.subscribe('new_thing')
-    => #<Jubjub::PubsubSubscription:0x101effd60 @service="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
+    => #<Jubjub::Pubsub::Subscription:0x101effd60 @service="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
     
     # Publish to a node
     item = u.pubsub['node_1'].publish(Jubjub::DataForm.new({:foo => {:type => 'boolean', :value => 'bar'}}))
-    => #<Jubjub::PubsubItem:0x101f2e9f8 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>false</value>\n  </field>\n</x>"> 
+    => #<Jubjub::Pubsub::Item:0x101f2e9f8 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>false</value>\n  </field>\n</x>"> 
     
     # Retract an item from a node
     item.retract
@@ -120,13 +120,13 @@ Examples
     # List items on a node
     u.pubsub['node_1'].items
     => [
-      #<Jubjub::PubsubItem:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">,
+      #<Jubjub::Pubsub::Item:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">,
       ...
     ]
     
     # Retrieve an item from a node
     u.pubsub['node_1'].items['519DCAA72FFD6']
-    => #<Jubjub::PubsubItem:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">
+    => #<Jubjub::Pubsub::Item:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">
     
     # Purge a node
     node.purge

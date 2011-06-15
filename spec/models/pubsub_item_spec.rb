@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Jubjub::PubsubItem do
+describe Jubjub::Pubsub::Item do
   
   def pubsub_item_factory(override = {})
     options = {
@@ -11,7 +11,7 @@ describe Jubjub::PubsubItem do
       :connection => "SHHHH CONNECTION OBJECT"
     }.merge( override )
     
-    Jubjub::PubsubItem.new(
+    Jubjub::Pubsub::Item.new(
       options[:jid],
       options[:node],
       options[:item_id],

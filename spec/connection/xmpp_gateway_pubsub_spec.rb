@@ -109,10 +109,10 @@ describe Jubjub::Connection::XmppGateway do
         @connection.pubsub.create 'pubsub.theo-template.local', 'node_1'
       end
       
-      it "return a Jubjub::PubsubSubscription" do
+      it "return a Jubjub::Pubsub::Subscription" do
         @subscription = @connection.pubsub.subscribe( 'pubsub.theo-template.local', 'node_1' )
         
-        @subscription.should be_a_kind_of Jubjub::PubsubSubscription
+        @subscription.should be_a_kind_of Jubjub::Pubsub::Subscription
         @subscription.jid.should == Jubjub::Jid.new('pubsub.theo-template.local')
         @subscription.node.should == 'node_1'
         @subscription.subscriber.should == @jid
@@ -176,9 +176,9 @@ describe Jubjub::Connection::XmppGateway do
       describe "with id" do
         use_vcr_cassette 'pubsub publish with id', :record => :new_episodes
         
-        it "should return a Jubjub::PubsubItem" do
+        it "should return a Jubjub::Pubsub::Item" do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new, '123'
-          i.should be_a_kind_of Jubjub::PubsubItem
+          i.should be_a_kind_of Jubjub::Pubsub::Item
           i.item_id.should == '123'
           i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\"/>"
         end
@@ -188,10 +188,10 @@ describe Jubjub::Connection::XmppGateway do
       describe "with string payload" do
         use_vcr_cassette 'pubsub publish with string payload', :record => :new_episodes
         
-        it "should return a Jubjub::PubsubItem" do
+        it "should return a Jubjub::Pubsub::Item" do
           item = "<x xmlns=\"jabber:x:data\" type=\"submit\"><field var=\"foo\"><value>true</value></field></x>"
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', item
-          i.should be_a_kind_of Jubjub::PubsubItem
+          i.should be_a_kind_of Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
           i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
         end
@@ -201,9 +201,9 @@ describe Jubjub::Connection::XmppGateway do
       describe "with dataform payload" do
         use_vcr_cassette 'pubsub publish with dataform payload', :record => :new_episodes
         
-        it "should return a Jubjub::PubsubItem" do
+        it "should return a Jubjub::Pubsub::Item" do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new({ :foo => {:type => "boolean", :value => true }})
-          i.should be_a_kind_of Jubjub::PubsubItem
+          i.should be_a_kind_of Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
           i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
         end
@@ -249,10 +249,10 @@ describe Jubjub::Connection::XmppGateway do
         @connection.pubsub.publish 'pubsub.theo-template.local', 'node_retrieve_items', Jubjub::DataForm.new(:foo => {:type => :boolean, :value => false}), 'abc'
       end
       
-      it "should return array of PubsubItem when successful" do
+      it "should return array of Pubsub::Item when successful" do
         expected = [
-          Jubjub::PubsubItem.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'abc', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"foo\">\n            <value>false</value>\n          </field>\n        </x>", @connection ),
-          Jubjub::PubsubItem.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'efg', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"bar\">\n            <value>true</value>\n          </field>\n        </x>", @connection )
+          Jubjub::Pubsub::Item.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'abc', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"foo\">\n            <value>false</value>\n          </field>\n        </x>", @connection ),
+          Jubjub::Pubsub::Item.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'efg', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"bar\">\n            <value>true</value>\n          </field>\n        </x>", @connection )
         ]
         
         @connection.pubsub.retrieve_items( 'pubsub.theo-template.local', 'node_retrieve_items' ).should == expected

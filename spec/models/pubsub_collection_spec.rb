@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Jubjub::PubsubCollection do
+describe Jubjub::Pubsub::Collection do
   
   describe "that are proxied like" do
     
@@ -16,7 +16,7 @@ describe Jubjub::PubsubCollection do
     describe "inspect" do
 
       it "should show the list of rooms, not MucCollection" do
-        Jubjub::PubsubCollection.new('pubsub.foo.com', @mock_connection).inspect.should eql(@nodes.inspect)
+        Jubjub::Pubsub::Collection.new('pubsub.foo.com', @mock_connection).inspect.should eql(@nodes.inspect)
       end
 
     end
@@ -24,7 +24,7 @@ describe Jubjub::PubsubCollection do
     describe "map" do
 
       it "should pass the block to the rooms" do
-        c = Jubjub::PubsubCollection.new('pubsub.foo.com', @mock_connection)
+        c = Jubjub::Pubsub::Collection.new('pubsub.foo.com', @mock_connection)
         c.map{|r| r.node.to_s }.should eql(['node_1', 'node_2'])
       end
 
@@ -36,7 +36,7 @@ describe Jubjub::PubsubCollection do
     
     describe "jid" do
       it "should return the jid" do
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", mock
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", mock
         p.jid.should == Jubjub::Jid.new('pubsub.foo.com')
       end
     end
@@ -47,7 +47,7 @@ describe Jubjub::PubsubCollection do
         @mock_connection.stub_chain :pubsub, :subscribe
         @mock_connection.pubsub.should_receive(:subscribe).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node' )
     
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.subscribe "node"       
       end
     end
@@ -61,14 +61,14 @@ describe Jubjub::PubsubCollection do
       it "without subid should call pubsub.unsubscribe on connection" do
         @mock_connection.pubsub.should_receive(:unsubscribe).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', nil )
 
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.unsubscribe "node"       
       end
       
       it "with subid should call pubsub.unsubscribe on connection" do
         @mock_connection.pubsub.should_receive(:unsubscribe).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', '123' )
 
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.unsubscribe "node", "123"
       end
     end
@@ -80,7 +80,7 @@ describe Jubjub::PubsubCollection do
         
         @mock_connection.pubsub.should_receive(:create).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node' )        
         
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.create "node"
       end
     end
@@ -95,7 +95,7 @@ describe Jubjub::PubsubCollection do
         @mock_connection.stub_chain( :pubsub, :list ).and_return(@nodes)
       end
       
-      subject { Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection }
+      subject { Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection }
       
       it "should work like a normal array when passed a Fixnum" do
         subject[1].should == @nodes[1]
@@ -123,7 +123,7 @@ describe Jubjub::PubsubCollection do
           'node_2'
         )
         
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.destroy "node", "pubsub.new.com", "node_2"
       end
       
@@ -138,7 +138,7 @@ describe Jubjub::PubsubCollection do
           nil
         )
         
-        p = Jubjub::PubsubCollection.new "pubsub.foo.com", @mock_connection
+        p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.destroy "node"
       end
     end
@@ -156,7 +156,7 @@ describe Jubjub::PubsubCollection do
           'node'
         )
         
-        m = Jubjub::PubsubCollection.new 'pubsub.foo.com', @mock_connection
+        m = Jubjub::Pubsub::Collection.new 'pubsub.foo.com', @mock_connection
         m.purge('node')
       end
       

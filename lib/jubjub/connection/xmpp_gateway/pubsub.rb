@@ -208,7 +208,7 @@ module Jubjub
             subscriber   = Jubjub::Jid.new(result.first.attr('jid'))
             subid        = result.first.attr('subid') 
             subscription = result.first.attr('subscription')
-            Jubjub::PubsubSubscription.new jid, node, subscriber, subid, subscription, @connection
+            Jubjub::Pubsub::Subscription.new jid, node, subscriber, subid, subscription, @connection
           end
         end
         
@@ -306,7 +306,7 @@ module Jubjub
           if result.any?
             item_id = result.first.attr('id')
             data = request.doc.xpath("//pubsub:item/*", namespaces).to_s
-            Jubjub::PubsubItem.new jid, node, item_id, data, @connection
+            Jubjub::Pubsub::Item.new jid, node, item_id, data, @connection
           end
         end
         
@@ -398,7 +398,7 @@ module Jubjub
           ).map{|item|
             item_id = item.attr('id')
             data = item.xpath('./*').to_xml
-            Jubjub::PubsubItem.new jid, node, item_id, data, @connection
+            Jubjub::Pubsub::Item.new jid, node, item_id, data, @connection
           }
         end
         

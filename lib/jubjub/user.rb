@@ -59,7 +59,7 @@ module Jubjub
       
       def pubsub(jid = nil)
         jid ||= "pubsub.#{jubjub_jid.domain}"
-        Jubjub::PubsubCollection.new jid, jubjub_connection
+        Jubjub::Pubsub::Collection.new jid, jubjub_connection
       end
     end
     

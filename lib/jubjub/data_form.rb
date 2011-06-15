@@ -6,6 +6,8 @@ module Jubjub
     attr_reader :fields
 
     def initialize(config={})
+      config = convert_xml config if config.respond_to? :xpath
+
       check_config config
 
       @fields = config
@@ -84,6 +86,34 @@ module Jubjub
           ":#{mystery_arguments.join(', :')} is not a recognised option for #{name}"
         ) if mystery_arguments.any?
       end
+    end
+    
+    def convert_xml(config)
+      config.xpath(
+        # Get fields
+        "//x_data:x[@type='form']/x_data:field",
+        namespaces
+      ).inject({}){|result,field|
+        # Build parameters
+        hash = {}
+        hash[:type]  = field.attr 'type'
+        hash[:label] = field.attr 'label'
+        
+        value = field.xpath('x_data:value', namespaces)
+        hash[:value] = hash[:type].match(/\-multi$/) ? value.map{|e| e.content } : value.text
+        
+        options = field.xpath('x_data:option', namespaces).map{|o|
+          { :label => o.attr('label'), :value => o.xpath('x_data:value', namespaces).text }
+        }
+        hash[:options] = options if options.any?
+        
+        result[field.attr 'var'] = hash unless hash[:type] == 'fixed'
+        result
+      }
+    end
+    
+    def namespaces
+      { 'x_data' => 'jabber:x:data' }
     end
 
   end

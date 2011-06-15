@@ -217,27 +217,11 @@ module Jubjub
             request.to_xml
           ).xpath(
             # Get fields
-            "//iq[@type='result']/muc_owner:query/x_data:x[@type='form']/x_data:field",
+            "//iq[@type='result']/muc_owner:query/x_data:x[@type='form']",
             namespaces
-          ).inject({}){|result,field|
-            # Build MucConfiguration parameters
-            hash = {}
-            hash[:type]  = field.attr 'type'
-            hash[:label] = field.attr 'label'
-            
-            value = field.xpath('x_data:value', namespaces)
-            hash[:value] = hash[:type].match(/\-multi$/) ? value.map{|e| e.content } : value.text
-            
-            options = field.xpath('x_data:option', namespaces).map{|o|
-              { :label => o.attr('label'), :value => o.xpath('x_data:value', namespaces).text }
-            }
-            hash[:options] = options if options.any?
-            
-            result[field.attr 'var'] = hash
-            result
-          }
+          )
           
-          Jubjub::MucConfiguration.new response
+          Jubjub::MucConfiguration.new response if response
         end
         
         # http://xmpp.org/extensions/xep-0045.html#destroyroom

@@ -2,6 +2,36 @@ shared_examples_for "any data form" do
   
   describe "creating" do
     
+    it "should understand XML to build object" do
+      dataform_1 = xml_fixture 'dataform_1'
+      dataform = subject.class.new(dataform_1)
+      
+      expected = {
+        "public"      => { :type => "boolean",      :value => "", :label => "Public bot?" },
+        "FORM_TYPE"   => { :type => "hidden",       :value => "jabber:bot", :label => nil},
+        "invitelist"  => { :type => "jid-multi",    :value => [], :label=>"People to invite"},
+        "description" => { :type => "text-multi",   :value => [], :label=>"Helpful description of your bot"},
+        "password"    => { :type => "text-private", :value => "", :label=>"Password for special access"},
+        "botname"     => { :type => "text-single",  :value => "", :label=>"The name of your bot"},
+        "features"    => { :type => "list-multi",   :value => ["news", "search"], :label => "What features will the bot support?", :options => [
+          {:value => "contests",  :label=>"Contests"},
+          {:value => "news",      :label=>"News"},
+          {:value => "polls",     :label=>"Polls"},
+          {:value => "reminders", :label=>"Reminders"}, 
+          {:value => "search",    :label=>"Search"}
+        ]},
+        "maxsubs"     => { :type => "list-single",  :value => "20", :label => "Maximum number of subscribers", :options => [
+          { :value => "10",   :label=>"10"},
+          { :value => "20",   :label=>"20"},
+          { :value => "30",   :label=>"30"},
+          { :value => "50",   :label=>"50"},
+          { :value => "100",  :label=>"100"},
+          { :value => "none", :label=>"None"}]}
+      }
+      
+      dataform.fields.should == expected
+    end
+    
     it "should understand hash to build object" do
       params = {  
         "muc#roomconfig_allowvisitornickchange" => { :type => "boolean", :value => "1", :label => "Allow visitors to change nickname" },

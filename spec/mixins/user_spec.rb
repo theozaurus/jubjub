@@ -121,13 +121,13 @@ describe Jubjub::User do
         mock_jubjub_connection
       end
          
-      it 'should return Jubjub::MucCollection for conference.biggles.com when no service specified' do        
-        @user.mucs.should be_a Jubjub::MucCollection
+      it 'should return Jubjub::Muc::Collection for conference.biggles.com when no service specified' do        
+        @user.mucs.should be_a Jubjub::Muc::Collection
         @user.mucs.jid.should == Jubjub::Jid.new('conference.biggles.com')
       end
       
-      it 'should return Jubjub::MucCollection for service when specified' do
-        @user.mucs('wibble.com').should be_a Jubjub::MucCollection
+      it 'should return Jubjub::Muc::Collection for service when specified' do
+        @user.mucs('wibble.com').should be_a Jubjub::Muc::Collection
         @user.mucs('wibble.com').jid.should == Jubjub::Jid.new('wibble.com')
       end
     end

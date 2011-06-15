@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Jubjub::MucCollection do
+describe Jubjub::Muc::Collection do
   
   describe "instance methods" do
     
@@ -15,16 +15,16 @@ describe Jubjub::MucCollection do
       it "should call muc.create on connection" do
         @mock_connection.muc.should_receive(:create).with( Jubjub::Jid.new 'hello@conference.foo.com/admin' )
         
-        Jubjub::MucCollection.new("conference.foo.com", @mock_connection).create("hello")
+        Jubjub::Muc::Collection.new("conference.foo.com", @mock_connection).create("hello")
       end
       
-      it "should yield a MucConfiguration if a block is given" do
-        @config = Jubjub::MucConfiguration.new( "allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
+      it "should yield a Muc::Configuration if a block is given" do
+        @config = Jubjub::Muc::Configuration.new( "allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
         
         @mock_connection.muc.should_receive( :configuration ).with( Jubjub::Jid.new( 'hello@conference.foo.com/admin' )).and_return( @config )
         @mock_connection.muc.should_receive( :create        ).with( Jubjub::Jid.new( 'hello@conference.foo.com/admin' ), @config )
         
-        Jubjub::MucCollection.new("conference.foo.com", @mock_connection).create("hello"){|config|
+        Jubjub::Muc::Collection.new("conference.foo.com", @mock_connection).create("hello"){|config|
           config.should == @config
         }
       end
@@ -33,7 +33,7 @@ describe Jubjub::MucCollection do
     
     describe "jid" do
       it "should return the jid" do
-        Jubjub::MucCollection.new("conference.foo.com", mock).jid.should == Jubjub::Jid.new("conference.foo.com")
+        Jubjub::Muc::Collection.new("conference.foo.com", mock).jid.should == Jubjub::Jid.new("conference.foo.com")
       end
     end
     
@@ -47,7 +47,7 @@ describe Jubjub::MucCollection do
         @mock_connection.stub_chain( :muc, :list ).and_return(@rooms)
       end
       
-      subject { Jubjub::MucCollection.new('conference.foo.com', @mock_connection) }
+      subject { Jubjub::Muc::Collection.new('conference.foo.com', @mock_connection) }
       
       it "should work like a normal array when passed a Fixnum" do
         subject[1].should == @rooms[1]
@@ -79,8 +79,8 @@ describe Jubjub::MucCollection do
       
       describe "inspect" do
 
-        it "should show the list of rooms, not MucCollection" do
-          Jubjub::MucCollection.new('conference.foo.com', @mock_connection).inspect.should eql(@rooms.inspect)
+        it "should show the list of rooms, not Muc::Collection" do
+          Jubjub::Muc::Collection.new('conference.foo.com', @mock_connection).inspect.should eql(@rooms.inspect)
         end
 
       end
@@ -88,7 +88,7 @@ describe Jubjub::MucCollection do
       describe "map" do
 
         it "should pass the block to the rooms" do
-          c = Jubjub::MucCollection.new('conference.foo.com', @mock_connection)
+          c = Jubjub::Muc::Collection.new('conference.foo.com', @mock_connection)
           c.map{|r| r.jid.to_s }.should eql(['room_1@conference.foo.com', 'room_2@conference.foo.com'])
         end
 

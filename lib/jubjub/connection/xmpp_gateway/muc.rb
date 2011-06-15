@@ -33,7 +33,7 @@ module Jubjub
         #     to='crone1@shakespeare.lit/desktop'
         #     type='result'/>
         #
-        def create(full_jid, configuration = Jubjub::MucConfiguration.new)
+        def create(full_jid, configuration = Jubjub::Muc::Configuration.new)
           room_jid = Jubjub::Jid.new full_jid.node, full_jid.domain
           
           request = Nokogiri::XML::Builder.new do |xml|
@@ -221,7 +221,7 @@ module Jubjub
             namespaces
           )
           
-          Jubjub::MucConfiguration.new response if response
+          Jubjub::Muc::Configuration.new response if response
         end
         
         # http://xmpp.org/extensions/xep-0045.html#destroyroom

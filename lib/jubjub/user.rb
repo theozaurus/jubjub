@@ -54,7 +54,7 @@ module Jubjub
       # if no jid is specified will default to 'connection.JID_DOMAIN'
       def mucs(jid = nil)
         jid ||= "conference.#{jubjub_jid.domain}"
-        Jubjub::MucCollection.new jid, jubjub_connection
+        Jubjub::Muc::Collection.new jid, jubjub_connection
       end
       
       def pubsub(jid = nil)

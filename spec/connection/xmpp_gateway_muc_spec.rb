@@ -29,7 +29,7 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc create with configuration', :record => :new_episodes
       
       it "return a Jubjub::Muc" do
-        @config = Jubjub::MucConfiguration.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Allow users to query other users" })
+        @config = Jubjub::Muc::Configuration.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Allow users to query other users" })
         
         @room = @connection.muc.create( Jubjub::Jid.new( 'room@conference.theo-template.local/nick' ), @config )
         @room.should be_a_kind_of Jubjub::Muc
@@ -46,7 +46,7 @@ describe Jubjub::Connection::XmppGateway do
       
       use_vcr_cassette 'muc configuration', :record => :new_episodes
       
-      it "return a Jubjub::MucConfiguration" do
+      it "return a Jubjub::Muc::Configuration" do
         config = @connection.muc.configuration( Jubjub::Jid.new 'room@conference.theo-template.local/nick' )
         
         expected_config = {
@@ -88,7 +88,7 @@ describe Jubjub::Connection::XmppGateway do
               { :value => "200", :label => "200" }]}
         }
         
-        config.should == Jubjub::MucConfiguration.new(expected_config)
+        config.should == Jubjub::Muc::Configuration.new(expected_config)
       end
       
     end

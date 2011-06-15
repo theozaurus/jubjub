@@ -15,7 +15,7 @@ describe Jubjub::Pubsub::Collection do
     
     describe "inspect" do
 
-      it "should show the list of rooms, not MucCollection" do
+      it "should show the list of rooms, not Muc::Collection" do
         Jubjub::Pubsub::Collection.new('pubsub.foo.com', @mock_connection).inspect.should eql(@nodes.inspect)
       end
 

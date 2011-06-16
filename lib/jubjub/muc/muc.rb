@@ -26,6 +26,12 @@ module Jubjub
       "#<#{self.class}:0x#{obj_id} @jid=\"#{@jid}\" @name=#{@name.inspect}>"
     end
     
+    def ==(other)
+      other.is_a?( self.class ) &&
+      other.jid     == self.jid &&
+      other.name    == self.name
+    end
+    
   end 
 
 end

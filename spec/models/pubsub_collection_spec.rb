@@ -105,8 +105,8 @@ describe Jubjub::Pubsub::Collection do
         subject["node_1"].should == @nodes[0]
       end
       
-      it "should return nil if nothing found" do
-        subject['made-up'].should be_nil
+      it "should return Jubjub::Pubsub item if nothing found as it may still exist" do
+        subject['made-up'].should == Jubjub::Pubsub.new( 'pubsub.foo.com', 'made-up', @mock_connection )
       end
     end
     

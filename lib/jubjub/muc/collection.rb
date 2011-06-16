@@ -30,10 +30,10 @@ class Jubjub::Muc::Collection
     when Fixnum
       list[jid_node_num]
     when Jubjub::Jid
-      list.find{|m| m.jid == jid_node_num }
+      list.find{|m| m.jid == jid_node_num } || Jubjub::Muc.new( jid_node_num, nil, @connection )
     else
       j = Jubjub::Jid.new jid_node_num, jid.domain
-      list.find{|m| m.jid == j }        
+      list.find{|m| m.jid == j } || Jubjub::Muc.new( j, nil, @connection )
     end
   end
   

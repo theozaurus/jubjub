@@ -56,14 +56,19 @@ describe Jubjub::Muc::Collection do
       it "should search by node if a String" do
         subject["room_1"].should == @rooms[0]
       end
+
+      it "should return Jubjub::Muc if nothing found for a String as it may still exist" do
+        subject['made-up'].should == Jubjub::Muc.new('made-up@conference.foo.com', nil, @mock_connection)
+      end
       
       it "should search by jid if a Jubjub::Jid" do
         subject[Jubjub::Jid.new("room_1@conference.foo.com")].should == @rooms[0]
       end
       
-      it "should return nil if nothing found" do
-        subject['made-up'].should be_nil
+      it "should return Jubjub::Muc if nothing found for a Jubjub::Jid as it may still exist" do
+        subject[Jubjub::Jid.new("made-up@conference.foo.com")].should == Jubjub::Muc.new('made-up@conference.foo.com', nil, @mock_connection)
       end
+
     end
     
     describe "that are proxied like" do

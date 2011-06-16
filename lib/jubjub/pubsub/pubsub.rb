@@ -43,6 +43,12 @@ class Jubjub::Pubsub
     ItemCollection.new jid, node, @connection
   end
   
+  def ==(other)
+    other.is_a?( self.class ) &&
+    other.jid     == self.jid &&
+    other.node    == self.node
+  end
+  
 private
 
   def method_missing(name, *args, &block)

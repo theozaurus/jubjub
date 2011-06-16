@@ -36,7 +36,7 @@ class Jubjub::Pubsub::Collection
     when Fixnum
       list[node_num]
     else
-      list.find{|p| p.node == node_num }        
+      list.find{|p| p.node == node_num } || Jubjub::Pubsub.new( jid, node_num, @connection )
     end
   end
   

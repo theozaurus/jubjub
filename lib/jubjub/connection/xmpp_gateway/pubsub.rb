@@ -402,6 +402,52 @@ module Jubjub
           }
         end
         
+        
+        # http://xmpp.org/extensions/xep-0060.html#owner-affiliations
+        # <iq type='get'
+        #     from='hamlet@denmark.lit/elsinore'
+        #     to='pubsub.shakespeare.lit'
+        #     id='ent1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <affiliations node='princely_musings'/>
+        #   </pubsub>
+        # </iq>
+        # 
+        # Expected
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     to='hamlet@denmark.lit/elsinore'
+        #     id='ent1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <affiliations node='princely_musings'>
+        #       <affiliation jid='hamlet@denmark.lit' affiliation='owner'/>
+        #       <affiliation jid='polonius@denmark.lit' affiliation='outcast'/>
+        #     </affiliations>
+        #   </pubsub>
+        # </iq>
+        def retrieve_affiliations(jid, node)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'get') {
+              xml.pubsub_(:xmlns => namespaces['pubsub_owner']){
+                xml.affiliations_(:node => node)
+              }
+            }
+          end
+          
+          write(
+            # Generate stanza
+            request.to_xml
+          ).xpath(
+            # Pull out required parts
+            '//iq[@type="result"]/pubsub_owner:pubsub/pubsub_owner:affiliations/pubsub_owner:affiliation',
+            namespaces
+          ).map{|affiliation|
+            jid = Jubjub::Jid.new affiliation.attr('jid')
+            affiliation = affiliation.attr('affiliation')
+            Jubjub::Pubsub::Affiliation.new jid, affiliation, @connection
+          }
+        end        
+        
       private
       
         def subscriber

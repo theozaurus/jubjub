@@ -268,6 +268,27 @@ describe Jubjub::Connection::XmppGateway do
       end
     end
     
+    describe "retrieve_affiliations" do
+      use_vcr_cassette 'pubsub retrieve affiliations', :record => :new_episodes
+      
+      it "should return array of Pubsub::Affiliation when successful" do
+        @connection.pubsub.create 'pubsub.theo-template.local', 'node_retrieve_affiliations'
+        
+        expected = [
+          Jubjub::Pubsub::Affiliation.new( Jubjub::Jid.new('theozaurus@theo-template.local'), 'owner', @connection )
+        ]
+        
+        @connection.pubsub.retrieve_affiliations( 'pubsub.theo-template.local', 'node_retrieve_affiliations' ).should == expected
+
+        # Clean up the node
+        @connection.pubsub.destroy 'pubsub.theo-template.local', 'node_retrieve_affiliations'
+      end
+      
+      it "should return empty array when not successful" do
+        @connection.pubsub.retrieve_affiliations( 'pubsub.theo-template.local', 'made-up' ).should == []
+      end
+    end
+    
   end
   
 end

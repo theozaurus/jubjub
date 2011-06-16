@@ -128,6 +128,23 @@ Examples
     u.pubsub['node_1'].items['519DCAA72FFD6']
     => #<Jubjub::Pubsub::Item:0x101f7bd48 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="...">
     
+    # Retrieve affiliations from a node
+    u.pubsub['node_1'].affiliations
+    => [
+      #<Jubjub::Pubsub::Affiliation:0x101f52830 @jid="theozaurus@jabber.org" @affiliation="owner">
+      ...
+    ]
+    
+    # Search affiliations
+    u.pubsub['node_1'].affiliations['theozaurus@jabber.org']
+    => #<Jubjub::Pubsub::Affiliation:0x101f52830 @jid="theozaurus@jabber.org" @affiliation="owner">
+    
+    # Test affiliations
+    u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].owner?
+    => true
+    u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].publisher?
+    => false
+    
     # Purge a node
     node.purge
     => true

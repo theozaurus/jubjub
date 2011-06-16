@@ -26,6 +26,67 @@ describe Jubjub::Connection::XmppGateway do
       end
     end
     
+    describe "default_configuration" do
+      use_vcr_cassette 'pubsub default configuration', :record => :new_episodes
+      
+      it "should return a Jubjub::Pubsub::Configuration" do
+        expected_config = {
+          "pubsub#deliver_payloads" => { :type => "boolean", :value => "1", :label => "Deliver payloads with event notifications" },
+          "pubsub#subscribe" => { :type => "boolean", :value => "1", :label => "Whether to allow subscriptions" },
+          "pubsub#notify_delete" => { :type => "boolean", :value => "0", :label => "Notify subscribers when the node is deleted" },
+          "pubsub#deliver_notifications" => { :type => "boolean", :value => "1", :label => "Deliver event notifications" },
+          "pubsub#persist_items" => { :type => "boolean", :value => "1", :label => "Persist items to storage" },
+          "pubsub#presence_based_delivery" => { :type => "boolean", :value => "0", :label => "Only deliver notifications to available users" },
+          "pubsub#notify_retract"  => { :type => "boolean", :value => "1", :label => "Notify subscribers when items are removed from the node" },
+          "pubsub#notify_config" => { :type => "boolean", :value => "0", :label => "Notify subscribers when the node configuration changes" },
+          "pubsub#max_payload_size"  => { :type => "text-single", :value => "60000", :label => "Max payload size in bytes" },
+          "pubsub#title" => { :type => "text-single", :value => "", :label => "A friendly name for the node" },
+          "pubsub#max_items" => { :type => "text-single", :value => "10", :label => "Max # of items to persist" },
+          "pubsub#collection" => { :type => "text-multi", :value => [], :label => "The collections with which a node is affiliated" },
+          "pubsub#roster_groups_allowed" => { :type => "list-multi", :value => [], :label => "Roster groups allowed to subscribe" },
+          "FORM_TYPE"  => { :type => "hidden", :value => "http://jabber.org/protocol/pubsub#node_config", :label => "" },
+          "pubsub#send_last_published_item" => {
+            :type => "list-single",
+            :value => "on_sub_and_presence",
+            :label => "When to send the last published item",
+            :options => [
+              { :value => "never",               :label => nil },
+              { :value => "on_sub",              :label => nil },
+              { :value => "on_sub_and_presence", :label => nil }]},
+          "pubsub#access_model" => {
+            :type    => "list-single",
+            :value   => "open",
+            :label   => "Specify the access model",
+            :options => [
+              { :value => "open",      :label => nil },
+              { :value => "authorize", :label => nil },
+              { :value => "presence",  :label => nil },
+              { :value => "roster",    :label => nil },
+              { :value => "whitelist", :label => nil }]},
+          "pubsub#publish_model" => {
+            :type => "list-single",
+            :value => "publishers",
+            :label => "Specify the publisher model",
+            :options => [
+              { :value => "publishers",  :label => nil },
+              { :value => "subscribers", :label => nil },
+              { :value => "open",        :label => nil }]},
+          "pubsub#notification_type" => {
+            :type    => "list-single",
+            :value   => "headline",
+            :label   => "Specify the event message type",
+            :options => [
+              { :value => "headline", :label => nil },
+              { :value => "normal",   :label => nil }]}
+        }
+        
+        config = @connection.pubsub.default_configuration 'pubsub.theo-template.local'
+        
+        config.should be_a_kind_of Jubjub::Pubsub::Configuration
+        config.should == Jubjub::Pubsub::Configuration.new( expected_config ) 
+      end
+    end
+    
     describe "destroy" do
       use_vcr_cassette 'pubsub destroy', :record => :new_episodes
       

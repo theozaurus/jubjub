@@ -14,6 +14,16 @@ class Jubjub::Pubsub::Collection
     @connection.pubsub.create jid, node
   end
   
+  def create(node, &block)
+    config = nil
+    if block_given?
+      # Configure node
+      config = @connection.pubsub.default_configuration jid
+      yield config
+    end
+    @connection.pubsub.create jid, node, config
+  end
+  
   def destroy(node, redirect_jid = nil, redirect_node = nil)
     redirect_jid = Jubjub::Jid.new(redirect_jid) if redirect_jid
     @connection.pubsub.destroy jid, node, redirect_jid, redirect_node

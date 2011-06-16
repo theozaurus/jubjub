@@ -1,0 +1,118 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22get%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%23owner%22%3e%0a%20%20%20%20%3cdefault%2f%3e%0a%20%20%3c%2fpubsub%3e%0a%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "3905"
+    body: |
+      <iq type="result" id="blather00bb" from="pubsub.theo-template.local" to="theozaurus@theo-template.local/17171467891308244735792143">
+        <pubsub xmlns="http://jabber.org/protocol/pubsub#owner">
+          <default>
+            <x xmlns="jabber:x:data" type="form">
+              <field type="hidden" label="" var="FORM_TYPE">
+                <value>http://jabber.org/protocol/pubsub#node_config</value>
+              </field>
+              <field type="boolean" label="Deliver payloads with event notifications" var="pubsub#deliver_payloads">
+                <value>1</value>
+              </field>
+              <field type="boolean" label="Deliver event notifications" var="pubsub#deliver_notifications">
+                <value>1</value>
+              </field>
+              <field type="boolean" label="Notify subscribers when the node configuration changes" var="pubsub#notify_config">
+                <value>0</value>
+              </field>
+              <field type="boolean" label="Notify subscribers when the node is deleted" var="pubsub#notify_delete">
+                <value>0</value>
+              </field>
+              <field type="boolean" label="Notify subscribers when items are removed from the node" var="pubsub#notify_retract">
+                <value>1</value>
+              </field>
+              <field type="boolean" label="Persist items to storage" var="pubsub#persist_items">
+                <value>1</value>
+              </field>
+              <field type="text-single" label="A friendly name for the node" var="pubsub#title">
+                <value/>
+              </field>
+              <field type="text-single" label="Max # of items to persist" var="pubsub#max_items">
+                <value>10</value>
+              </field>
+              <field type="boolean" label="Whether to allow subscriptions" var="pubsub#subscribe">
+                <value>1</value>
+              </field>
+              <field type="list-single" label="Specify the access model" var="pubsub#access_model">
+                <option>
+                  <value>open</value>
+                </option>
+                <option>
+                  <value>authorize</value>
+                </option>
+                <option>
+                  <value>presence</value>
+                </option>
+                <option>
+                  <value>roster</value>
+                </option>
+                <option>
+                  <value>whitelist</value>
+                </option>
+                <value>open</value>
+              </field>
+              <field type="list-multi" label="Roster groups allowed to subscribe" var="pubsub#roster_groups_allowed"/>
+              <field type="list-single" label="Specify the publisher model" var="pubsub#publish_model">
+                <option>
+                  <value>publishers</value>
+                </option>
+                <option>
+                  <value>subscribers</value>
+                </option>
+                <option>
+                  <value>open</value>
+                </option>
+                <value>publishers</value>
+              </field>
+              <field type="list-single" label="Specify the event message type" var="pubsub#notification_type">
+                <option>
+                  <value>headline</value>
+                </option>
+                <option>
+                  <value>normal</value>
+                </option>
+                <value>headline</value>
+              </field>
+              <field type="text-single" label="Max payload size in bytes" var="pubsub#max_payload_size">
+                <value>60000</value>
+              </field>
+              <field type="list-single" label="When to send the last published item" var="pubsub#send_last_published_item">
+                <option>
+                  <value>never</value>
+                </option>
+                <option>
+                  <value>on_sub</value>
+                </option>
+                <option>
+                  <value>on_sub_and_presence</value>
+                </option>
+                <value>on_sub_and_presence</value>
+              </field>
+              <field type="boolean" label="Only deliver notifications to available users" var="pubsub#presence_based_delivery">
+                <value>0</value>
+              </field>
+              <field type="text-multi" label="The collections with which a node is affiliated" var="pubsub#collection"/>
+            </x>
+          </default>
+        </pubsub>
+      </iq>
+
+    http_version: "1.1"

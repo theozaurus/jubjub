@@ -97,6 +97,11 @@ Examples
     node = u.pubsub.create('node_1')
     => #<Jubjub::Pubsub:0x101f3bae0 @service="pubsub.jabber.org" @node="node_1">
     
+    # Create a pubsub node with a custom configuration
+    u.pubsub.create('node_2'){|c|
+      c['pubsub#title'] = "Node 2" 
+    }
+    
     # Subscribe to node
     subscription = node.subscribe
     => #<Jubjub::Pubsub::Subscription:0x101effd60 @service="pubsub.jabber.org" @node="node_1" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
@@ -181,7 +186,6 @@ TODO
 
  - Error handling
  - MUC user role and affiliation control
- - Pubsub configuration
  - Service discovery
  - Operations that are not IQ based, such as rosters and two way messaging
  - Other backends (for servers that are evented)

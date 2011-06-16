@@ -74,14 +74,27 @@ describe Jubjub::Pubsub::Collection do
     end
     
     describe "create" do
-      it "should call pubsub.create on connection" do
+      before do
         @mock_connection = mock
-        @mock_connection.stub_chain :pubsub, :create
-        
-        @mock_connection.pubsub.should_receive(:create).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node' )        
+        @mock_connection.stub_chain :pubsub, :create        
+      end
+      
+      it "should call pubsub.create on connection" do
+        @mock_connection.pubsub.should_receive(:create).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', nil )
         
         p = Jubjub::Pubsub::Collection.new "pubsub.foo.com", @mock_connection
         p.create "node"
+      end
+      
+      it "should yield a Pubsub::Configuration if a block is given" do
+        @config = Jubjub::Pubsub::Configuration.new( "foo" => { :type => "boolean", :value => "1", :label => "Foo" } )
+        
+        @mock_connection.pubsub.should_receive( :default_configuration ).with( Jubjub::Jid.new( 'pubsub.foo.com' ) ).and_return( @config )
+        @mock_connection.pubsub.should_receive( :create ).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', @config )
+        
+        Jubjub::Pubsub::Collection.new( "pubsub.foo.com", @mock_connection ).create( 'node' ){|config|
+          config.should == @config
+        }
       end
     end
     

@@ -15,7 +15,7 @@ describe Jubjub::Pubsub::ItemCollection do
     
     describe "inspect" do
 
-      it "should show the list of rooms, not Muc::Collection" do
+      it "should show the list of items, not Pubsub::ItemCollection" do
         Jubjub::Pubsub::ItemCollection.new('pubsub.foo.com', 'node_1', @mock_connection).inspect.should eql(@items.inspect)
       end
 
@@ -23,7 +23,7 @@ describe Jubjub::Pubsub::ItemCollection do
 
     describe "map" do
 
-      it "should pass the block to the rooms" do
+      it "should pass the block to the items" do
         c = Jubjub::Pubsub::ItemCollection.new('pubsub.foo.com', 'node_1', @mock_connection)
         c.map{|r| r.data.to_s }.should eql(['<foo></foo>', '<bar></bar>'])
       end

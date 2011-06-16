@@ -47,6 +47,10 @@ class Jubjub::Pubsub
     AffiliationCollection.new jid, node, @connection
   end
   
+  def uri
+    "xmpp:#{@jid}?;node=#{@node}"
+  end
+  
   def ==(other)
     other.is_a?( self.class ) &&
     other.jid     == self.jid &&

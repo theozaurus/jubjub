@@ -38,6 +38,12 @@ describe Jubjub::Pubsub do
       end
     end
     
+    describe "uri" do
+      it "should return the uri of the node" do
+        Jubjub::Pubsub.new(Jubjub::Jid.new('theozaurus@foo.com'), 'blah', mock ).uri.should == "xmpp:theozaurus@foo.com?;node=blah"
+      end
+    end
+    
     describe "subscribe" do
       it "should call pubsub.subscribe on connection" do
         @mock_connection = mock

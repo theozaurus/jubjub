@@ -50,6 +50,13 @@ describe Jubjub::Pubsub::Item do
       end
     end
     
+    describe "uri" do
+      it "should return the uri of the item" do
+        item = pubsub_item_factory :jid => "theozaurus@foo.com", :node => "blah", :item_id => "123"
+        item.uri.should == "xmpp:theozaurus@foo.com?;node=blah;item=123"
+      end
+    end
+    
     describe "retract" do
       it "should call pubsub.retract on connection" do
         @mock_connection = mock

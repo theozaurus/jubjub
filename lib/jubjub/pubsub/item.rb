@@ -28,4 +28,8 @@ class Jubjub::Pubsub::Item
     other.data    == self.data
   end
   
+  def uri
+    "xmpp:#{@jid}?;node=#{@node};item=#{@item_id}"
+  end
+  
 end

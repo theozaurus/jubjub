@@ -13,10 +13,10 @@ class Jubjub::Pubsub::AffiliationCollection
     when Fixnum
       affiliations[jid_num]
     when Jubjub::Jid
-      affiliations.find{|i| i.jid == jid_num } || Jubjub::Pubsub::Affiliation.new( jid_num, 'none', @connection )
+      affiliations.find{|i| i.jid == jid_num } || Jubjub::Pubsub::Affiliation.new( jid, node, jid_num, 'none', @connection )
     else
       j = Jubjub::Jid.new( jid_num )
-      affiliations.find{|i| i.jid == j } || Jubjub::Pubsub::Affiliation.new( j, 'none', @connection )
+      affiliations.find{|i| i.jid == j } || Jubjub::Pubsub::Affiliation.new( jid, node, j, 'none', @connection )
     end
   end
 

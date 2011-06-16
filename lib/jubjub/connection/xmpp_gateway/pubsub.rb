@@ -425,11 +425,11 @@ module Jubjub
         #     </affiliations>
         #   </pubsub>
         # </iq>
-        def retrieve_affiliations(jid, node)
+        def retrieve_affiliations(pubsub_jid, pubsub_node)
           request = Nokogiri::XML::Builder.new do |xml|
-            xml.iq_(:to => jid, :type => 'get') {
+            xml.iq_(:to => pubsub_jid, :type => 'get') {
               xml.pubsub_(:xmlns => namespaces['pubsub_owner']){
-                xml.affiliations_(:node => node)
+                xml.affiliations_(:node => pubsub_node)
               }
             }
           end
@@ -444,7 +444,7 @@ module Jubjub
           ).map{|affiliation|
             jid = Jubjub::Jid.new affiliation.attr('jid')
             affiliation = affiliation.attr('affiliation')
-            Jubjub::Pubsub::Affiliation.new jid, affiliation, @connection
+            Jubjub::Pubsub::Affiliation.new pubsub_jid, pubsub_node, jid, affiliation, @connection
           }
         end        
         

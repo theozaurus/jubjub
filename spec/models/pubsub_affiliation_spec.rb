@@ -4,12 +4,16 @@ describe Jubjub::Pubsub::Affiliation do
   
   def pubsub_affiliation_factory(override = {})
     options = {
+      :pubsub_jid  => Jubjub::Jid.new("pubsub.foo.com"),
+      :pubsub_node => "node_1",
       :jid         => Jubjub::Jid.new("theozaurus@foo.com"),
       :affiliation => 'owner',
       :connection  => "SHHHH CONNECTION OBJECT"
     }.merge( override )
     
     Jubjub::Pubsub::Affiliation.new(
+      options[:pubsub_jid],
+      options[:pubsub_node],
       options[:jid],
       options[:affiliation],
       options[:connection]
@@ -18,10 +22,24 @@ describe Jubjub::Pubsub::Affiliation do
   
   describe "instance method" do
     
+    describe "pubsub_jid" do
+      it "should return the pubsub_jid" do
+        p = pubsub_affiliation_factory :pubsub_jid => 'pubsub.foo.com'
+        p.pubsub_jid.should == Jubjub::Jid.new('pubsub.foo.com')
+      end
+    end
+    
+    describe "pubsub_node" do
+      it "should return the node" do
+        p = pubsub_affiliation_factory :pubsub_node => 'node_1'
+        p.pubsub_node.should == 'node_1'
+      end
+    end
+    
     describe "jid" do
       it "should return the jid" do
-        p = pubsub_affiliation_factory :jid => 'foo.com'
-        p.jid.should == Jubjub::Jid.new('foo.com')
+        p = pubsub_affiliation_factory :jid => 'bob@foo.com'
+        p.jid.should == Jubjub::Jid.new('bob@foo.com')
       end
     end
     
@@ -105,7 +123,14 @@ describe Jubjub::Pubsub::Affiliation do
         pubsub_affiliation_factory(:jid => 'foo@bar.com').should == pubsub_affiliation_factory(:jid => Jubjub::Jid.new('foo@bar.com'))
       end
       
+      it "should still match no matter how pubsub_jid is initialized" do
+        pubsub_affiliation_factory(:pubsub_jid => 'pubsub.bar.com').should == 
+        pubsub_affiliation_factory(:pubsub_jid => Jubjub::Jid.new('pubsub.bar.com'))
+      end
+      
       it "should not match objects with different attributes" do
+        pubsub_affiliation_factory(:pubsub_jid => 'a.b.com').should_not == pubsub_affiliation_factory
+        pubsub_affiliation_factory(:pubsub_node => 'waggle').should_not == pubsub_affiliation_factory        
         pubsub_affiliation_factory(:jid => 'a.b.com').should_not == pubsub_affiliation_factory
         pubsub_affiliation_factory(:affiliation => 'member').should_not == pubsub_affiliation_factory
       end

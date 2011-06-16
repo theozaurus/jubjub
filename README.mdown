@@ -131,13 +131,13 @@ Examples
     # Retrieve affiliations from a node
     u.pubsub['node_1'].affiliations
     => [
-      #<Jubjub::Pubsub::Affiliation:0x101f52830 @jid="theozaurus@jabber.org" @affiliation="owner">
+      #<Jubjub::Pubsub::Affiliation:0x101f52830 @pubsub_jid="pubsub.jabber.org" @pubsub_node="node_1" @jid="theozaurus@jabber.org" @affiliation="owner">
       ...
     ]
     
     # Search affiliations
     u.pubsub['node_1'].affiliations['theozaurus@jabber.org']
-    => #<Jubjub::Pubsub::Affiliation:0x101f52830 @jid="theozaurus@jabber.org" @affiliation="owner">
+    => #<Jubjub::Pubsub::Affiliation:0x101f52830 @pubsub_jid="pubsub.jabber.org" @pubsub_node="node_1" @jid="theozaurus@jabber.org" @affiliation="owner">
     
     # Test affiliations
     u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].owner?

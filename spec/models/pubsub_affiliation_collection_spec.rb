@@ -7,8 +7,8 @@ describe Jubjub::Pubsub::AffiliationCollection do
     before do
       @mock_connection = mock
       @affiliations = [
-        Jubjub::Pubsub::Affiliation.new('theozaurus@foo.com', 'owner', @mock_connection),
-        Jubjub::Pubsub::Affiliation.new('dragonzaurus@foo.com', 'publisher', @mock_connection)        
+        Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node', 'theozaurus@foo.com', 'owner', @mock_connection),
+        Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node', 'dragonzaurus@foo.com', 'publisher', @mock_connection)        
       ]
       @mock_connection.stub_chain( :pubsub, :retrieve_affiliations ).and_return(@affiliations)
     end
@@ -50,8 +50,8 @@ describe Jubjub::Pubsub::AffiliationCollection do
       before do
         @mock_connection = mock
         @nodes = [
-          Jubjub::Pubsub::Affiliation.new('theozaurus@foo.com', 'owner', @mock_connection),
-          Jubjub::Pubsub::Affiliation.new('dragonzaurus@foo.com', 'member', @mock_connection)        
+          Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'theozaurus@foo.com', 'owner', @mock_connection),
+          Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'dragonzaurus@foo.com', 'member', @mock_connection)        
         ]
         @mock_connection.stub_chain( :pubsub, :retrieve_affiliations ).and_return(@nodes)
       end
@@ -67,7 +67,8 @@ describe Jubjub::Pubsub::AffiliationCollection do
       end
 
       it "should return affiliation of 'none' if not found when searching by String" do
-        subject['blogozaurus@foo.com'].should == Jubjub::Pubsub::Affiliation.new('blogozaurus@foo.com', 'none', @mock_connection)
+        subject['blogozaurus@foo.com'].should == 
+          Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'blogozaurus@foo.com', 'none', @mock_connection)
       end
       
       it "should search by Jid if Jubjub::Jid" do
@@ -75,8 +76,8 @@ describe Jubjub::Pubsub::AffiliationCollection do
       end
       
       it "should return afiliation of 'none' if not found when searching by Jubjub::Jid" do
-        subject[Jubjub::Jid.new 'blogozaurus@foo.com'].should == Jubjub::Pubsub::Affiliation.new('blogozaurus@foo.com', 'none', @mock_connection)
-        
+        subject[Jubjub::Jid.new 'blogozaurus@foo.com'].should ==
+          Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'blogozaurus@foo.com', 'none', @mock_connection)
       end
     end
     

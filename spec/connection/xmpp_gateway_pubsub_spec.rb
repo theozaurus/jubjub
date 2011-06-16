@@ -275,7 +275,13 @@ describe Jubjub::Connection::XmppGateway do
         @connection.pubsub.create 'pubsub.theo-template.local', 'node_retrieve_affiliations'
         
         expected = [
-          Jubjub::Pubsub::Affiliation.new( Jubjub::Jid.new('theozaurus@theo-template.local'), 'owner', @connection )
+          Jubjub::Pubsub::Affiliation.new(
+            'pubsub.theo-template.local',
+            'node_retrieve_affiliations',
+            Jubjub::Jid.new('theozaurus@theo-template.local'),
+            'owner',
+            @connection 
+          )
         ]
         
         @connection.pubsub.retrieve_affiliations( 'pubsub.theo-template.local', 'node_retrieve_affiliations' ).should == expected

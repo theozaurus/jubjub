@@ -295,6 +295,56 @@ describe Jubjub::Connection::XmppGateway do
       end
     end
     
+    describe "modify_affiliations" do
+      use_vcr_cassette 'pubsub modify affiliations', :record => :new_episodes
+            
+      it "should return true when successful" do
+        pubsub = 'pubsub.theo-template.local'
+        node = 'node_modify_affiliations_1'
+        @connection.pubsub.create pubsub, node
+        
+        affiliation = Jubjub::Pubsub::Affiliation.new pubsub, node, 'theozaurus@theo-template.local', 'owner', @connection
+        @connection.pubsub.modify_affiliations( pubsub, node, affiliation).should equal(true)
+        
+        @connection.pubsub.destroy pubsub, node
+      end
+      
+      it "should allow affiliations to be specified as an array" do
+        pubsub = 'pubsub.theo-template.local'
+        node = 'node_modify_affiliations_2'
+        @connection.pubsub.create pubsub, node
+        
+        affiliation_1 = Jubjub::Pubsub::Affiliation.new pubsub, node, 'theozaurus@theo-template.local','owner', @connection
+        affiliation_2 = Jubjub::Pubsub::Affiliation.new pubsub, node, 'trex@theo-template.local', 'publisher', @connection
+        @connection.pubsub.modify_affiliations pubsub, node, [affiliation_1, affiliation_2]
+        
+        @connection.pubsub.destroy pubsub, node
+      end
+      
+      it "should allow affiliations to be specified as arguments" do
+        pubsub = 'pubsub.theo-template.local'
+        node = 'node_modify_affiliations_3'
+        @connection.pubsub.create pubsub, node
+        
+        affiliation_1 = Jubjub::Pubsub::Affiliation.new pubsub, node, 'theozaurus@theo-template.local', 'owner', @connection
+        affiliation_2 = Jubjub::Pubsub::Affiliation.new pubsub, node, 'trex@theo-template.local', 'publisher', @connection
+        @connection.pubsub.modify_affiliations pubsub, node, affiliation_1, affiliation_2
+        
+        @connection.pubsub.destroy pubsub, node
+      end
+      
+      it "should return false if unsuccessful" do
+        pubsub = 'pubsub.theo-template.local'
+        node = 'node_modify_affiliations_4'
+        @connection.pubsub.create pubsub, node
+        
+        affiliation = Jubjub::Pubsub::Affiliation.new pubsub, node, 'theozaurus@theo-template.local', 'WIBBLE', @connection
+        @connection.pubsub.modify_affiliations( pubsub, node, affiliation ).should equal(false)
+        
+        @connection.pubsub.destroy pubsub, node
+      end
+    end
+    
   end
   
 end

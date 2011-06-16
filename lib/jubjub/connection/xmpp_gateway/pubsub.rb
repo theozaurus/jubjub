@@ -446,7 +446,47 @@ module Jubjub
             affiliation = affiliation.attr('affiliation')
             Jubjub::Pubsub::Affiliation.new pubsub_jid, pubsub_node, jid, affiliation, @connection
           }
-        end        
+        end
+        
+        # http://xmpp.org/extensions/xep-0060.html#owner-affiliations-modify
+        # <iq type='set'
+        #     from='hamlet@denmark.lit/elsinore'
+        #     to='pubsub.shakespeare.lit'
+        #     id='ent2'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <affiliations node='princely_musings'>
+        #       <affiliation jid='bard@shakespeare.lit' affiliation='publisher'/>
+        #     </affiliations>
+        #   </pubsub>
+        # </iq>
+        # 
+        # Expected
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     id='ent2'/>
+        def modify_affiliations(pubsub_jid, pubsub_node, *affiliations)
+          affiliations = [affiliations].flatten
+          
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => pubsub_jid, :type => 'set') {
+              xml.pubsub_(:xmlns => namespaces['pubsub_owner']){
+                xml.affiliations_(:node => pubsub_node){
+                  affiliations.each {|a|
+                    xml.affiliation_(:jid => a.jid, :affiliation => a.affiliation)
+                  }
+                }
+              }
+            }
+          end
+          
+          write(
+            # Generate stanza
+            request.to_xml
+          ).xpath(
+            # Pull out required parts
+            '//iq[@type="result"]'
+          ).any?
+        end
         
       private
       

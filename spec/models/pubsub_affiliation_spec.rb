@@ -110,6 +110,109 @@ describe Jubjub::Pubsub::Affiliation do
       end
     end
     
+    describe "set" do
+      it "should redirect call to pubsub.modify_affiliation" do
+        @mock_connection = mock
+        @mock_connection.stub_chain :pubsub, :modify_affiliations
+        
+        affiliation = pubsub_affiliation_factory :connection => @mock_connection
+        
+        @mock_connection.pubsub.should_receive(:modify_affiliations).with( affiliation.pubsub_jid, affiliation.pubsub_node, affiliation )
+        
+        affiliation.set 'publisher'
+      end
+
+      describe "when succesful" do
+        before do
+          @mock_connection = mock
+          @mock_connection.stub_chain( :pubsub, :modify_affiliations ).and_return( true )
+        end
+        
+        it "should return true" do
+          @affiliation = pubsub_affiliation_factory :connection => @mock_connection
+          @affiliation.set( 'publisher' ).should equal( true )
+        end
+        
+        it "should have affiliaton set to new value" do
+          @affiliation = pubsub_affiliation_factory :connection => @mock_connection, :affiliation => 'owner'
+          @affiliation.set 'publisher'
+          @affiliation.affiliation.should == 'publisher'
+        end
+      end
+      
+      describe "when unsuccesful" do
+        before do
+          @mock_connection = mock
+          @mock_connection.stub_chain( :pubsub, :modify_affiliations ).and_return( false )
+        end
+        
+        it "should return false" do
+          @affiliation = pubsub_affiliation_factory :connection => @mock_connection
+          @affiliation.set( 'publisher' ).should equal( false )
+        end
+        
+        it "should have affiliaton set to original value" do
+          @affiliation = pubsub_affiliation_factory :connection => @mock_connection, :affiliation => 'owner'
+          @affiliation.set 'publisher'
+          @affiliation.affiliation.should == 'owner'
+        end
+      end
+    end
+    
+    describe "set_owner" do
+      it "should redirect call to set" do
+        affiliation = pubsub_affiliation_factory
+        affiliation.should_receive(:set).with('owner').and_return( 'from-set' )
+        
+        affiliation.set_owner.should == 'from-set'
+      end
+    end
+    
+    describe "set_publisher" do
+      it "should redirect call to set" do
+        affiliation = pubsub_affiliation_factory
+        affiliation.should_receive(:set).with('publisher').and_return( 'from-set' )
+      
+        affiliation.set_publisher.should == 'from-set'
+      end
+    end
+    
+    describe "set_publish_only" do
+      it "should redirect call to set" do
+        affiliation = pubsub_affiliation_factory
+        affiliation.should_receive(:set).with('publish-only').and_return( 'from-set' )
+      
+        affiliation.set_publish_only.should == 'from-set'
+      end
+    end
+    
+    describe "set_member" do
+      it "should redirect call to set" do
+        affiliation = pubsub_affiliation_factory
+        affiliation.should_receive(:set).with('member').and_return( 'from-set' )
+      
+        affiliation.set_member.should == 'from-set'
+      end
+    end
+    
+    describe "set_none" do
+      it "should redirect call to set" do
+        affiliation = pubsub_affiliation_factory
+        affiliation.should_receive(:set).with('none').and_return( 'from-set' )
+      
+        affiliation.set_none.should == 'from-set'
+      end
+    end
+    
+    describe "set_outcast" do
+      it "should redirect call to set" do
+        affiliation = pubsub_affiliation_factory
+        affiliation.should_receive(:set).with('outcast').and_return( 'from-set' )
+      
+        affiliation.set_outcast.should == 'from-set'
+      end
+    end
+    
     describe "==" do
       it "should match equivalent objects" do
         pubsub_affiliation_factory.should == pubsub_affiliation_factory

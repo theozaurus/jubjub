@@ -40,6 +40,38 @@ class Jubjub::Pubsub::Affiliation
     affiliation == "outcast"
   end
   
+  def set(new_affiliation)
+    old_affiliation = @affiliation
+    @affiliation = new_affiliation
+    r = @connection.pubsub.modify_affiliations pubsub_jid, pubsub_node, self
+    @affiliation = old_affiliation unless r
+    r
+  end
+  
+  def set_owner
+    set 'owner'
+  end
+  
+  def set_publisher
+    set 'publisher'    
+  end
+  
+  def set_publish_only
+    set 'publish-only'    
+  end
+  
+  def set_member
+    set 'member'
+  end
+  
+  def set_none
+    set 'none'
+  end
+  
+  def set_outcast
+    set 'outcast'
+  end
+  
   def ==(other)
     other.is_a?( self.class ) &&
     other.pubsub_jid  == self.pubsub_jid &&

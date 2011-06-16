@@ -145,6 +145,13 @@ Examples
     u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].publisher?
     => false
     
+    # Set affiliation
+    u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].set_publisher
+    => true
+    # or
+    u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].set('publisher')
+    => true
+        
     # Purge a node
     node.purge
     => true

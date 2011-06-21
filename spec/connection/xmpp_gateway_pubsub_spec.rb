@@ -15,7 +15,7 @@ describe Jubjub::Connection::XmppGateway do
       it "return a Jubjub::Pubsub" do
         @pubsub = @connection.pubsub.create 'pubsub.theo-template.local', 'node_1'
         
-        @pubsub.should be_a_kind_of Jubjub::Pubsub
+        @pubsub.should be_a_kind_of_response_proxied Jubjub::Pubsub
         @pubsub.jid.should == Jubjub::Jid.new('pubsub.theo-template.local')
         @pubsub.node.should == 'node_1'
       end
@@ -82,7 +82,7 @@ describe Jubjub::Connection::XmppGateway do
         
         config = @connection.pubsub.default_configuration 'pubsub.theo-template.local'
         
-        config.should be_a_kind_of Jubjub::Pubsub::Configuration
+        config.should be_a_kind_of_response_proxied Jubjub::Pubsub::Configuration
         config.should == Jubjub::Pubsub::Configuration.new( expected_config ) 
       end
     end
@@ -130,7 +130,7 @@ describe Jubjub::Connection::XmppGateway do
       
       it "return an array of Jubjub::Muc" do
         list = @connection.pubsub.list 'pubsub.theo-template.local'
-        list.should be_a_kind_of Array
+        list.should be_a_kind_of_response_proxied Array
         
         list.size.should eql(2)
         list[0].should be_a_kind_of Jubjub::Pubsub
@@ -173,7 +173,7 @@ describe Jubjub::Connection::XmppGateway do
       it "return a Jubjub::Pubsub::Subscription" do
         @subscription = @connection.pubsub.subscribe( 'pubsub.theo-template.local', 'node_1' )
         
-        @subscription.should be_a_kind_of Jubjub::Pubsub::Subscription
+        @subscription.should be_a_kind_of_response_proxied Jubjub::Pubsub::Subscription
         @subscription.jid.should == Jubjub::Jid.new('pubsub.theo-template.local')
         @subscription.node.should == 'node_1'
         @subscription.subscriber.should == @jid
@@ -239,7 +239,7 @@ describe Jubjub::Connection::XmppGateway do
         
         it "should return a Jubjub::Pubsub::Item" do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new, '123'
-          i.should be_a_kind_of Jubjub::Pubsub::Item
+          i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should == '123'
           i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\"/>"
         end
@@ -252,7 +252,7 @@ describe Jubjub::Connection::XmppGateway do
         it "should return a Jubjub::Pubsub::Item" do
           item = "<x xmlns=\"jabber:x:data\" type=\"submit\"><field var=\"foo\"><value>true</value></field></x>"
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', item
-          i.should be_a_kind_of Jubjub::Pubsub::Item
+          i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
           i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
         end
@@ -264,7 +264,7 @@ describe Jubjub::Connection::XmppGateway do
         
         it "should return a Jubjub::Pubsub::Item" do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new({ :foo => {:type => "boolean", :value => true }})
-          i.should be_a_kind_of Jubjub::Pubsub::Item
+          i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
           i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
         end
@@ -292,7 +292,7 @@ describe Jubjub::Connection::XmppGateway do
       end
       
       it "should return false when not successful" do
-        @connection.pubsub.retract( 'pubsub.theo-template.local', 'node_pubsub_retract', "wibble" ).should be_false        
+        @connection.pubsub.retract( 'pubsub.theo-template.local', 'node_pubsub_retract', "wibble" ).should equal(false)        
       end
       
       after do

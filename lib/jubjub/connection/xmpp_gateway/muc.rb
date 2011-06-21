@@ -46,14 +46,10 @@ module Jubjub
           
           presence full_jid
           
-          success = write(
-            # Open room
-            request.to_xml
-          ).xpath(
-            # Check for valid response
-            '//iq[@type="result"]'
-          ).any?
-          Jubjub::Muc.new room_jid, nil, @connection if success
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            success = stanza.xpath( '/iq[@type="result"]' ).any?
+            Jubjub::Muc.new room_jid, nil, @connection if success
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0045.html#createroom-reserved
@@ -212,16 +208,14 @@ module Jubjub
           end
           
           presence full_jid
-          response = write(
-            # Request room configuration
-            request.to_xml
-          ).xpath(
-            # Get fields
-            "//iq[@type='result']/muc_owner:query/x_data:x[@type='form']",
-            namespaces
-          )
           
-          Jubjub::Muc::Configuration.new response if response
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            config = stanza.xpath(
+              "/iq[@type='result']/muc_owner:query/x_data:x[@type='form']",
+              namespaces
+            )
+            Jubjub::Muc::Configuration.new config if config
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0045.html#destroyroom
@@ -250,13 +244,9 @@ module Jubjub
             }
           end
           
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Check for valid response
-            '//iq[@type="result"]'
-          ).any?
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0045.html#disco-rooms
@@ -289,18 +279,16 @@ module Jubjub
               xml.query_('xmlns' => 'http://jabber.org/protocol/disco#items')
             }
           end
-          
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]/disco_items:query/disco_items:item',
-            namespaces
-          ).map{|item| 
-            # Convert to Jubjub object
-            Jubjub::Muc.new item.attr('jid'), item.attr('name'), @connection
-          }
+                    
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath(
+              '/iq[@type="result"]/disco_items:query/disco_items:item',
+              namespaces
+            ).map{|item|
+              # Convert to Jubjub object
+              Jubjub::Muc.new item.attr('jid'), item.attr('name'), @connection
+            }
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0045.html#exit

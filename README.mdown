@@ -181,11 +181,57 @@ Examples
     u.pubsub.destroy('old_node', 'pubsub.jabber.ru', 'new_new')
     => true
     
+Dealing with errors
+===================
+
+Every returned object from every action is really a Jubjub::Response::Proxy, which delegates to the Jubjub::Response and if the method doesn't exist there to the actual result. As Jubjub::Response only has a few methods it will usually just behaves like the actual result (say a Jubjub::Pubsub::Item). However, you can check what has really happened like so:
+
+    # Attempt to destroy a node that does not exist
+    u.pubsub.destroy('made up')
+    => false
+    
+    # False tells us destroy didn't succeed in this case, but it's not terribly helpful
+    # So we can use methods provided by the Jubjub::Response as well
+    
+    response = u.pubsub.destroy('made up')
+    response.success?
+    => false
+    
+    response.stanza.to_s
+    => "<?xml version=\"1.0\"?>\n<iq type=\"error\" id=\"blather0011\" from=\"pubsub.theo-template.local\" to=\"theozaurus@theo-template.local/42607076141308656900975361\" lang=\"en\">\n  <pubsub xmlns=\"http://jabber.org/protocol/pubsub#owner\">\n    <delete node=\"made up\"/>\n  </pubsub>\n<error code=\"404\" type=\"cancel\"><item-not-found xmlns=\"urn:ietf:params:xml:ns:xmpp-stanzas\"/></error></iq>\n" 
+    
+    # We can get the real result with no proxy sat in front
+    response.result
+    => false
+    response.result.success?
+    NoMethodError: undefined method `success?' for false:FalseClass
+    	from (irb):14
+    
+    # We can also get an enhanced error object, Jubjub::Response::Error
+    response.error
+    => #<Jubjub::Response::Error:0x101ef51f8 @stanza=#<Nokogiri::XML::Element:0x80f7a7bc name="error" attributes=[#<Nokogiri::XML::Attr:0x80f7a654 name="code" value="404">, #<Nokogiri::XML::Attr:0x80f7a640 name="type" value="cancel">] children=[#<Nokogiri::XML::Element:0x80f7a03c name="item-not-found" namespace=#<Nokogiri::XML::Namespace:0x80f79fb0 href="urn:ietf:params:xml:ns:xmpp-stanzas">>]>> 
+    
+    response.error.stanza.to_s
+    => "<error code=\"404\" type=\"cancel\">\n  <item-not-found xmlns=\"urn:ietf:params:xml:ns:xmpp-stanzas\"/>\n</error>"
+    
+    response.error.condition
+    => 'item-not-found'
+    
+    response.error.type
+    => 'cancel'
+    
+    # If there is any error text this can also be extracted
+    response.error.text
+    => 'Item not found'
+    
+    
+The error `type` and error `condition` are the important factors. The `type` is defined in the [RFC 6121](http://xmpp.org/rfcs/rfc6120.html#stanzas-error-syntax), and helps decide whether the action should be attempted again. The `condition` provides a bit more detail, and will always be part of the [urn:ietf:params:xml:ns:xmpp-stanzas namespace](http://xmpp.org/schemas/stanzaerror.xsd).
+
 TODO
 ====
 
- - Error handling
  - MUC user role and affiliation control
+ - Better exception handling
  - Service discovery
  - Operations that are not IQ based, such as rosters and two way messaging
  - Other backends (for servers that are evented)

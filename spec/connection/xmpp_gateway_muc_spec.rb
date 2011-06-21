@@ -14,7 +14,7 @@ describe Jubjub::Connection::XmppGateway do
       
       it "return a Jubjub::Muc" do
         @room = @connection.muc.create( Jubjub::Jid.new 'room@conference.theo-template.local/nick' )
-        @room.should be_a_kind_of Jubjub::Muc
+        @room.should be_a_kind_of_response_proxied Jubjub::Muc
         @room.jid.should == Jubjub::Jid.new( 'room@conference.theo-template.local' )
       end
       
@@ -32,7 +32,7 @@ describe Jubjub::Connection::XmppGateway do
         @config = Jubjub::Muc::Configuration.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Allow users to query other users" })
         
         @room = @connection.muc.create( Jubjub::Jid.new( 'room@conference.theo-template.local/nick' ), @config )
-        @room.should be_a_kind_of Jubjub::Muc
+        @room.should be_a_kind_of_response_proxied Jubjub::Muc
         @room.jid.should == Jubjub::Jid.new( 'room@conference.theo-template.local' )
       end
       
@@ -104,7 +104,7 @@ describe Jubjub::Connection::XmppGateway do
       
       it "return an array of Jubjub::Muc" do
         list = @connection.muc.list( Jubjub::Jid.new 'conference.theo-template.local' )
-        list.should be_a_kind_of Array
+        list.should be_a_kind_of_response_proxied Array
         
         list.size.should eql(2)
         list[0].should be_a_kind_of Jubjub::Muc

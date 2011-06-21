@@ -40,19 +40,17 @@ module Jubjub
               xml.query_('xmlns' => namespaces['disco_items'])
             }
           end
-          
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]/disco_items:query/disco_items:item',
-            namespaces
-          ).map{|item|
-            jid  = item.attr('jid')
-            node = item.attr('node')
-            Jubjub::Pubsub.new jid, node, @connection
-          }
+                    
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath(
+              '/iq[@type="result"]/disco_items:query/disco_items:item',
+              namespaces
+            ).map{|item|
+              jid  = item.attr('jid')
+              node = item.attr('node')
+              Jubjub::Pubsub.new jid, node, @connection
+            }
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#owner-create-and-configure
@@ -93,14 +91,13 @@ module Jubjub
             }
           end
           
-          success = write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]'
-          ).any?
-          Jubjub::Pubsub.new jid, node, @connection if success
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            success = stanza.xpath(
+              # Pull out required parts
+              '/iq[@type="result"]'
+            ).any?
+            Jubjub::Pubsub.new jid, node, @connection if success
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#owner-configure
@@ -144,16 +141,14 @@ module Jubjub
             }
           end
           
-          response = write(
-            # Request default node configuration
-            request.to_xml
-          ).xpath(
-            # Get fields
-            "//iq[@type='result']/pubsub_owner:pubsub/pubsub_owner:default/x_data:x[@type='form']",
-            namespaces
-          )
-          
-          Jubjub::Pubsub::Configuration.new response if response
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            config = stanza.xpath(
+              # Pull out required parts
+              "/iq[@type='result']/pubsub_owner:pubsub/pubsub_owner:default/x_data:x[@type='form']",
+              namespaces
+            )
+            Jubjub::Pubsub::Configuration.new config if config
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#owner-delete
@@ -183,13 +178,9 @@ module Jubjub
             }
           end
           
-          success = write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]'
-          ).any?
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#owner-purge
@@ -215,13 +206,9 @@ module Jubjub
             }
           end
           
-          success = write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]'
-          ).any?
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#subscriber-subscribe
@@ -257,21 +244,19 @@ module Jubjub
               }
             }
           end
-          
-          result = write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]/pubsub:pubsub/pubsub:subscription',
-            namespaces
-          )
-          if result.any?
-            subscriber   = Jubjub::Jid.new(result.first.attr('jid'))
-            subid        = result.first.attr('subid') 
-            subscription = result.first.attr('subscription')
-            Jubjub::Pubsub::Subscription.new jid, node, subscriber, subid, subscription, @connection
-          end
+                    
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            result = stanza.xpath(
+              '/iq[@type="result"]/pubsub:pubsub/pubsub:subscription',
+              namespaces
+            )
+            if result.any?
+              subscriber   = Jubjub::Jid.new(result.first.attr('jid'))
+              subid        = result.first.attr('subid') 
+              subscription = result.first.attr('subscription')
+              Jubjub::Pubsub::Subscription.new jid, node, subscriber, subid, subscription, @connection
+            end
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#subscriber-unsubscribe
@@ -303,13 +288,9 @@ module Jubjub
             }
           end
           
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]'
-          ).any?
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#publisher-publish
@@ -357,19 +338,17 @@ module Jubjub
             }
           end
           
-          result = write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]/pubsub:pubsub/pubsub:publish/pubsub:item',
-            namespaces
-          )
-          if result.any?
-            item_id = result.first.attr('id')
-            data = request.doc.xpath("//pubsub:item/*", namespaces).to_s
-            Jubjub::Pubsub::Item.new jid, node, item_id, data, @connection
-          end
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            result = stanza.xpath(
+              '/iq[@type="result"]/pubsub:pubsub/pubsub:publish/pubsub:item',
+              namespaces
+            )
+            if result.any?
+              item_id = result.first.attr('id')
+              data = request.doc.xpath("//pubsub:item/*", namespaces).to_s
+              Jubjub::Pubsub::Item.new jid, node, item_id, data, @connection
+            end
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#publisher-delete
@@ -400,10 +379,9 @@ module Jubjub
             }
           end
           
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath('//iq[@type="result"]').any?
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#subscriber-retrieve
@@ -449,19 +427,17 @@ module Jubjub
               }
             }
           end
-          
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]/pubsub:pubsub/pubsub:items/pubsub:item',
-            namespaces
-          ).map{|item|
-            item_id = item.attr('id')
-            data = item.xpath('./*').to_xml
-            Jubjub::Pubsub::Item.new jid, node, item_id, data, @connection
-          }
+                    
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath(
+              '/iq[@type="result"]/pubsub:pubsub/pubsub:items/pubsub:item',
+              namespaces
+            ).map{|item|
+              item_id = item.attr('id')
+              data = item.xpath('./*').to_xml
+              Jubjub::Pubsub::Item.new jid, node, item_id, data, @connection
+            }
+          }.proxy_result
         end
         
         
@@ -496,18 +472,16 @@ module Jubjub
             }
           end
           
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]/pubsub_owner:pubsub/pubsub_owner:affiliations/pubsub_owner:affiliation',
-            namespaces
-          ).map{|affiliation|
-            jid = Jubjub::Jid.new affiliation.attr('jid')
-            affiliation = affiliation.attr('affiliation')
-            Jubjub::Pubsub::Affiliation.new pubsub_jid, pubsub_node, jid, affiliation, @connection
-          }
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath(
+              '/iq[@type="result"]/pubsub_owner:pubsub/pubsub_owner:affiliations/pubsub_owner:affiliation',
+              namespaces
+            ).map{|item|
+              jid = Jubjub::Jid.new item.attr('jid')
+              affiliation = item.attr('affiliation')
+              Jubjub::Pubsub::Affiliation.new pubsub_jid, pubsub_node, jid, affiliation, @connection
+            }
+          }.proxy_result
         end
         
         # http://xmpp.org/extensions/xep-0060.html#owner-affiliations-modify
@@ -541,13 +515,9 @@ module Jubjub
             }
           end
           
-          write(
-            # Generate stanza
-            request.to_xml
-          ).xpath(
-            # Pull out required parts
-            '//iq[@type="result"]'
-          ).any?
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
         end
         
       private

@@ -1,4 +1,5 @@
 require 'jubjub/errors'
+require 'jubjub/response'
 require 'jubjub/jid'
 require 'jubjub/connection/xmpp_gateway'
 require 'jubjub/pubsub'

@@ -20,6 +20,14 @@ module Jubjub
       @connection.muc.destroy(@jid)
     end
     
+    def affiliations
+      AffiliationCollection.new jid, @connection
+    end
+    
+    def roles
+      RoleCollection.new jid, @connection
+    end
+    
     # Hide the connection details and show jid as string for compactness
     def inspect
       obj_id = "%x" % (object_id << 1)

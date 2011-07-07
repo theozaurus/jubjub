@@ -115,6 +115,109 @@ describe Jubjub::Connection::XmppGateway do
       
     end
     
+    describe "retrieve_affiliations" do
+      
+      use_vcr_cassette 'muc retrieve_affiliations', :record => :new_episodes
+      
+      before do
+        @room_full = Jubjub::Jid.new( 'retrieve_affiliations@conference.theo-template.local/theozaurus' )
+        @room = Jubjub::Jid.new @room_full.node, @room_full.domain
+        
+        @connection.muc.create @room_full
+      end
+      
+      it "return an array of Jubjub::Muc::Affiliation" do
+        list = @connection.muc.retrieve_affiliations @room, 'owner'
+        list.should be_a_kind_of_response_proxied Array
+        
+        list.size.should eql(1)
+        list[0].should be_a_kind_of Jubjub::Muc::Affiliation
+        list[0].jid.should == Jubjub::Jid.new( 'theozaurus@theo-template.local' )
+        list[0].role.should == nil
+        list[0].affiliation.should == "owner"
+        list[0].nick.should == nil
+      end
+      
+      after do
+        @connection.muc.destroy @room
+      end
+      
+    end
+    
+    describe "modify_affiliations" do
+      
+      use_vcr_cassette 'muc modify_affiliations', :record => :new_episodes
+      
+      it "should return true when successful" do
+        room_full = Jubjub::Jid.new 'modify_affiliations_1@conference.theo-template.local/foo'
+        room = Jubjub::Jid.new room_full.node, room_full.domain
+        @connection.muc.create room_full
+        
+        affiliation = muc_affiliation_factory :muc_jid => room, 
+                                              :jid => 'ed@theo-template.local',
+                                              :affiliation => 'owner',
+                                              :connection => @connection
+        
+        @connection.muc.modify_affiliations( room, affiliation).should equal(true)
+        
+        @connection.muc.destroy room
+      end
+      
+      it "should allow affiliations to be specified as an array" do
+        room_full = Jubjub::Jid.new 'modify_affiliations_2@conference.theo-template.local/foo'
+        room = Jubjub::Jid.new room_full.node, room_full.domain
+        @connection.muc.create room_full
+        
+        affiliation_1 = muc_affiliation_factory :muc_jid => room, 
+                                                :jid => 'ed@theo-template.local',
+                                                :affiliation => 'owner',
+                                                :connection => @connection
+        affiliation_2 = muc_affiliation_factory :muc_jid => room,
+                                                :jid => 'bob@theo-template.local',
+                                                :affiliation => 'member',
+                                                :connection => @connection
+        
+        @connection.muc.modify_affiliations room, [affiliation_1, affiliation_2]
+        
+        @connection.muc.destroy room
+      end
+      
+      it "should allow affiliations to be specified as arguments" do
+        room_full = Jubjub::Jid.new 'modify_affiliations_3@conference.theo-template.local/foo'
+        room = Jubjub::Jid.new room_full.node, room_full.domain
+        @connection.muc.create room_full
+        
+        affiliation_1 = muc_affiliation_factory :muc_jid => room, 
+                                                :jid => 'ed@theo-template.local',
+                                                :affiliation => 'owner',
+                                                :connection => @connection
+        affiliation_2 = muc_affiliation_factory :muc_jid => room,
+                                                :jid => 'bob@theo-template.local',
+                                                :affiliation => 'member',
+                                                :connection => @connection
+        
+        @connection.muc.modify_affiliations room, affiliation_1, affiliation_2
+        
+        @connection.muc.destroy room
+      end
+      
+      it "should return false if unsuccessful" do
+        room_full = Jubjub::Jid.new 'modify_affiliations_4@conference.theo-template.local/foo'
+        room = Jubjub::Jid.new room_full.node, room_full.domain
+        @connection.muc.create room_full
+        
+        affiliation = muc_affiliation_factory :muc_jid => room, 
+                                              :jid => 'ed@theo-template.local',
+                                              :affiliation => 'WIBBLE',
+                                              :connection => @connection
+                                              
+        @connection.muc.modify_affiliations( room, affiliation ).should equal(false)
+        
+        @connection.muc.destroy room
+      end
+      
+    end
+    
     describe "exit" do
       use_vcr_cassette 'muc exit', :record => :new_episodes
       

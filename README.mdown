@@ -67,6 +67,27 @@ Examples
       c['muc#roomconfig_allowinvites'] = false
     }
     
+    # Retrieve current affiliations
+    room.affiliations
+    => [#<Jubjub::Muc::Affiliation:0x1019a3c90 @muc_jid="jubjub@chat.test.com" @jid="theozaurus@jabber.org" @nick=nil @affiliation="owner"  @role=nil>]
+    
+    # Search affiliations
+    room.affiliations['theozaurus@jabber.org']
+    => #<Jubjub::Muc::Affiliation:0x1019a3c90 @muc_jid="jubjub@chat.test.com" @jid="theozaurus@jabber.org" @nick=nil @affiliation="owner"  @role=nil>
+    
+    # Test affiliations
+    room.affiliations['theozaurus@jabber.org'].owner?
+    => true
+    room.affiliations['theozaurus@jabber.org'].member?
+    => false
+    
+    # Create affiliation
+    room.affiliations['bob@test.com'].set_admin
+    => true
+    # or
+    room.affiliations['bot@test.com'].set('admin')
+    => true
+    
     # Destroy a room
     room.destroy
     => true
@@ -230,7 +251,8 @@ The error `type` and error `condition` are the important factors. The `type` is 
 TODO
 ====
 
- - MUC user role and affiliation control
+ - MUC user role control
+ - Bulk Pubsub and MUC affiliation control
  - Better exception handling
  - Service discovery
  - Operations that are not IQ based, such as rosters and two way messaging

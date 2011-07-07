@@ -38,7 +38,7 @@ module Jubjub
           
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:type => 'set', :to => room_jid) {
-              xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner'){
+              xml.query_('xmlns' => namespaces['muc_owner']){
                 configuration.to_builder(xml.parent)
               }
             }
@@ -203,7 +203,7 @@ module Jubjub
           
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => room_jid, :type => 'get') {
-              xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner')
+              xml.query_('xmlns' => namespaces['muc_owner'])
             }
           end
           
@@ -238,7 +238,7 @@ module Jubjub
         def destroy(jid)
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'set') {
-              xml.query_('xmlns' => 'http://jabber.org/protocol/muc#owner'){
+              xml.query_('xmlns' => namespaces['muc_owner']){
                 xml.destroy_
               }
             }
@@ -276,7 +276,7 @@ module Jubjub
         def list(jid)
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'get') {
-              xml.query_('xmlns' => 'http://jabber.org/protocol/disco#items')
+              xml.query_('xmlns' => namespaces['disco_items'])
             }
           end
                     
@@ -288,6 +288,82 @@ module Jubjub
               # Convert to Jubjub object
               Jubjub::Muc.new item.attr('jid'), item.attr('name'), @connection
             }
+          }.proxy_result
+        end
+        
+        # http://xmpp.org/extensions/xep-0045.html#modifymember
+        # <iq from='crone1@shakespeare.lit/desktop'
+        #     id='member3'
+        #     to='coven@chat.shakespeare.lit'
+        #     type='get'>
+        #   <query xmlns='http://jabber.org/protocol/muc#admin'>
+        #     <item affiliation='member'/>
+        #   </query>
+        # </iq>
+        # 
+        # Expected
+        # <iq from='coven@chat.shakespeare.lit'
+        #     id='member3'
+        #     to='crone1@shakespeare.lit/desktop'
+        #     type='result'>
+        #   <query xmlns='http://jabber.org/protocol/muc#admin'>
+        #     <item affiliation='member'
+        #           jid='hag66@shakespeare.lit'
+        #           nick='thirdwitch'
+        #           role='participant'/>
+        #   </query>
+        # </iq>
+        def retrieve_affiliations(jid, affiliation)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'get') {
+              xml.query_('xmlns' => namespaces['muc_admin']) {
+                xml.item_(:affiliation => affiliation)
+              }
+            }
+          end
+          
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath(
+              '/iq[@type="result"]/muc_admin:query/muc_admin:item',
+              namespaces
+            ).map{|item|
+              # Convert to Jubjub object
+              Jubjub::Muc::Affiliation.new jid, item.attr('jid'), item.attr('nick'), item.attr('role'), item.attr('affiliation'), @connection
+            }
+          }.proxy_result
+        end
+        
+        # http://xmpp.org/extensions/xep-0045.html#grantmember
+        # <iq from='crone1@shakespeare.lit/desktop'
+        #     id='member1'
+        #     to='coven@chat.shakespeare.lit'
+        #     type='set'>
+        #   <query xmlns='http://jabber.org/protocol/muc#admin'>
+        #     <item affiliation='member'
+        #           jid='hag66@shakespeare.lit'/>
+        #   </query>
+        # </iq>
+        #
+        # Expected
+        # <iq from='coven@chat.shakespeare.lit'
+        #     id='member1'
+        #     to='crone1@shakespeare.lit/desktop'
+        #     type='result'/>
+        def modify_affiliations(muc_jid, *affiliations)
+          affiliations = [affiliations].flatten
+          
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => muc_jid, :type => 'set') {
+              xml.query_('xmlns' => namespaces['muc_admin']) {
+                affiliations.each {|a|
+                  xml.item_(:affiliation => a.affiliation, :jid => a.jid)
+                }
+              }
+            }
+          end
+          
+          Jubjub::Response.new( write request.to_xml ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
         
@@ -319,6 +395,7 @@ module Jubjub
           {
             'disco_items' => 'http://jabber.org/protocol/disco#items',
             'muc_owner'   => "http://jabber.org/protocol/muc#owner",
+            'muc_admin'   => "http://jabber.org/protocol/muc#admin",
             'x_data'      => 'jabber:x:data'
           }
         end

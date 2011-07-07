@@ -2,6 +2,8 @@ class Jubjub::Muc::AffiliationCollection
   
   attr_reader :jid
   
+  include Jubjub::Helpers::Collection
+  
   def initialize(jid,connection)
     @jid = Jubjub::Jid.new jid
     @connection = connection
@@ -10,29 +12,20 @@ class Jubjub::Muc::AffiliationCollection
   def [](jid_num)
     case jid_num
     when Fixnum
-      affiliations[jid_num]
+      list[jid_num]
     when Jubjub::Jid
-      affiliations.find{|i| i.jid == jid_num } || Jubjub::Muc::Affiliation.new( jid, jid_num, nil, nil, 'none', @connection )
+      search_list( Jubjub::Muc::Affiliation.new( jid, jid_num, nil, nil, 'none', @connection ) ){|i| i.jid == jid_num }
     else
       j = Jubjub::Jid.new( jid_num )
-      affiliations.find{|i| i.jid == j } || Jubjub::Muc::Affiliation.new( jid, j, nil, nil, 'none', @connection )
+      search_list( Jubjub::Muc::Affiliation.new( jid, j, nil, nil, 'none', @connection ) ){|i| i.jid == j }
     end
   end
 
-  # Hint that methods are actually applied to list using method_missing
-  def inspect
-    affiliations.inspect
-  end
-
 private
-
-  def method_missing(name, *args, &block)
-    affiliations.send(name, *args, &block)
-  end
   
-  def affiliations
+  def list
     # OPTIMIZE: These requests should be made in parallel, not sequentially
-    @affiliations ||= %w(owner outcast member admin).map{|a| @connection.muc.retrieve_affiliations( jid, a ) }.flatten
+    @list ||= %w(owner outcast member admin).map{|a| @connection.muc.retrieve_affiliations( jid, a ) }.flatten
   end
   
 end

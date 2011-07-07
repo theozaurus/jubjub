@@ -5,6 +5,8 @@ class Jubjub::Pubsub::Collection
    
   attr_reader :jid
    
+  include Jubjub::Helpers::Collection
+   
   def initialize(jid, connection)
     @jid = Jubjub::Jid.new jid
     @connection = connection
@@ -46,20 +48,11 @@ class Jubjub::Pubsub::Collection
     when Fixnum
       list[node_num]
     else
-      list.find{|p| p.node == node_num } || Jubjub::Pubsub.new( jid, node_num, @connection )
+      search_list(Jubjub::Pubsub.new( jid, node_num, @connection )){|p| p.node == node_num }
     end
-  end
-  
-  # Hint that methods are actually applied to list using method_missing
-  def inspect
-    list.inspect
   end
 
 private
-
-  def method_missing(name, *args, &block)
-    list.send(name, *args, &block)
-  end
   
   def list
     @list ||= @connection.pubsub.list jid

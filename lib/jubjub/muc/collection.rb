@@ -4,7 +4,9 @@
 class Jubjub::Muc::Collection
    
   attr_reader :jid
-   
+  
+  include Jubjub::Helpers::Collection
+  
   def initialize(jid, connection)
     @jid = Jubjub::Jid.new(jid)
     @connection = connection
@@ -30,24 +32,15 @@ class Jubjub::Muc::Collection
     when Fixnum
       list[jid_node_num]
     when Jubjub::Jid
-      list.find{|m| m.jid == jid_node_num } || Jubjub::Muc.new( jid_node_num, nil, @connection )
+      search_list( Jubjub::Muc.new( jid_node_num, nil, @connection ) ){|m| m.jid == jid_node_num }
     else
       j = Jubjub::Jid.new jid_node_num, jid.domain
-      list.find{|m| m.jid == j } || Jubjub::Muc.new( j, nil, @connection )
+      search_list( Jubjub::Muc.new( j, nil, @connection ) ){|m| m.jid == j }
     end
   end
   
-  # Hint that methods are actually applied to list using method_missing
-  def inspect
-    list.inspect
-  end
-  
 private
-
-  def method_missing(name, *args, &block)
-    list.send(name, *args, &block)
-  end
-    
+  
   def list
     @list ||= @connection.muc.list @jid
   end

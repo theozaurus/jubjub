@@ -2,6 +2,8 @@ class Jubjub::Pubsub::AffiliationCollection
   
   attr_reader :jid, :node
   
+  include Jubjub::Helpers::Collection
+  
   def initialize(jid,node,connection)
     @jid = Jubjub::Jid.new jid
     @node = node
@@ -11,28 +13,19 @@ class Jubjub::Pubsub::AffiliationCollection
   def [](jid_num)
     case jid_num
     when Fixnum
-      affiliations[jid_num]
+      list[jid_num]
     when Jubjub::Jid
-      affiliations.find{|i| i.jid == jid_num } || Jubjub::Pubsub::Affiliation.new( jid, node, jid_num, 'none', @connection )
+      search_list( Jubjub::Pubsub::Affiliation.new( jid, node, jid_num, 'none', @connection ) ){|i| i.jid == jid_num }
     else
       j = Jubjub::Jid.new( jid_num )
-      affiliations.find{|i| i.jid == j } || Jubjub::Pubsub::Affiliation.new( jid, node, j, 'none', @connection )
+      search_list( Jubjub::Pubsub::Affiliation.new( jid, node, j, 'none', @connection ) ){|i| i.jid == j }
     end
   end
 
-  # Hint that methods are actually applied to list using method_missing
-  def inspect
-    affiliations.inspect
-  end
-
 private
-
-  def method_missing(name, *args, &block)
-    affiliations.send(name, *args, &block)
-  end
   
-  def affiliations
-    @affiliations ||= @connection.pubsub.retrieve_affiliations( @jid, @node )
+  def list
+    @list ||= @connection.pubsub.retrieve_affiliations( @jid, @node )
   end
   
 end

@@ -31,7 +31,7 @@ module Jubjub
       def method_missing(name, *args, &block)
         # If the method exists on the primary use that
         # unless it's the method name called to create the proxy from the primary, or is a standard object method
-        if name.to_s != @primary_method && (proxy_primary.public_methods - Object.public_methods).include?( name.to_s )
+        if name.to_s != @primary_method && (proxy_primary.public_methods - Object.public_methods).map{|m| m.to_s }.include?( name.to_s )
           proxy_primary.send(name, *args, &block)
         else
         # Else use a method on the secondary

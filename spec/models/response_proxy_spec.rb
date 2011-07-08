@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe Jubjub::Response::Proxy do
   
   describe "creating" do

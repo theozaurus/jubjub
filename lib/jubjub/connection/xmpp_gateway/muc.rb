@@ -46,7 +46,7 @@ module Jubjub
           
           presence full_jid
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             success = stanza.xpath( '/iq[@type="result"]' ).any?
             Jubjub::Muc.new room_jid, nil, @connection if success
           }.proxy_result
@@ -209,7 +209,7 @@ module Jubjub
           
           presence full_jid
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             config = stanza.xpath(
               "/iq[@type='result']/muc_owner:query/x_data:x[@type='form']",
               namespaces
@@ -244,7 +244,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
@@ -280,7 +280,7 @@ module Jubjub
             }
           end
                     
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/disco_items:query/disco_items:item',
               namespaces
@@ -322,7 +322,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/muc_admin:query/muc_admin:item',
               namespaces
@@ -362,7 +362,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
@@ -388,7 +388,7 @@ module Jubjub
             }
           end
           
-          write request.to_xml
+          write request
         end
         
         def namespaces

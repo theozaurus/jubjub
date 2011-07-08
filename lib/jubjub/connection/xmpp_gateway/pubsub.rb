@@ -41,7 +41,7 @@ module Jubjub
             }
           end
                     
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/disco_items:query/disco_items:item',
               namespaces
@@ -91,7 +91,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             success = stanza.xpath(
               # Pull out required parts
               '/iq[@type="result"]'
@@ -141,7 +141,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             config = stanza.xpath(
               # Pull out required parts
               "/iq[@type='result']/pubsub_owner:pubsub/pubsub_owner:default/x_data:x[@type='form']",
@@ -178,7 +178,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
@@ -206,7 +206,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
@@ -245,7 +245,7 @@ module Jubjub
             }
           end
                     
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             result = stanza.xpath(
               '/iq[@type="result"]/pubsub:pubsub/pubsub:subscription',
               namespaces
@@ -288,7 +288,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
@@ -338,7 +338,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             result = stanza.xpath(
               '/iq[@type="result"]/pubsub:pubsub/pubsub:publish/pubsub:item',
               namespaces
@@ -379,7 +379,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
@@ -428,7 +428,7 @@ module Jubjub
             }
           end
                     
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/pubsub:pubsub/pubsub:items/pubsub:item',
               namespaces
@@ -472,7 +472,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/pubsub_owner:pubsub/pubsub_owner:affiliations/pubsub_owner:affiliation',
               namespaces
@@ -515,7 +515,7 @@ module Jubjub
             }
           end
           
-          Jubjub::Response.new( write request.to_xml ){|stanza|
+          Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end

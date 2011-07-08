@@ -8,7 +8,7 @@ module Jubjub
         end
         
         def write(stanza)
-          @connection.write(stanza)
+          @connection.write stanza.to_xml(:indent => 0, :save_with => Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
         end
         
       end

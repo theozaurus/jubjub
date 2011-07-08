@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'vcr'
   s.add_development_dependency 'webmock', '~> 1.6'
   s.add_development_dependency 'rspec', '~> 2.4'
+  s.add_development_dependency 'equivalent-xml', '~> 0.2.7'
   
   s.files        = Dir.glob("lib/**/*") + %w(LICENSE README.mdown)
   s.test_files   = Dir.glob("spec/**/*") + %w(.rspec .infinity_test)

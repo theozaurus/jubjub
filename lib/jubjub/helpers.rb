@@ -8,7 +8,12 @@ module Jubjub
       end
     
       def search_list(default=nil, &block)
-        list.find( &block ) || default
+        list unless default # We HAVE to search unless there is a default
+        if list?
+          list.find( &block ) || default
+        else
+          default
+        end
       end
       private :search_list
 
@@ -16,6 +21,11 @@ module Jubjub
         list.send(name, *args, &block)
       end
       private :method_missing
+
+      def list?
+        instance_variable_defined?("@list") 
+      end
+      private :list?
       
     end
   end

@@ -114,12 +114,28 @@ describe Jubjub::Pubsub::Collection do
         subject[1].should == @nodes[1]
       end
       
-      it "should search by node if a String" do
-        subject["node_1"].should == @nodes[0]
-      end
+      describe "searching by node if a String" do
       
-      it "should return Jubjub::Pubsub item if nothing found as it may still exist" do
-        subject['made-up'].should == Jubjub::Pubsub.new( 'pubsub.foo.com', 'made-up', @mock_connection )
+        it "should return cached result if it has already searched" do
+          # Trigger lookup
+          @mock_connection.pubsub.should_receive(:list)
+          subject.first
+          subject["node_1"].should equal @nodes[0]
+        end
+      
+        it "should return default result if it has already searched and does not exist" do
+          # Trigger lookup
+          @mock_connection.pubsub.should_receive(:list)
+          subject.first
+          subject['made-up'].should == Jubjub::Pubsub.new( 'pubsub.foo.com', 'made-up', @mock_connection )
+        end
+      
+        it "should return default result if it has not already searched" do
+          @mock_connection.pubsub.should_not_receive(:list)
+          subject['node_1'].should_not equal @nodes[0]
+          subject['node_1'].should == Jubjub::Pubsub.new( 'pubsub.foo.com', 'node_1', @mock_connection )
+        end
+        
       end
     end
     

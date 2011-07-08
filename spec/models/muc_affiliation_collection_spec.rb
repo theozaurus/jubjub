@@ -71,31 +71,74 @@ describe Jubjub::Muc::AffiliationCollection do
         subject[1].should == @affiliations[1]
       end
       
-      it "should search by jid if a String" do
-        subject["theozaurus@foo.com"].should == @affiliations[0]
-      end
-
-      it "should return affiliation of 'none', and role and nick as nil if not found when searching by String" do
-        subject['blogozaurus@foo.com'].should ==
-          muc_affiliation_factory( :muc_jid => 'conference.foo.com',
-                                   :jid => 'blogozaurus@foo.com',
-                                   :affiliation => 'none',
-                                   :role => nil,
-                                   :nick => nil )
+      describe "searching by jid if a String" do
+        
+        it "should return cached result if it has already searched" do
+          # Trigger lookup
+          @mock_connection.muc.should_receive(:retrieve_affiliations)
+          subject.first
+          subject["theozaurus@foo.com"].should == @affiliations[0]
+        end
+      
+        it "should return default result if it has already searched and does not exist" do
+          # Trigger lookup
+          @mock_connection.muc.should_receive(:retrieve_affiliations)
+          subject.first
+          subject['blogozaurus@foo.com'].should ==
+            muc_affiliation_factory( :muc_jid => 'conference.foo.com',
+                                     :jid => 'blogozaurus@foo.com',
+                                     :affiliation => 'none',
+                                     :role => nil,
+                                     :nick => nil )
+        end
+      
+        it "should return default result if it has not already searched" do
+          @mock_connection.muc.should_not_receive(:retrieve_affiliations)
+          subject["theozaurus@foo.com"].should_not equal @affiliations[0]
+          subject["theozaurus@foo.com"].should == 
+            muc_affiliation_factory( :muc_jid => 'conference.foo.com',
+                                     :jid => 'theozaurus@foo.com',
+                                     :affiliation => 'none',
+                                     :role => nil,
+                                     :nick => nil )
+        end
+        
       end
       
-      it "should search by Jid if Jubjub::Jid" do
-        subject[Jubjub::Jid.new 'dragonzaurus@foo.com'].should == @affiliations[1]
+      describe "searching by Jid if a Jubjub::Jid" do
+        
+        it "should return cached result if it has already searched" do
+          # Trigger lookup
+          @mock_connection.muc.should_receive(:retrieve_affiliations)
+          subject.first
+          subject[Jubjub::Jid.new "theozaurus@foo.com"].should == @affiliations[0]
+        end
+      
+        it "should return default result if it has already searched and does not exist" do
+          # Trigger lookup
+          @mock_connection.muc.should_receive(:retrieve_affiliations)
+          subject.first
+          subject[Jubjub::Jid.new 'blogozaurus@foo.com'].should ==
+            muc_affiliation_factory( :muc_jid => 'conference.foo.com',
+                                     :jid => 'blogozaurus@foo.com',
+                                     :affiliation => 'none',
+                                     :role => nil,
+                                     :nick => nil )
+        end
+      
+        it "should return default result if it has not already searched" do
+          @mock_connection.muc.should_not_receive(:retrieve_affiliations)
+          subject[Jubjub::Jid.new "theozaurus@foo.com"].should_not equal @affiliations[0]
+          subject[Jubjub::Jid.new "theozaurus@foo.com"].should == 
+            muc_affiliation_factory( :muc_jid => 'conference.foo.com',
+                                     :jid => 'theozaurus@foo.com',
+                                     :affiliation => 'none',
+                                     :role => nil,
+                                     :nick => nil )
+        end
+        
       end
       
-      it "should return afiliation of 'none', and role and nick as nil if not found when searching by Jubjub::Jid" do
-        subject[Jubjub::Jid.new 'blogozaurus@foo.com'].should ==
-          muc_affiliation_factory( :muc_jid => 'conference.foo.com',
-                                   :jid => 'blogozaurus@foo.com',
-                                   :affiliation => 'none',
-                                   :role => nil,
-                                   :nick => nil )
-      end
     end
     
   end

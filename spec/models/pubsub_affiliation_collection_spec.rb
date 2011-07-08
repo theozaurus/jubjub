@@ -62,23 +62,58 @@ describe Jubjub::Pubsub::AffiliationCollection do
         subject[1].should == @nodes[1]
       end
       
-      it "should search by jid if a String" do
-        subject["theozaurus@foo.com"].should == @nodes[0]
-      end
-
-      it "should return affiliation of 'none' if not found when searching by String" do
-        subject['blogozaurus@foo.com'].should == 
-          Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'blogozaurus@foo.com', 'none', @mock_connection)
+      describe "searching by node if a String" do
+      
+        it "should return cached result if it has already searched" do
+          # Trigger lookup
+          @mock_connection.pubsub.should_receive(:retrieve_affiliations)
+          subject.first
+          subject["theozaurus@foo.com"].should equal @nodes[0]
+        end
+      
+        it "should return default result if it has already searched and does not exist" do
+          # Trigger lookup
+          @mock_connection.pubsub.should_receive(:retrieve_affiliations)
+          subject.first
+          subject['blogozaurus@foo.com'].should == 
+            Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'blogozaurus@foo.com', 'none', @mock_connection)
+        end
+      
+        it "should return default result if it has not already searched" do
+          @mock_connection.pubsub.should_not_receive(:retrieve_affiliations)
+          subject['theozaurus@foo.com'].should_not equal @nodes[0]
+          subject['theozaurus@foo.com'].should == 
+            Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'theozaurus@foo.com', 'none', @mock_connection)
+        end
+        
       end
       
-      it "should search by Jid if Jubjub::Jid" do
-        subject[Jubjub::Jid.new 'dragonzaurus@foo.com'].should == @nodes[1]
+      describe "searching by jid if a Jubjub::Jid" do
+      
+        it "should return cached result if it has already searched" do
+          # Trigger lookup
+          @mock_connection.pubsub.should_receive(:retrieve_affiliations)
+          subject.first
+          subject[Jubjub::Jid.new "theozaurus@foo.com"].should equal @nodes[0]
+        end
+      
+        it "should return default result if it has already searched and does not exist" do
+          # Trigger lookup
+          @mock_connection.pubsub.should_receive(:retrieve_affiliations)
+          subject.first
+          subject[Jubjub::Jid.new 'blogozaurus@foo.com'].should == 
+            Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'blogozaurus@foo.com', 'none', @mock_connection)
+        end
+      
+        it "should return default result if it has not already searched" do
+          @mock_connection.pubsub.should_not_receive(:retrieve_affiliations)
+          subject[Jubjub::Jid.new 'theozaurus@foo.com'].should_not equal @nodes[0]
+          subject[Jubjub::Jid.new 'theozaurus@foo.com'].should == 
+            Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'theozaurus@foo.com', 'none', @mock_connection)
+        end
+        
       end
       
-      it "should return afiliation of 'none' if not found when searching by Jubjub::Jid" do
-        subject[Jubjub::Jid.new 'blogozaurus@foo.com'].should ==
-          Jubjub::Pubsub::Affiliation.new('pubsub.foo.com', 'node_1', 'blogozaurus@foo.com', 'none', @mock_connection)
-      end
     end
     
   end

@@ -218,6 +218,28 @@ describe Jubjub::Connection::XmppGateway do
       
     end
     
+    describe "message" do
+      use_vcr_cassette 'muc message', :record => :new_episodes
+      
+      before do
+        @full_jid = Jubjub::Jid.new 'message@conference.theo-template.local/nick'
+        @jid = Jubjub::Jid.new 'message@conference.theo-template.local'
+        @connection.muc.create(@full_jid)
+      end
+      
+      it "should send correct stanza" do
+        # will attempt to create new vcr cassette if the stanza is wrong
+        # relies on cassette being manually checked
+        @connection.muc.message(@jid, "Jubjub here!")
+      end
+      
+      after do
+        # Just incase the room is persistent
+        @connection.muc.destroy(@jid)        
+      end
+      
+    end
+    
     describe "exit" do
       use_vcr_cassette 'muc exit', :record => :new_episodes
       

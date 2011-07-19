@@ -9,6 +9,11 @@ module Jubjub
       @connection = connection
     end 
     
+    def message(body)
+      @connection.muc.message(jid, body)
+      self
+    end
+    
     def exit(nick = nil)
       full_jid = Jubjub::Jid.new @jid.node, @jid.domain, nick || @connection.jid.node
       

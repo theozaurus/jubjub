@@ -1,0 +1,89 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3cpresence%20to%3d%22message%40conference.theo-template.local%2fnick%22%3e%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%3c%2fpresence%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "40"
+    body: |
+      #<EventMachine::Timer:0x000001010aae90>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22message%40conference.theo-template.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%3c%2fquery%3e%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "205"
+    body: |
+      <iq type="result" id="blather000b" from="message@conference.theo-template.local" to="theozaurus@theo-template.local/512476862131169174174563">
+        <query xmlns="http://jabber.org/protocol/muc#owner"/>
+      </iq>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3cmessage%20type%3d%22groupchat%22%20to%3d%22message%40conference.theo-template.local%22%3e%3cbody%3eJubjub%20here%21%3c%2fbody%3e%3c%2fmessage%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "40"
+    body: |
+      #<EventMachine::Timer:0x0000010105b638>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
+    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22message%40conference.theo-template.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%3cdestroy%2f%3e%3c%2fquery%3e%3c%2fiq%3e%0a
+    headers: 
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: ...
+    headers: 
+      content-type: 
+      - application/xml
+      content-length: 
+      - "205"
+    body: |
+      <iq type="result" id="blather000d" from="message@conference.theo-template.local" to="theozaurus@theo-template.local/512476862131169174174563">
+        <query xmlns="http://jabber.org/protocol/muc#owner"/>
+      </iq>
+
+    http_version: "1.1"

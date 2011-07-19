@@ -88,6 +88,10 @@ Examples
     room.affiliations['bot@test.com'].set('admin')
     => true
     
+    # Message a room
+    room.message "I am an invisible man."
+    => #<Jubjub::Muc:0x10161c3b0 @jid="customjub@chat.test.com" @name=nil>
+    
     # Destroy a room
     room.destroy
     => true

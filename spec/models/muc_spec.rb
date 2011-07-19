@@ -39,6 +39,27 @@ describe Jubjub::Muc do
       end
     end
     
+    describe "message" do
+      
+      before do
+        @mock_connection = mock
+        @mock_connection.stub_chain :muc, :message
+      end
+      
+      it "should call muc.message on connection" do
+        jid = Jubjub::Jid.new "room@conference.foo.com"
+        @mock_connection.muc.should_receive( :message ).with( jid, "rrrrspec" )
+        
+        Jubjub::Muc.new( jid, nil, @mock_connection ).message( "rrrrspec" )
+      end
+      
+      it "should be chainable" do
+        room = Jubjub::Muc.new("room@conference.foo.com", nil, @mock_connection)
+        room.message("whoop").should eql room
+      end
+      
+    end
+    
     describe "exit" do
       before do
         muc_mock = mock

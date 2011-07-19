@@ -367,6 +367,24 @@ module Jubjub
           }.proxy_result
         end
         
+        
+        # http://xmpp.org/extensions/xep-0045.html#message
+        # <message
+        #     from='hag66@shakespeare.lit/pda'
+        #     to='coven@chat.shakespeare.lit'
+        #     type='groupchat'>
+        #   <body>Harpier cries: 'tis time, 'tis time.</body>
+        # </message>
+        def message(muc_jid, body)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.message_(:to => muc_jid, :type => 'groupchat') {
+              xml.body_ body
+            }
+          end
+          
+          write request
+        end
+        
         # http://xmpp.org/extensions/xep-0045.html#exit
         # <presence
         #     from='hag66@shakespeare.lit/pda'

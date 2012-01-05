@@ -46,8 +46,13 @@ describe Jubjub::Connection::XmppGateway do
 
       use_vcr_cassette 'muc configuration', :record => :new_episodes
 
+      before do
+        @jid = Jubjub::Jid.new 'configuration@conference.theo-template.local/nick'
+        @room = @connection.muc.create @jid
+      end
+
       it "return a Jubjub::Muc::Configuration" do
-        config = @connection.muc.configuration( Jubjub::Jid.new 'room@conference.theo-template.local/nick' )
+        config = @connection.muc.configuration @jid
 
         expected_config = {
           "allow_query_users"                     => { :type => "boolean", :value => "1", :label => "Allow users to query other users" },
@@ -89,6 +94,10 @@ describe Jubjub::Connection::XmppGateway do
         }
 
         config.should == Jubjub::Muc::Configuration.new(expected_config)
+      end
+
+      after do
+        @room.destroy
       end
 
     end

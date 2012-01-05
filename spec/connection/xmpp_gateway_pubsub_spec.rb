@@ -132,11 +132,7 @@ describe Jubjub::Connection::XmppGateway do
         list = @connection.pubsub.list 'pubsub.theo-template.local'
         list.should be_a_kind_of_response_proxied Array
 
-        list.size.should eql(2)
-        list[0].should be_a_kind_of Jubjub::Pubsub
-        list[0].node.should == 'node_1'
-        list[1].should be_a_kind_of Jubjub::Pubsub
-        list[1].node.should == 'node_2'
+        list.map{|item| item.node }.to_set.should == ['node_1', 'node_2'].to_set
       end
 
       after do

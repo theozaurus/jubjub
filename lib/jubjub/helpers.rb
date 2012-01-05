@@ -1,12 +1,12 @@
 module Jubjub
   module Helpers
     module Collection
-      
+
       # Hint that methods are actually applied to list using method_missing
       def inspect
         list.inspect
       end
-    
+
       def search_list(default=nil, &block)
         list unless default # We HAVE to search unless there is a default
         if list?
@@ -23,10 +23,10 @@ module Jubjub
       private :method_missing
 
       def list?
-        instance_variable_defined?("@list") 
+        instance_variable_defined?("@list")
       end
       private :list?
-      
+
     end
   end
 end

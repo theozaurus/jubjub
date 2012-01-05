@@ -1,9 +1,9 @@
 class Jubjub::Pubsub::AffiliationCollection
-  
+
   attr_reader :jid, :node
-  
+
   include Jubjub::Helpers::Collection
-  
+
   def initialize(jid,node,connection)
     @jid = Jubjub::Jid.new jid
     @node = node
@@ -23,9 +23,9 @@ class Jubjub::Pubsub::AffiliationCollection
   end
 
 private
-  
+
   def list
     @list ||= @connection.pubsub.retrieve_affiliations( @jid, @node )
   end
-  
+
 end

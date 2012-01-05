@@ -1,9 +1,9 @@
 class Jubjub::Muc::AffiliationCollection
-  
+
   attr_reader :jid
-  
+
   include Jubjub::Helpers::Collection
-  
+
   def initialize(jid,connection)
     @jid = Jubjub::Jid.new jid
     @connection = connection
@@ -22,10 +22,10 @@ class Jubjub::Muc::AffiliationCollection
   end
 
 private
-  
+
   def list
     # OPTIMIZE: These requests should be made in parallel, not sequentially
     @list ||= %w(owner outcast member admin).map{|a| @connection.muc.retrieve_affiliations( jid, a ) }.flatten
   end
-  
+
 end

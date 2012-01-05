@@ -1,7 +1,7 @@
 class Jubjub::Muc::Affiliation
-  
+
   attr_reader :muc_jid, :jid, :nick, :role, :affiliation
-  
+
   def initialize(muc_jid, jid, nick, role, affiliation, connection)
     @muc_jid = Jubjub::Jid.new muc_jid
     @jid = Jubjub::Jid.new jid
@@ -20,23 +20,23 @@ class Jubjub::Muc::Affiliation
   def outcast?
     affiliation == "outcast"
   end
-  
+
   def none?
     affiliation == "none"
   end
-  
+
   def member?
     affiliation == "member"
   end
-  
+
   def admin?
     affiliation == "admin"
   end
-  
+
   def owner?
     affiliation == "owner"
   end
-  
+
   def set(new_affiliation)
     old_affiliation = @affiliation
     @affiliation = new_affiliation
@@ -44,27 +44,27 @@ class Jubjub::Muc::Affiliation
     @affiliation = old_affiliation unless r
     r
   end
-  
+
   def set_outcast
     set 'outcast'
   end
-  
+
   def set_none
     set 'none'
   end
-  
+
   def set_member
-    set 'member'    
+    set 'member'
   end
-  
+
   def set_admin
-    set 'admin'    
+    set 'admin'
   end
-  
+
   def set_owner
     set 'owner'
   end
-  
+
   def ==(other)
     other.is_a?( self.class ) &&
     other.muc_jid     == self.muc_jid &&
@@ -73,5 +73,5 @@ class Jubjub::Muc::Affiliation
     other.role        == self.role &&
     other.affiliation == self.affiliation
   end
-  
+
 end

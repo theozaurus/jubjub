@@ -5,19 +5,19 @@ module Jubjub
   module Connection
     class XmppGateway
       class Muc
-        
+
         include Helper
-        
+
         def initialize(connection)
           @connection = connection
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#createroom-instant
         # <presence
         #     from='crone1@shakespeare.lit/desktop'
         #     to='darkcave@chat.shakespeare.lit/firstwitch'>
         #   <x xmlns='http://jabber.org/protocol/muc'/>
-        # </presence> 
+        # </presence>
         # <iq from='crone1@shakespeare.lit/desktop'
         #     id='create1'
         #     to='darkcave@chat.shakespeare.lit'
@@ -35,7 +35,7 @@ module Jubjub
         #
         def create(full_jid, configuration = Jubjub::Muc::Configuration.new)
           room_jid = Jubjub::Jid.new full_jid.node, full_jid.domain
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:type => 'set', :to => room_jid) {
               xml.query_('xmlns' => namespaces['muc_owner']){
@@ -43,15 +43,15 @@ module Jubjub
               }
             }
           end
-          
+
           presence full_jid
-          
+
           Jubjub::Response.new( write request ){|stanza|
             success = stanza.xpath( '/iq[@type="result"]' ).any?
             Jubjub::Muc.new room_jid, nil, @connection if success
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#createroom-reserved
         # <presence
         #     from='crone1@shakespeare.lit/desktop'
@@ -200,15 +200,15 @@ module Jubjub
         # </iq>
         def configuration(full_jid)
           room_jid = Jubjub::Jid.new full_jid.node, full_jid.domain
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => room_jid, :type => 'get') {
               xml.query_('xmlns' => namespaces['muc_owner'])
             }
           end
-          
+
           presence full_jid
-          
+
           Jubjub::Response.new( write request ){|stanza|
             config = stanza.xpath(
               "/iq[@type='result']/muc_owner:query/x_data:x[@type='form']",
@@ -217,7 +217,7 @@ module Jubjub
             Jubjub::Muc::Configuration.new config if config
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#destroyroom
         # <iq from='crone1@shakespeare.lit/desktop'
         #     id='begone'
@@ -243,12 +243,12 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#disco-rooms
         # <iq from='hag66@shakespeare.lit/pda'
         #     id='disco2'
@@ -279,7 +279,7 @@ module Jubjub
               xml.query_('xmlns' => namespaces['disco_items'])
             }
           end
-                    
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/disco_items:query/disco_items:item',
@@ -290,7 +290,7 @@ module Jubjub
             }
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#modifymember
         # <iq from='crone1@shakespeare.lit/desktop'
         #     id='member3'
@@ -300,7 +300,7 @@ module Jubjub
         #     <item affiliation='member'/>
         #   </query>
         # </iq>
-        # 
+        #
         # Expected
         # <iq from='coven@chat.shakespeare.lit'
         #     id='member3'
@@ -321,7 +321,7 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/muc_admin:query/muc_admin:item',
@@ -332,7 +332,7 @@ module Jubjub
             }
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#grantmember
         # <iq from='crone1@shakespeare.lit/desktop'
         #     id='member1'
@@ -351,7 +351,7 @@ module Jubjub
         #     type='result'/>
         def modify_affiliations(muc_jid, *affiliations)
           affiliations = [affiliations].flatten
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => muc_jid, :type => 'set') {
               xml.query_('xmlns' => namespaces['muc_admin']) {
@@ -361,13 +361,13 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
-        
+
+
         # http://xmpp.org/extensions/xep-0045.html#message
         # <message
         #     from='hag66@shakespeare.lit/pda'
@@ -381,10 +381,10 @@ module Jubjub
               xml.body_ body
             }
           end
-          
+
           write request
         end
-        
+
         # http://xmpp.org/extensions/xep-0045.html#exit
         # <presence
         #     from='hag66@shakespeare.lit/pda'
@@ -393,22 +393,22 @@ module Jubjub
         def exit(full_jid)
           presence full_jid, :unavailable
         end
-        
+
       private
-      
+
         def presence(full_jid, availability = :available)
           options = { :to => full_jid }
           options[:type] = availability unless availability == :available
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.presence_(options) {
               xml.x_('xmlns' => 'http://jabber.org/protocol/muc')
             }
           end
-          
+
           write request
         end
-        
+
         def namespaces
           {
             'disco_items' => 'http://jabber.org/protocol/disco#items',
@@ -417,7 +417,7 @@ module Jubjub
             'x_data'      => 'jabber:x:data'
           }
         end
-        
+
       end
     end
   end

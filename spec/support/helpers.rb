@@ -5,7 +5,7 @@ end
 def fixture_path(location)
   File.join(File.dirname(File.dirname(__FILE__)),'fixtures',location)
 end
-  
+
 def muc_affiliation_factory(override = {})
   options = {
     :muc_jid     => Jubjub::Jid.new("borogove@conference.foo.com"),
@@ -15,7 +15,7 @@ def muc_affiliation_factory(override = {})
     :affiliation => 'none',
     :connection  => 'SHHHH CONNECTION OBJECT'
   }.merge( override )
-  
+
   Jubjub::Muc::Affiliation.new(
     options[:muc_jid],
     options[:jid],

@@ -5,13 +5,13 @@ module Jubjub
   module Connection
     class XmppGateway
       class Pubsub
-        
+
         include Helper
-        
+
         def initialize(connection)
           @connection = connection
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#entity-nodes
         # <iq type='get'
         #     from='francisco@denmark.lit/barracks'
@@ -19,7 +19,7 @@ module Jubjub
         #     id='nodes1'>
         #   <query xmlns='http://jabber.org/protocol/disco#items'/>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -40,7 +40,7 @@ module Jubjub
               xml.query_('xmlns' => namespaces['disco_items'])
             }
           end
-                    
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/disco_items:query/disco_items:item',
@@ -52,7 +52,7 @@ module Jubjub
             }
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#owner-create-and-configure
         # <iq type='set'
         #     from='hamlet@denmark.lit/elsinore'
@@ -71,7 +71,7 @@ module Jubjub
         #     </configure>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -82,7 +82,7 @@ module Jubjub
             xml.iq_(:to => jid, :type => 'set') {
               xml.pubsub_('xmlns' => namespaces['pubsub']) {
                 xml.create_('node' => node)
-                if configuration 
+                if configuration
                   xml.configure_{
                     configuration.to_builder(xml.parent)
                   }
@@ -90,7 +90,7 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             success = stanza.xpath(
               # Pull out required parts
@@ -99,7 +99,7 @@ module Jubjub
             Jubjub::Pubsub.new jid, node, @connection if success
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#owner-configure
         # <iq type='get'
         #     from='hamlet@denmark.lit/elsinore'
@@ -109,7 +109,7 @@ module Jubjub
         #     <configure node='princely_musings'/>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -132,7 +132,7 @@ module Jubjub
         #     </configure>
         #   </pubsub>
         # </iq>
-        def default_configuration(jid)          
+        def default_configuration(jid)
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'get') {
               xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
@@ -140,7 +140,7 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             config = stanza.xpath(
               # Pull out required parts
@@ -150,7 +150,7 @@ module Jubjub
             Jubjub::Pubsub::Configuration.new config if config
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#owner-delete
         # <iq type='set'
         #     from='hamlet@denmark.lit/elsinore'
@@ -162,12 +162,12 @@ module Jubjub
         #     </delete>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
         #     id='delete1'/>
-        def destroy(jid, node, redirect_jid = nil, redirect_node = nil)        
+        def destroy(jid, node, redirect_jid = nil, redirect_node = nil)
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'set') {
               xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
@@ -177,12 +177,12 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#owner-purge
         # <iq type='set'
         #     from='hamlet@denmark.lit/elsinore'
@@ -205,12 +205,12 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#subscriber-subscribe
         # <iq type='set'
         #     from='francisco@denmark.lit/barracks'
@@ -236,7 +236,7 @@ module Jubjub
         #         subscription='subscribed'/>
         #   </pubsub>
         # </iq>
-        def subscribe(jid, node)        
+        def subscribe(jid, node)
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'set') {
               xml.pubsub_('xmlns' => namespaces['pubsub']) {
@@ -244,7 +244,7 @@ module Jubjub
               }
             }
           end
-                    
+
           Jubjub::Response.new( write request ){|stanza|
             result = stanza.xpath(
               '/iq[@type="result"]/pubsub:pubsub/pubsub:subscription',
@@ -252,13 +252,13 @@ module Jubjub
             )
             if result.any?
               subscriber   = Jubjub::Jid.new(result.first.attr('jid'))
-              subid        = result.first.attr('subid') 
+              subid        = result.first.attr('subid')
               subscription = result.first.attr('subscription')
               Jubjub::Pubsub::Subscription.new jid, node, subscriber, subid, subscription, @connection
             end
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#subscriber-unsubscribe
         # <iq type='set'
         #     from='francisco@denmark.lit/barracks'
@@ -270,16 +270,16 @@ module Jubjub
         #          jid='francisco@denmark.lit'/>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
         #     to='francisco@denmark.lit/barracks'
         #     id='unsub1'/>
-        def unsubscribe(jid, node, subid=nil)        
+        def unsubscribe(jid, node, subid=nil)
           unsubscribe_options = {'node' => node, 'jid' => subscriber}
           unsubscribe_options['subid'] = subid if subid
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'set') {
               xml.pubsub_('xmlns' => namespaces['pubsub']) {
@@ -287,12 +287,12 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#publisher-publish
         # <iq type='set'
         #     from='hamlet@denmark.lit/blogbot'
@@ -306,7 +306,7 @@ module Jubjub
         #     </publish>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -321,7 +321,7 @@ module Jubjub
         def publish(jid, node, data, item_id = nil)
           item_options = {}
           item_options[:id] = item_id if item_id
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => jid, :type => 'set') {
               xml.pubsub_('xmlns' => namespaces['pubsub']) {
@@ -337,7 +337,7 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             result = stanza.xpath(
               '/iq[@type="result"]/pubsub:pubsub/pubsub:publish/pubsub:item',
@@ -350,7 +350,7 @@ module Jubjub
             end
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#publisher-delete
         # <iq type='set'
         #     from='hamlet@denmark.lit/elsinore'
@@ -362,7 +362,7 @@ module Jubjub
         #     </retract>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -378,12 +378,12 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#subscriber-retrieve
         # <iq type='get'
         #     from='francisco@denmark.lit/barracks'
@@ -393,7 +393,7 @@ module Jubjub
         #     <items node='princely_musings'/>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -427,7 +427,7 @@ module Jubjub
               }
             }
           end
-                    
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/pubsub:pubsub/pubsub:items/pubsub:item',
@@ -439,8 +439,8 @@ module Jubjub
             }
           }.proxy_result
         end
-        
-        
+
+
         # http://xmpp.org/extensions/xep-0060.html#owner-affiliations
         # <iq type='get'
         #     from='hamlet@denmark.lit/elsinore'
@@ -450,7 +450,7 @@ module Jubjub
         #     <affiliations node='princely_musings'/>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
@@ -471,7 +471,7 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath(
               '/iq[@type="result"]/pubsub_owner:pubsub/pubsub_owner:affiliations/pubsub_owner:affiliation',
@@ -483,7 +483,7 @@ module Jubjub
             }
           }.proxy_result
         end
-        
+
         # http://xmpp.org/extensions/xep-0060.html#owner-affiliations-modify
         # <iq type='set'
         #     from='hamlet@denmark.lit/elsinore'
@@ -495,14 +495,14 @@ module Jubjub
         #     </affiliations>
         #   </pubsub>
         # </iq>
-        # 
+        #
         # Expected
         # <iq type='result'
         #     from='pubsub.shakespeare.lit'
         #     id='ent2'/>
         def modify_affiliations(pubsub_jid, pubsub_node, *affiliations)
           affiliations = [affiliations].flatten
-          
+
           request = Nokogiri::XML::Builder.new do |xml|
             xml.iq_(:to => pubsub_jid, :type => 'set') {
               xml.pubsub_(:xmlns => namespaces['pubsub_owner']){
@@ -514,22 +514,22 @@ module Jubjub
               }
             }
           end
-          
+
           Jubjub::Response.new( write request ){|stanza|
             stanza.xpath( '/iq[@type="result"]' ).any?
           }.proxy_result
         end
-        
+
       private
-      
+
         def subscriber
           Jubjub::Jid.new @connection.jid.node, @connection.jid.domain
         end
-        
+
         def pubsub_uri(jid, node)
           "xmpp:#{jid}?;node=#{node}"
         end
-      
+
         def namespaces
           {
             'disco_items'  => 'http://jabber.org/protocol/disco#items',
@@ -538,7 +538,7 @@ module Jubjub
             'x_data'       => 'jabber:x:data'
           }
         end
-        
+
       end
     end
   end

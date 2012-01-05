@@ -2,7 +2,7 @@ require "nokogiri"
 
 module Jubjub
   class DataForm
-    
+
     attr_reader :fields
 
     def initialize(config={})
@@ -47,7 +47,7 @@ module Jubjub
     def ==(thing)
       thing.is_a?( self.class ) && thing.fields == self.fields
     end
-    
+
     def to_builder(root_doc=Nokogiri::XML.parse(""))
       Nokogiri::XML::Builder.with(root_doc) do |xml|
         xml.x_('xmlns' => 'jabber:x:data', :type => 'submit') {
@@ -87,7 +87,7 @@ module Jubjub
         ) if mystery_arguments.any?
       end
     end
-    
+
     def convert_xml(config)
       config.xpath(
         # Get fields
@@ -98,24 +98,24 @@ module Jubjub
         hash = {}
         hash[:type]  = field.attr 'type'
         hash[:label] = field.attr 'label'
-        
+
         value = field.xpath('x_data:value', namespaces)
         hash[:value] = hash[:type].match(/\-multi$/) ? value.map{|e| e.content } : value.text
-        
+
         options = field.xpath('x_data:option', namespaces).map{|o|
           { :label => o.attr('label'), :value => o.xpath('x_data:value', namespaces).text }
         }
         hash[:options] = options if options.any?
-        
+
         result[field.attr 'var'] = hash unless hash[:type] == 'fixed'
         result
       }
     end
-    
+
     def namespaces
       { 'x_data' => 'jabber:x:data' }
     end
 
   end
-  
+
 end

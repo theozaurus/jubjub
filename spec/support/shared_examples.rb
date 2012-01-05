@@ -1,11 +1,11 @@
 shared_examples_for "any data form" do
-  
+
   describe "creating" do
-    
+
     it "should understand XML to build object" do
       dataform_1 = xml_fixture 'dataform_1'
       dataform = subject.class.new(dataform_1)
-      
+
       expected = {
         "public"      => { :type => "boolean",      :value => "", :label => "Public bot?" },
         "FORM_TYPE"   => { :type => "hidden",       :value => "jabber:bot", :label => nil},
@@ -17,7 +17,7 @@ shared_examples_for "any data form" do
           {:value => "contests",  :label=>"Contests"},
           {:value => "news",      :label=>"News"},
           {:value => "polls",     :label=>"Polls"},
-          {:value => "reminders", :label=>"Reminders"}, 
+          {:value => "reminders", :label=>"Reminders"},
           {:value => "search",    :label=>"Search"}
         ]},
         "maxsubs"     => { :type => "list-single",  :value => "20", :label => "Maximum number of subscribers", :options => [
@@ -28,15 +28,15 @@ shared_examples_for "any data form" do
           { :value => "100",  :label=>"100"},
           { :value => "none", :label=>"None"}]}
       }
-      
+
       dataform.fields.should == expected
     end
-    
+
     it "should understand hash to build object" do
-      params = {  
+      params = {
         "muc#roomconfig_allowvisitornickchange" => { :type => "boolean", :value => "1", :label => "Allow visitors to change nickname" },
         "muc#roomconfig_roomname" => { :type => "text-single", :value => "", :label => "Room title" },
-        "muc#roomconfig_whois" => { 
+        "muc#roomconfig_whois" => {
           :type    => "list-single",
           :value   => "moderators",
           :label   => "Present real Jabber IDs to",
@@ -46,35 +46,35 @@ shared_examples_for "any data form" do
         },
         "muc#roomconfig_passwordprotectedroom" => { :type => "boolean", :value => "0", :label => "Make room password protected" }
       }
-      
+
       config = subject.class.new params
-            
+
       config.should be_a_kind_of subject.class
       config.fields.should == params
     end
 
     it "should throw an error if an unknown key is sent" do
-      expect{ 
+      expect{
         subject.class.new( "foo" => { :type => "boolean", :value => "1", :label => "Foo", :oh_no => nil } )
-      }.to raise_error( 
+      }.to raise_error(
         Jubjub::ArgumentError,
         ":oh_no is not a recognised option for foo"
       )
     end
-    
+
     it "should throw an error if a hash isn't passed in" do
-      expect{ 
+      expect{
         subject.class.new( "config" )
-      }.to raise_error( 
+      }.to raise_error(
         Jubjub::ArgumentError,
         "please initialize with a hash of the format { 'foo' => {:type => 'boolean', :value => false, :label => 'Fooey'} }"
       )
     end
-    
+
   end
-  
+
   describe "instance method" do
-        
+
     describe "[]" do
       context "for booleans" do
         before do
@@ -101,16 +101,16 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should return false or true" do
           @config['muc#roomconfig_allowinvites'].should be_false
           @config['muc#roomconfig_moderatedroom'].should be_false
-          
+
           @config['muc#roomconfig_changesubject'].should be_true
           @config['muc#roomconfig_publicroom'].should be_true
         end
       end
-      
+
       context "for lists" do
         before do
           @config = subject.class.new(
@@ -137,16 +137,16 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should return an array for list-multi" do
           @config["muc#roomconfig_presencebroadcast"].should == ["moderator", "participant", "visitor"]
         end
-        
+
         it "should return a single item for list-single" do
-          @config["muc#roomconfig_maxusers"].should == "20"          
+          @config["muc#roomconfig_maxusers"].should == "20"
         end
       end
-      
+
       context "for jids" do
         before do
           @config = subject.class.new(
@@ -162,15 +162,15 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should return a Jubjub::Jid" do
           jids = [Jubjub::Jid.new("wiccarocks@shakespeare.lit"), Jubjub::Jid.new("hecate@shakespeare.lit")]
-          
+
           @config['muc#roomconfig_roomadmins'].should == jids
           @config['special_jid'].should == Jubjub::Jid.new("foo@bar.com")
         end
       end
-      
+
       context "for non existent options" do
         before do
           @config = subject.class.new(
@@ -181,15 +181,15 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should return nil" do
           @config['made_up'].should be_nil
         end
       end
     end
-    
+
     describe "[]=" do
-      
+
       context "for booleans do" do
         before do
           @config = subject.class.new(
@@ -200,33 +200,33 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should convert '0' to false" do
           @config["muc#roomconfig_allowinvites"] = '0'
           @config["muc#roomconfig_allowinvites"].should be_false
         end
-        
+
         it "should convert '1' to true" do
           @config["muc#roomconfig_allowinvites"] = '1'
           @config["muc#roomconfig_allowinvites"].should be_true
         end
-        
+
         it "should convert 'true' to true" do
           @config["muc#roomconfig_allowinvites"] = 'true'
           @config["muc#roomconfig_allowinvites"].should be_true
         end
-        
+
         it "should convert 'false' to false" do
           @config["muc#roomconfig_allowinvites"] = 'false'
           @config["muc#roomconfig_allowinvites"].should be_false
         end
-        
+
         it "should return false if something else" do
           @config["muc#roomconfig_allowinvites"] = 'wibble'
           @config["muc#roomconfig_allowinvites"].should be_false
         end
       end
-      
+
       context "for multi types" do
         before do
           @config = subject.class.new(
@@ -237,20 +237,20 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should accept an array" do
           @config['muc#roomconfig_roomadmins'] = ['giraffe@zoo', 'elephant@zoo']
-          
+
           @config['muc#roomconfig_roomadmins'].should == [Jubjub::Jid.new('giraffe@zoo'), Jubjub::Jid.new('elephant@zoo')]
         end
-        
+
         it "should convert to an array if it isn't" do
           @config['muc#roomconfig_roomadmins'] = 'giraffe@zoo'
-          
+
           @config['muc#roomconfig_roomadmins'].should == [Jubjub::Jid.new('giraffe@zoo')]
         end
       end
-      
+
       context "for list types" do
         before do
           @config = subject.class.new(
@@ -277,23 +277,23 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should set the value if it is a valid option" do
           @config['muc#roomconfig_maxusers'] = "10"
           @config['muc#roomconfig_maxusers'].should eql("10")
-          
+
           @config['muc#roomconfig_presencebroadcast'] = ["visitor"]
-          @config['muc#roomconfig_presencebroadcast'].should eql(["visitor"])          
+          @config['muc#roomconfig_presencebroadcast'].should eql(["visitor"])
         end
-        
+
         it "should raise an error if the value isn't one of the options" do
           expect{
-           @config['muc#roomconfig_maxusers'] = "50000" 
+           @config['muc#roomconfig_maxusers'] = "50000"
           }.to raise_error(
             Jubjub::ArgumentError,
             "50000 is not an accepted value please choose from 10, 20, 30, 40"
           )
-          
+
           expect{
             @config['muc#roomconfig_presencebroadcast'] = ["superman", "moderators"]
           }.to raise_error(
@@ -302,7 +302,7 @@ shared_examples_for "any data form" do
           )
         end
       end
-      
+
       context "for jid types" do
         before do
           @config = subject.class.new(
@@ -318,7 +318,7 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should convert strings to jids" do
           @config['muc#roomconfig_roomadmins'] = ["foo@bar.com", "bar@foo.com"]
           @config['muc#roomconfig_roomadmins'].should == [Jubjub::Jid.new('foo@bar.com'), Jubjub::Jid.new('bar@foo.com')]
@@ -326,7 +326,7 @@ shared_examples_for "any data form" do
           @config['special_jid'] = "bar@foo.com"
           @config['special_jid'].should == Jubjub::Jid.new('bar@foo.com')
         end
-        
+
         it "should accept jids" do
           @config['muc#roomconfig_roomadmins'] = [Jubjub::Jid.new('foo@bar.com'), Jubjub::Jid.new('bar@foo.com')]
           @config['muc#roomconfig_roomadmins'].should == [Jubjub::Jid.new('foo@bar.com'), Jubjub::Jid.new('bar@foo.com')]
@@ -335,7 +335,7 @@ shared_examples_for "any data form" do
           @config['special_jid'].should == Jubjub::Jid.new('bar@foo.com')
         end
       end
-      
+
       context "for non existent fields" do
         before do
           @config = subject.class.new(
@@ -346,9 +346,9 @@ shared_examples_for "any data form" do
             }
           )
         end
-        
+
         it "should raise an error" do
-          expect{ 
+          expect{
             @config['fooey'] = "bar"
           }.to raise_error(
             Jubjub::ArgumentError,
@@ -356,9 +356,9 @@ shared_examples_for "any data form" do
           )
         end
       end
-      
+
     end
-    
+
     describe "fields" do
       it "should return all of the types, values, labels and options for each field" do
         params = {
@@ -373,7 +373,7 @@ shared_examples_for "any data form" do
             ]
           }
         }
-        
+
         adjusted_params = {
           "allow_query_users"       => { :type => "boolean", :value => false, :label => "Allow users to query other users" },
           "muc#roomconfig_maxusers" => {
@@ -386,37 +386,37 @@ shared_examples_for "any data form" do
             ]
           }
         }
-        
+
         config = subject.class.new(params)
         config.fields.should == params
-        
+
         config['allow_query_users'] = false
         config.fields.should == adjusted_params
       end
     end
-    
+
     describe "==" do
-      it "should match the same room config" do        
+      it "should match the same room config" do
         config_1 = subject.class.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
         config_2 = subject.class.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
-        
+
         config_1.should == config_2
       end
-      
+
       it "should not match a different room config" do
         config_1 = subject.class.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
         config_2 = subject.class.new("allow_query_users" => { :type => "boolean", :value => "0", :label => "Foo" } )
-        
+
         config_1.should_not == config_2
       end
     end
-    
+
     describe "settings" do
       before do
         @config = subject.class.new(
           "muc#roomconfig_allowvisitornickchange" => { :type => "boolean", :value => "1", :label => "Allow visitors to change nickname" },
           "muc#roomconfig_roomname" => { :type => "text-single", :value => "", :label => "Room title" },
-          "muc#roomconfig_whois" => { 
+          "muc#roomconfig_whois" => {
             :type    => "list-single",
             :value   => "moderators",
             :label   => "Present real Jabber IDs to",
@@ -431,9 +431,9 @@ shared_examples_for "any data form" do
           },
           "muc#roomconfig_passwordprotectedroom" => { :type => "boolean", :value => "0", :label => "Make room password protected" }
         )
-        
+
       end
-      
+
       it "should generate hash of name and values" do
         @config.settings.should == {
           "muc#roomconfig_allowvisitornickchange" => [true],
@@ -446,53 +446,53 @@ shared_examples_for "any data form" do
     end
 
     describe "to_builder" do
-      
+
       it "should return a Nokogiri::XML::Builder" do
-        subject.to_builder.should be_a_kind_of Nokogiri::XML::Builder 
+        subject.to_builder.should be_a_kind_of Nokogiri::XML::Builder
       end
-      
+
       it "should be possible to merge this into another Nokogiri::Builder" do
         doc = Nokogiri::XML::Builder.new{|xml|
           xml.foo {
             subject.to_builder(xml.parent)
           }
         }.to_xml
-        
+
         expected = "<?xml version=\"1.0\"?>\n<foo>\n  <x xmlns=\"jabber:x:data\" type=\"submit\"/>\n</foo>\n"
-        
+
         doc.should == expected
       end
-      
+
     end
-    
+
   end
-  
+
   describe "dynamic methods" do
-    
+
     describe "<friendly name>= " do
       it "should return the same as []="
     end
-    
+
     describe "<friendly name>" do
       it "should return the same as []"
     end
-    
+
     describe "<friendly name>?" do
       it "should return label"
     end
-    
+
     describe "<name>=" do
       it "should return the same as []="
     end
-    
+
     describe "<name>" do
       it "should return the same as []"
     end
-    
+
     describe "<name>?" do
       it "should return label"
     end
-    
+
   end
-  
+
 end

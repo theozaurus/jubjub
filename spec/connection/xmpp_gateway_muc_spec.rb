@@ -1,54 +1,54 @@
 require 'spec_helper'
 
 describe Jubjub::Connection::XmppGateway do
-  
+
   before do
     @connection = Jubjub::Connection::XmppGateway.new('theozaurus@theo-template.local','secret', {:host => '127.0.0.1', :port => '8000'})
   end
-  
+
   describe "muc" do
-    
+
     describe "create" do
-      
+
       use_vcr_cassette 'muc create', :record => :new_episodes
-      
+
       it "return a Jubjub::Muc" do
         @room = @connection.muc.create( Jubjub::Jid.new 'room@conference.theo-template.local/nick' )
         @room.should be_a_kind_of_response_proxied Jubjub::Muc
         @room.jid.should == Jubjub::Jid.new( 'room@conference.theo-template.local' )
       end
-      
+
       after do
         @room.destroy
       end
-      
+
     end
-    
+
     describe "create with configuration" do
-      
+
       use_vcr_cassette 'muc create with configuration', :record => :new_episodes
-      
+
       it "return a Jubjub::Muc" do
         @config = Jubjub::Muc::Configuration.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Allow users to query other users" })
-        
+
         @room = @connection.muc.create( Jubjub::Jid.new( 'room@conference.theo-template.local/nick' ), @config )
         @room.should be_a_kind_of_response_proxied Jubjub::Muc
         @room.jid.should == Jubjub::Jid.new( 'room@conference.theo-template.local' )
       end
-      
+
       after do
         @room.destroy
       end
-      
+
     end
-    
+
     describe "configuration" do
-      
+
       use_vcr_cassette 'muc configuration', :record => :new_episodes
-      
+
       it "return a Jubjub::Muc::Configuration" do
         config = @connection.muc.configuration( Jubjub::Jid.new 'room@conference.theo-template.local/nick' )
-        
+
         expected_config = {
           "allow_query_users"                     => { :type => "boolean", :value => "1", :label => "Allow users to query other users" },
           "allow_private_messages"                => { :type => "boolean", :value => "1", :label => "Allow users to send private messages" },
@@ -87,49 +87,49 @@ describe Jubjub::Connection::XmppGateway do
               { :value => "100", :label => "100" },
               { :value => "200", :label => "200" }]}
         }
-        
+
         config.should == Jubjub::Muc::Configuration.new(expected_config)
       end
-      
+
     end
-    
+
     describe "list" do
-      
+
       use_vcr_cassette 'muc list', :record => :new_episodes
-      
+
       before do
         @connection.muc.create Jubjub::Jid.new( 'test_1@conference.theo-template.local/nick' )
         @connection.muc.create Jubjub::Jid.new( 'test_2@conference.theo-template.local/nick' )
       end
-      
+
       it "return an array of Jubjub::Muc" do
         list = @connection.muc.list( Jubjub::Jid.new 'conference.theo-template.local' )
         list.should be_a_kind_of_response_proxied Array
-        
+
         list.size.should eql(2)
         list[0].should be_a_kind_of Jubjub::Muc
         list[0].jid.should == Jubjub::Jid.new( 'test_1@conference.theo-template.local' )
         list[1].should be_a_kind_of Jubjub::Muc
         list[1].jid.should == Jubjub::Jid.new( 'test_2@conference.theo-template.local' )
       end
-      
+
     end
-    
+
     describe "retrieve_affiliations" do
-      
+
       use_vcr_cassette 'muc retrieve_affiliations', :record => :new_episodes
-      
+
       before do
         @room_full = Jubjub::Jid.new( 'retrieve_affiliations@conference.theo-template.local/theozaurus' )
         @room = Jubjub::Jid.new @room_full.node, @room_full.domain
-        
+
         @connection.muc.create @room_full
       end
-      
+
       it "return an array of Jubjub::Muc::Affiliation" do
         list = @connection.muc.retrieve_affiliations @room, 'owner'
         list.should be_a_kind_of_response_proxied Array
-        
+
         list.size.should eql(1)
         list[0].should be_a_kind_of Jubjub::Muc::Affiliation
         list[0].jid.should == Jubjub::Jid.new( 'theozaurus@theo-template.local' )
@@ -137,38 +137,38 @@ describe Jubjub::Connection::XmppGateway do
         list[0].affiliation.should == "owner"
         list[0].nick.should == nil
       end
-      
+
       after do
         @connection.muc.destroy @room
       end
-      
+
     end
-    
+
     describe "modify_affiliations" do
-      
+
       use_vcr_cassette 'muc modify_affiliations', :record => :new_episodes
-      
+
       it "should return true when successful" do
         room_full = Jubjub::Jid.new 'modify_affiliations_1@conference.theo-template.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
-        
-        affiliation = muc_affiliation_factory :muc_jid => room, 
+
+        affiliation = muc_affiliation_factory :muc_jid => room,
                                               :jid => 'ed@theo-template.local',
                                               :affiliation => 'owner',
                                               :connection => @connection
-        
+
         @connection.muc.modify_affiliations( room, affiliation).should equal(true)
-        
+
         @connection.muc.destroy room
       end
-      
+
       it "should allow affiliations to be specified as an array" do
         room_full = Jubjub::Jid.new 'modify_affiliations_2@conference.theo-template.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
-        
-        affiliation_1 = muc_affiliation_factory :muc_jid => room, 
+
+        affiliation_1 = muc_affiliation_factory :muc_jid => room,
                                                 :jid => 'ed@theo-template.local',
                                                 :affiliation => 'owner',
                                                 :connection => @connection
@@ -176,18 +176,18 @@ describe Jubjub::Connection::XmppGateway do
                                                 :jid => 'bob@theo-template.local',
                                                 :affiliation => 'member',
                                                 :connection => @connection
-        
+
         @connection.muc.modify_affiliations room, [affiliation_1, affiliation_2]
-        
+
         @connection.muc.destroy room
       end
-      
+
       it "should allow affiliations to be specified as arguments" do
         room_full = Jubjub::Jid.new 'modify_affiliations_3@conference.theo-template.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
-        
-        affiliation_1 = muc_affiliation_factory :muc_jid => room, 
+
+        affiliation_1 = muc_affiliation_factory :muc_jid => room,
                                                 :jid => 'ed@theo-template.local',
                                                 :affiliation => 'owner',
                                                 :connection => @connection
@@ -195,89 +195,89 @@ describe Jubjub::Connection::XmppGateway do
                                                 :jid => 'bob@theo-template.local',
                                                 :affiliation => 'member',
                                                 :connection => @connection
-        
+
         @connection.muc.modify_affiliations room, affiliation_1, affiliation_2
-        
+
         @connection.muc.destroy room
       end
-      
+
       it "should return false if unsuccessful" do
         room_full = Jubjub::Jid.new 'modify_affiliations_4@conference.theo-template.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
-        
-        affiliation = muc_affiliation_factory :muc_jid => room, 
+
+        affiliation = muc_affiliation_factory :muc_jid => room,
                                               :jid => 'ed@theo-template.local',
                                               :affiliation => 'WIBBLE',
                                               :connection => @connection
-                                              
+
         @connection.muc.modify_affiliations( room, affiliation ).should equal(false)
-        
+
         @connection.muc.destroy room
       end
-      
+
     end
-    
+
     describe "message" do
       use_vcr_cassette 'muc message', :record => :new_episodes
-      
+
       before do
         @full_jid = Jubjub::Jid.new 'message@conference.theo-template.local/nick'
         @jid = Jubjub::Jid.new 'message@conference.theo-template.local'
         @connection.muc.create(@full_jid)
       end
-      
+
       it "should send correct stanza" do
         # will attempt to create new vcr cassette if the stanza is wrong
         # relies on cassette being manually checked
         @connection.muc.message(@jid, "Jubjub here!")
       end
-      
+
       after do
         # Just incase the room is persistent
-        @connection.muc.destroy(@jid)        
+        @connection.muc.destroy(@jid)
       end
-      
+
     end
-    
+
     describe "exit" do
       use_vcr_cassette 'muc exit', :record => :new_episodes
-      
+
       before do
         @full_jid = Jubjub::Jid.new 'extra@conference.theo-template.local/nick'
         @jid = Jubjub::Jid.new 'extra@conference.theo-template.local'
         @connection.muc.create(@full_jid)
       end
-      
+
       it "should send correct stanza" do
         # will attempt to create new vcr cassette if the stanza is wrong
         # relies on cassette being manually checked
         @connection.muc.exit(@full_jid)
       end
-      
+
       after do
         # Just incase the room is persistent
-        @connection.muc.destroy(@jid)        
+        @connection.muc.destroy(@jid)
       end
-      
+
     end
-    
+
     describe "destroy" do
-      
+
       use_vcr_cassette 'muc destroy', :record => :new_episodes
-      
+
       before do
         @jid      = Jubjub::Jid.new 'extra@conference.theo-template.local'
         @full_jid = Jubjub::Jid.new 'extra@conference.theo-template.local/nick'
         @connection.muc.create @full_jid
       end
-      
+
       it "return true" do
         @connection.muc.destroy( @jid ).should be_true
       end
-      
+
     end
-    
+
   end
-  
+
 end

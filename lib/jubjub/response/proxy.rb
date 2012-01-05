@@ -6,26 +6,26 @@ module Jubjub
       instance_methods.each do |m|
         undef_method(m) if m.to_s !~ /(?:^__|^nil?$|^send$|^object_id$|^should$)/
       end
-      
+
       attr_reader :proxy_primary, :proxy_secondary
-      
+
       def initialize(primary, secondary, primary_method)
         @proxy_primary = primary
         @proxy_secondary = secondary
         @primary_method = primary_method
       end
-      
+
       # We really want to show the secondary object
       # as the primary is just a thin layer on top
       def inspect
         proxy_secondary.inspect
       end
-      
+
       # Used to give away this is really a proxy
       def proxy_class
         Jubjub::Response::Proxy
       end
-      
+
     private
 
       def method_missing(name, *args, &block)
@@ -38,7 +38,7 @@ module Jubjub
           proxy_secondary.send(name, *args, &block)
         end
       end
-      
+
     end
   end
 end

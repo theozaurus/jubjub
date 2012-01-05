@@ -1,9 +1,9 @@
 class Jubjub::Pubsub::ItemCollection
-  
+
   attr_reader :jid, :node
-  
+
   include Jubjub::Helpers::Collection
-  
+
   def initialize(jid,node,connection)
     @jid = Jubjub::Jid.new jid
     @node = node
@@ -15,14 +15,14 @@ class Jubjub::Pubsub::ItemCollection
     when Fixnum
       list[item_num]
     else
-      search_list{|i| i.item_id == item_num }        
+      search_list{|i| i.item_id == item_num }
     end
   end
 
 private
-  
+
   def list
     @list ||= @connection.pubsub.retrieve_items( @jid, @node )
   end
-  
+
 end

@@ -2,16 +2,16 @@
 # and delaying expensive operations until
 # required
 class Jubjub::Muc::Collection
-   
+
   attr_reader :jid
-  
+
   include Jubjub::Helpers::Collection
-  
+
   def initialize(jid, connection)
     @jid = Jubjub::Jid.new(jid)
     @connection = connection
   end
-  
+
   def create(node, nick = nil, &block)
     full_jid = Jubjub::Jid.new node, @jid.domain, nick || @connection.jid.node
 
@@ -24,9 +24,9 @@ class Jubjub::Muc::Collection
       # Instant room
       result = @connection.muc.create full_jid
     end
-    
+
   end
-  
+
   def [](jid_node_num)
     case jid_node_num
     when Fixnum
@@ -38,11 +38,11 @@ class Jubjub::Muc::Collection
       search_list( Jubjub::Muc.new( j, nil, @connection ) ){|m| m.jid == j }
     end
   end
-  
+
 private
-  
+
   def list
     @list ||= @connection.muc.list @jid
   end
-  
+
 end

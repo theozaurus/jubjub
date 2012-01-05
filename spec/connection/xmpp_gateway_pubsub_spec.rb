@@ -237,7 +237,7 @@ describe Jubjub::Connection::XmppGateway do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new, '123'
           i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should == '123'
-          i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\"/>"
+          i.data.should be_equivalent_to('<x xmlns="jabber:x:data" type="submit"/>')
         end
 
       end
@@ -246,11 +246,11 @@ describe Jubjub::Connection::XmppGateway do
         use_vcr_cassette 'pubsub publish with string payload', :record => :new_episodes
 
         it "should return a Jubjub::Pubsub::Item" do
-          item = "<x xmlns=\"jabber:x:data\" type=\"submit\"><field var=\"foo\"><value>true</value></field></x>"
+          item = '<x xmlns="jabber:x:data" type="submit"><field var="foo"><value>true</value></field></x>'
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', item
           i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
-          i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
+          i.data.should be_equivalent_to( item )
         end
 
       end
@@ -262,7 +262,7 @@ describe Jubjub::Connection::XmppGateway do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new({ :foo => {:type => "boolean", :value => true }})
           i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
-          i.data.should == "<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>true</value>\n  </field>\n</x>"
+          i.data.should be_equivalent_to('<x xmlns="jabber:x:data" type="submit"><field var="foo"><value>true</value></field></x>')
         end
 
       end

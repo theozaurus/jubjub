@@ -1,4 +1,5 @@
 require "equivalent-xml"
+require "cgi"
 require "vcr/request_matcher"
 require "vcr/http_stubbing_adapters/common"
 require "vcr/http_stubbing_adapters/webmock"
@@ -31,7 +32,7 @@ module VCR
       def body_to_stanza(body)
         if body
           # Split body at '&', then split each element at '=' creating the key and value. Unescape these and turn into hash.
-          params = Hash[ body.split("&").map{|c| c.split('=').map{|v| URI.unescape(v) } } ]
+          params = Hash[ body.split("&").map{|c| c.split('=').map{|v| CGI.unescape(v) } } ]
           # Pull out stanza attribute and turn into Nokogiri XML document
           Nokogiri::XML params["stanza"]
         end

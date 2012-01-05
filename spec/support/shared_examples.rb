@@ -52,16 +52,7 @@ shared_examples_for "any data form" do
       config.should be_a_kind_of subject.class
       config.fields.should == params
     end
-    
-    it "should throw an error if :type is missing" do
-      expect{ 
-        subject.class.new( "foo" => { :value => "1", :label => "Foo" } )
-      }.to raise_error( 
-        Jubjub::ArgumentError,
-        ":type is missing for foo"
-      )
-    end
-    
+
     it "should throw an error if an unknown key is sent" do
       expect{ 
         subject.class.new( "foo" => { :type => "boolean", :value => "1", :label => "Foo", :oh_no => nil } )

@@ -73,8 +73,8 @@ module Jubjub
     end
 
     def check_config(config)
-      required = [:type]
-      understood = required + [:label, :options, :value]    
+      required = []
+      understood = required + [:type, :label, :options, :value]
 
       raise Jubjub::ArgumentError.new("please initialize with a hash of the format { 'foo' => {:type => 'boolean', :value => false, :label => 'Fooey'} }") unless config.is_a? Hash
 

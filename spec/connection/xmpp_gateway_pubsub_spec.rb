@@ -262,7 +262,7 @@ describe Jubjub::Connection::XmppGateway do
           i = @connection.pubsub.publish 'pubsub.theo-template.local', 'node_1', Jubjub::DataForm.new({ :foo => {:type => "boolean", :value => true }})
           i.should be_a_kind_of_response_proxied Jubjub::Pubsub::Item
           i.item_id.should be_a_kind_of String
-          i.data.should be_equivalent_to('<x xmlns="jabber:x:data" type="submit"><field var="foo"><value>true</value></field></x>')
+          i.data.should be_equivalent_to('<x xmlns="jabber:x:data" type="submit"><field var="foo" type="boolean"><value>true</value></field></x>')
         end
 
       end
@@ -308,8 +308,8 @@ describe Jubjub::Connection::XmppGateway do
 
       it "should return array of Pubsub::Item when successful" do
         expected = [
-          Jubjub::Pubsub::Item.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'abc', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"foo\">\n            <value>false</value>\n          </field>\n        </x>", @connection ),
-          Jubjub::Pubsub::Item.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'efg', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field var=\"bar\">\n            <value>true</value>\n          </field>\n        </x>", @connection )
+          Jubjub::Pubsub::Item.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'abc', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field type=\"boolean\" var=\"foo\">\n            <value>false</value>\n          </field>\n        </x>", @connection ),
+          Jubjub::Pubsub::Item.new( 'pubsub.theo-template.local', 'node_retrieve_items', 'efg', "<x xmlns=\"jabber:x:data\" type=\"submit\">\n          <field type=\"boolean\" var=\"bar\">\n            <value>true</value>\n          </field>\n        </x>", @connection )
         ]
 
         @connection.pubsub.retrieve_items( 'pubsub.theo-template.local', 'node_retrieve_items' ).should == expected

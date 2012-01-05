@@ -451,6 +451,53 @@ shared_examples_for "any data form" do
         subject.to_builder.should be_a_kind_of Nokogiri::XML::Builder
       end
 
+      it "should return a valid dataform" do
+        @config = subject.class.new(
+          "boolean_field" => { :type => "boolean", :value => "1", :label => "Boolean Field" },
+          "text_single_field" => { :type => "text-single", :value => "", :label => "Text Single Field" },
+          "list_single_field" => {
+            :type    => "list-single",
+            :value   => "first",
+            :label   => "List Single Field",
+            :options => [
+              { :value => "first",  :label => "The first option" },
+              { :value => "second", :label => "The second option" } ],
+          },
+          "jid_multi_field" => {
+            :type  => "jid-multi",
+            :label => "Jid Multi Field",
+            :value => ["first@jid", "second@jid"]
+          },
+          "unknown_field" => { :value => "0", :label => "Unknown Field" }
+        )
+
+        @xml = @config.to_builder.to_xml
+
+        @expected_xml = <<-EOS
+<?xml version="1.0"?>
+<x xmlns="jabber:x:data" type="submit">
+  <field var="boolean_field" type="boolean">
+    <value>true</value>
+  </field>
+  <field var="text_single_field"  type="text-single">
+    <value></value>
+  </field>
+  <field var="list_single_field" type="list-single">
+    <value>first</value>
+  </field>
+  <field var="jid_multi_field" type="jid-multi">
+    <value>first@jid</value>
+    <value>second@jid</value>
+  </field>
+  <field var="unknown_field">
+    <value>0</value>
+  </field>
+</x>
+EOS
+
+        @xml.should be_equivalent_to( @expected_xml )
+      end
+
       it "should be possible to merge this into another Nokogiri::Builder" do
         doc = Nokogiri::XML::Builder.new{|xml|
           xml.foo {

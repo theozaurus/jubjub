@@ -3,7 +3,7 @@
   request: !ruby/struct:VCR::Request 
     method: :post
     uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22pubsub.theo-template.local%22%3e%0a%20%20%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%22%3e%0a%20%20%20%20%3cpublish%20node%3d%22node_1%22%3e%0a%20%20%20%20%20%20%3citem%3e%0a%20%20%20%20%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%3e%0a%20%20%20%20%20%20%20%20%20%20%3cfield%20var%3d%22foo%22%3e%0a%20%20%20%20%20%20%20%20%20%20%20%20%3cvalue%3etrue%3c%2fvalue%3e%0a%20%20%20%20%20%20%20%20%20%20%3c%2ffield%3e%0a%20%20%20%20%20%20%20%20%3c%2fx%3e%0a%20%20%20%20%20%20%3c%2fitem%3e%0a%20%20%20%20%3c%2fpublish%3e%0a%20%20%3c%2fpubsub%3e%0a%3c%2fiq%3e%0a
+    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22pubsub.theo-template.local%22%3e%3cpubsub%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fpubsub%22%3e%3cpublish%20node%3d%22node_1%22%3e%3citem%3e%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%3e%3cfield%20type%3d%22boolean%22%20var%3d%22foo%22%3e%3cvalue%3etrue%3c%2fvalue%3e%3c%2ffield%3e%3c%2fx%3e%3c%2fitem%3e%3c%2fpublish%3e%3c%2fpubsub%3e%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -17,10 +17,10 @@
       content-length: 
       - "280"
     body: |
-      <iq type="result" id="blather004d" to="theozaurus@theo-template.local/39957870571305901244463676" from="pubsub.theo-template.local">
+      <iq type="result" id="blather06b1" to="theozaurus@theo-template.local/12410623761325794466810696" from="pubsub.theo-template.local">
         <pubsub xmlns="http://jabber.org/protocol/pubsub">
           <publish node="node_1">
-            <item id="519DC0A278204"/>
+            <item id="52DC1F7BD2334"/>
           </publish>
         </pubsub>
       </iq>

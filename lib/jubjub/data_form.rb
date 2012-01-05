@@ -51,8 +51,11 @@ module Jubjub
     def to_builder(root_doc=Nokogiri::XML.parse(""))
       Nokogiri::XML::Builder.with(root_doc) do |xml|
         xml.x_('xmlns' => 'jabber:x:data', :type => 'submit') {
-          settings.each{|name,values|
-            xml.field_('var' => name){
+          fields.each{|name,settings|
+            options = {'var' => name}
+            options[:type] = settings[:type] if settings[:type]
+            values = Array[self[name]].flatten
+            xml.field_(options){
               values.each {|v|
                 xml.value_ v
               }

@@ -263,6 +263,85 @@ module Jubjub
           }.proxy_result
         end
 
+        # http://xmpp.org/extensions/xep-0060.html#owner-subscriptions
+        # <iq type='get'
+        #     from='hamlet@denmark.lit/elsinore'
+        #     to='pubsub.shakespeare.lit'
+        #     id='subman1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <subscriptions node='princely_musings'/>
+        #   </pubsub>
+        # </iq>
+        #
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     to='hamlet@denmark.lit/elsinore'
+        #     id='subman1'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <subscriptions node='princely_musings'>
+        #       <subscription jid='hamlet@denmark.lit' subscription='subscribed'/>
+        #       <subscription jid='polonius@denmark.lit' subscription='unconfigured'/>
+        #       <subscription jid='bernardo@denmark.lit' subscription='subscribed' subid='123-abc'/>
+        #       <subscription jid='bernardo@denmark.lit' subscription='subscribed' subid='004-yyy'/>
+        #     </subscriptions>
+        #   </pubsub>
+        # </iq>
+        def subscriptions(jid, node)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'get') {
+              xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
+                xml.subscriptions_('node' => node)
+              }
+            }
+          end
+
+          Jubjub::Response.new( write request ){|stanza|
+            stanza.xpath(
+              '/iq[@type="result"]/pubsub_owner:pubsub/pubsub_owner:subscriptions/pubsub_owner:subscription',
+              namespaces
+            ).map{|item|
+              subscriber   = Jubjub::Jid.new(item.attr('jid'))
+              subid        = item.attr('subid')
+              subscription = item.attr('subscription')
+              Jubjub::Pubsub::Subscription.new jid, node, subscriber, subid, subscription, @connection
+            }
+          }.proxy_result
+        end
+
+        # http://xmpp.org/extensions/xep-0060.html#owner-subscriptions-multi
+        # <iq type='set'
+        #     from='hamlet@denmark.lit/elsinore'
+        #     to='pubsub.shakespeare.lit'
+        #     id='subman3'>
+        #   <pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>
+        #     <subscriptions node='princely_musings'>
+        #       <subscription jid='polonius@denmark.lit' subscription='none'/>
+        #       <subscription jid='bard@shakespeare.lit' subscription='subscribed'/>
+        #     </subscriptions>
+        #   </pubsub>
+        # </iq>
+        #
+        # <iq type='result'
+        #     from='pubsub.shakespeare.lit'
+        #     id='subman3'/>
+        def set_subscriptions(jid, node, subscriptions)
+          request = Nokogiri::XML::Builder.new do |xml|
+            xml.iq_(:to => jid, :type => 'set') {
+              xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
+                xml.subscriptions_('node' => node) {
+                  subscriptions.each{|j,s|
+                    xml.subscription(:jid => j, :subscription => s)
+                  }
+                }
+              }
+            }
+          end
+
+          Jubjub::Response.new( write request ){|stanza|
+            stanza.xpath( '/iq[@type="result"]' ).any?
+          }.proxy_result
+        end
+
         # http://xmpp.org/extensions/xep-0060.html#subscriber-unsubscribe
         # <iq type='set'
         #     from='francisco@denmark.lit/barracks'

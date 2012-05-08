@@ -135,6 +135,14 @@ Examples
     u.pubsub.subscribe('new_thing')
     => #<Jubjub::Pubsub::Subscription:0x101effd60 @service="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">
     
+    # Subscribe someone else to the node
+    u.pubsub["new_thing"].subscriptions["foo@jabber.org"].subscribe
+    => true
+    
+    # Show subscriptions
+    u.pubsub["new_thing"].subscriptions
+    => [#<Jubjub::Pubsub::Subscription:0x7f99fda76c48 @jid="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">, #<Jubjub::Pubsub::Subscription:0x7f99fda76770 @jid="pubsub.jabber.org" @node="new_thing" @subscriber="foo@jabber.org" @subid="53876943C09A7" @subscription="subscribed">] 
+    
     # Publish to a node
     item = u.pubsub['node_1'].publish(Jubjub::DataForm.new({:foo => {:type => 'boolean', :value => 'bar'}}))
     => #<Jubjub::Pubsub::Item:0x101f2e9f8 @jid="pubsub.jabber.org" @node="node_1" @item_id="519DCAA72FFD6" @data="<x xmlns=\"jabber:x:data\" type=\"submit\">\n  <field var=\"foo\">\n    <value>false</value>\n  </field>\n</x>"> 

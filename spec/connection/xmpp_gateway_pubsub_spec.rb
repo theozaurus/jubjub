@@ -184,6 +184,47 @@ describe Jubjub::Connection::XmppGateway do
 
     end
 
+    describe "subscriptions" do
+      use_vcr_cassette 'pubsub subscriptions', :record => :new_episodes
+
+      before do
+        @connection.pubsub.create 'pubsub.xmpp.local', 'node_1'
+        @connection.pubsub.subscribe 'pubsub.xmpp.local', 'node_1'
+      end
+
+      it "return an array of Jubjub::Pubsub::Subscription" do
+        subscriptions = @connection.pubsub.subscriptions( 'pubsub.xmpp.local', 'node_1' )
+
+        subscriptions.should be_a_kind_of_response_proxied Array
+
+        subscriptions.map{|item| item.subscriber.to_s }.to_set.should == ['theozaurus@xmpp.local'].to_set
+      end
+
+      after do
+        # Clean up the node
+        @connection.pubsub.destroy 'pubsub.xmpp.local', 'node_1'
+      end
+    end
+
+    describe "set_subscriptions" do
+      use_vcr_cassette 'pubsub set_subscriptions', :record => :new_episodes
+
+      before do
+        @connection.pubsub.create 'pubsub.xmpp.local', 'node_1'
+      end
+
+      it "return true" do
+        result = @connection.pubsub.set_subscriptions( 'pubsub.xmpp.local', 'node_1', {'theozaurus@xmpp.local' => 'subscribed', 'foo@xmpp.local' => 'subscribed'} )
+
+        result.should be_true
+      end
+
+      after do
+        # Clean up the node
+        @connection.pubsub.destroy 'pubsub.xmpp.local', 'node_1'
+      end
+    end
+
     describe "unsubscribe" do
 
       use_vcr_cassette 'pubsub unsubscribe', :record => :new_episodes

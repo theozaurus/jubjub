@@ -43,6 +43,10 @@ class Jubjub::Pubsub
     ItemCollection.new jid, node, @connection
   end
 
+  def subscriptions
+    SubscriptionCollection.new jid, node, @connection
+  end
+
   def affiliations
     AffiliationCollection.new jid, node, @connection
   end

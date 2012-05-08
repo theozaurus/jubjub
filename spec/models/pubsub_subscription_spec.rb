@@ -3,13 +3,16 @@ require 'spec_helper'
 describe Jubjub::Pubsub::Subscription do
 
   def pubsub_subscription_factory(override = {})
+    connection = mock
+    connection.stub(:jid).and_return(Jubjub::Jid.new "theo@foo.com")
+
     options = {
       :jid          => Jubjub::Jid.new("pubsub.foo.com"),
       :node         => 'node',
       :subscriber   => Jubjub::Jid.new("theo@foo.com"),
       :subid        => nil,
       :subscription => 'subscribed',
-      :connection   => "SHHHH CONNECTION OBJECT"
+      :connection   => connection
     }.merge( override )
 
     Jubjub::Pubsub::Subscription.new(
@@ -99,14 +102,63 @@ describe Jubjub::Pubsub::Subscription do
       end
     end
 
-    describe "unsubscribe" do
-      it "should call pubsub.unsubscribe on connection" do
-        @mock_connection = mock
-        @mock_connection.stub_chain :pubsub, :unsubscribe
-        @mock_connection.pubsub.should_receive(:unsubscribe).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', '123' )
+    describe "when subscriber matches the connections jid" do
+      describe "subscribe" do
+        it "should call pubsub.unsubscribe on connection" do
+          @mock_connection = mock
+          @mock_connection.stub_chain :pubsub, :unsubscribe
+          @mock_connection.stub(:jid).and_return(Jubjub::Jid.new "theo@foo.com")
+          @mock_connection.pubsub.should_receive(:subscribe).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node' )
 
-        p = pubsub_subscription_factory :jid => 'pubsub.foo.com', :node => 'node', :subid => '123', :connection => @mock_connection
-        p.unsubscribe
+          p = pubsub_subscription_factory :jid => 'pubsub.foo.com', :subscriber => "theo@foo.com", :node => 'node', :connection => @mock_connection
+          p.subscribe
+        end
+      end
+
+      describe "unsubscribe" do
+        it "should call pubsub.unsubscribe on connection" do
+          @mock_connection = mock
+          @mock_connection.stub_chain :pubsub, :unsubscribe
+          @mock_connection.stub(:jid).and_return(Jubjub::Jid.new "theo@foo.com")
+          @mock_connection.pubsub.should_receive(:unsubscribe).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', '123' )
+
+          p = pubsub_subscription_factory :jid => 'pubsub.foo.com', :subscriber => "theo@foo.com", :node => 'node', :subid => '123', :connection => @mock_connection
+          p.unsubscribe
+        end
+      end
+    end
+
+    describe "when the subscribe does not match the connections jid" do
+      describe "subscribe" do
+        it "should call pubsub.set_subscriptions on connection" do
+          @mock_connection = mock
+          @mock_connection.stub_chain :pubsub, :subscribe
+          @mock_connection.stub(:jid).and_return(Jubjub::Jid.new "theo@foo.com")
+          @mock_connection.pubsub.should_receive(:set_subscriptions).with(
+            Jubjub::Jid.new( 'pubsub.foo.com' ),
+            'node',
+            { "ed@foo.com" => "subscribed" }
+          )
+
+          p = pubsub_subscription_factory :jid => 'pubsub.foo.com', :subscriber => "ed@foo.com", :node => 'node', :connection => @mock_connection
+          p.subscribe
+        end
+      end
+
+      describe "unsubscribe" do
+        it "should call pubsub.set_subscriptions on connection" do
+          @mock_connection = mock
+          @mock_connection.stub_chain :pubsub, :unsubscribe
+          @mock_connection.stub(:jid).and_return(Jubjub::Jid.new "theo@foo.com")
+          @mock_connection.pubsub.should_receive(:set_subscriptions).with(
+            Jubjub::Jid.new( 'pubsub.foo.com' ),
+            'node',
+            { "ed@foo.com" => "none" }
+          )
+
+          p = pubsub_subscription_factory :jid => 'pubsub.foo.com', :subscriber => "ed@foo.com", :node => 'node', :subid => '123', :connection => @mock_connection
+          p.unsubscribe
+        end
       end
     end
 

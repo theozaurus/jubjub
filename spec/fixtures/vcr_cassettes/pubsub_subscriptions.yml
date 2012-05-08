@@ -1,0 +1,86 @@
+---
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3Ciq+to%3D%22pubsub.xmpp.local%22+type%3D%22set%22%3E%3Cpubsub+xmlns%3D%22http%3A%2F%2Fjabber.org%2Fprotocol%2Fpubsub%22%3E%3Ccreate+node%3D%22node_1%22%2F%3E%3C%2Fpubsub%3E%3C%2Fiq%3E%0A
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: ! '...'
+    headers:
+      content-length:
+      - '213'
+      content-type:
+      - application/xml
+    body: ! "<iq type=\"result\" id=\"blather0008\" from=\"pubsub.xmpp.local\" to=\"theozaurus@xmpp.local/9052660771336491388947206\">\n
+      \ <pubsub xmlns=\"http://jabber.org/protocol/pubsub\">\n    <create node=\"node_1\"/>\n
+      \ </pubsub>\n</iq>\n"
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3Ciq+to%3D%22pubsub.xmpp.local%22+type%3D%22set%22%3E%3Cpubsub+xmlns%3D%22http%3A%2F%2Fjabber.org%2Fprotocol%2Fpubsub%22%3E%3Csubscribe+node%3D%22node_1%22+jid%3D%22theozaurus%40xmpp.local%22%2F%3E%3C%2Fpubsub%3E%3C%2Fiq%3E%0A
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: ! '...'
+    headers:
+      content-length:
+      - '295'
+      content-type:
+      - application/xml
+    body: ! "<iq type=\"result\" id=\"blather000a\" from=\"pubsub.xmpp.local\" to=\"theozaurus@xmpp.local/9052660771336491388947206\">\n
+      \ <pubsub xmlns=\"http://jabber.org/protocol/pubsub\">\n    <subscription jid=\"theozaurus@xmpp.local\"
+      subscription=\"subscribed\" subid=\"53877F7D1A032\" node=\"node_1\"/>\n  </pubsub>\n</iq>\n"
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3Ciq+to%3D%22pubsub.xmpp.local%22+type%3D%22get%22%3E%3Cpubsub+xmlns%3D%22http%3A%2F%2Fjabber.org%2Fprotocol%2Fpubsub%23owner%22%3E%3Csubscriptions+node%3D%22node_1%22%2F%3E%3C%2Fpubsub%3E%3C%2Fiq%3E%0A
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: ! '...'
+    headers:
+      content-length:
+      - '344'
+      content-type:
+      - application/xml
+    body: ! "<iq type=\"result\" id=\"blather000c\" from=\"pubsub.xmpp.local\" to=\"theozaurus@xmpp.local/9052660771336491388947206\">\n
+      \ <pubsub xmlns=\"http://jabber.org/protocol/pubsub#owner\">\n    <subscriptions
+      node=\"node_1\">\n      <subscription jid=\"theozaurus@xmpp.local\" subscription=\"subscribed\"
+      subid=\"53877F7D1A032\"/>\n    </subscriptions>\n  </pubsub>\n</iq>\n"
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :post
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3Ciq+to%3D%22pubsub.xmpp.local%22+type%3D%22set%22%3E%3Cpubsub+xmlns%3D%22http%3A%2F%2Fjabber.org%2Fprotocol%2Fpubsub%23owner%22%3E%3Cdelete+node%3D%22node_1%22%2F%3E%3C%2Fpubsub%3E%3C%2Fiq%3E%0A
+    headers:
+      content-type:
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: ! '...'
+    headers:
+      content-length:
+      - '115'
+      content-type:
+      - application/xml
+    body: ! '<iq type="result" id="blather000e" from="pubsub.xmpp.local" to="theozaurus@xmpp.local/9052660771336491388947206"/>
+
+'
+    http_version: '1.1'

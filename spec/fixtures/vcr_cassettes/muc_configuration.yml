@@ -2,8 +2,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3cpresence%20to%3d%22configuration%40conference.theo-template.local%2fnick%22%3e%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%3c%2fpresence%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3cpresence%20to%3d%22configuration%40conference.xmpp.local%2fnick%22%3e%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%3c%2fpresence%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -23,8 +23,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22configuration%40conference.theo-template.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%3c%2fquery%3e%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22configuration%40conference.xmpp.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%3c%2fquery%3e%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -38,7 +38,7 @@
       content-length: 
       - "213"
     body: |
-      <iq type="result" id="blather054f" from="configuration@conference.theo-template.local" to="theozaurus@theo-template.local/31288884971325786255308395">
+      <iq type="result" id="blather054f" from="configuration@conference.xmpp.local" to="theozaurus@xmpp.local/31288884971325786255308395">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -46,8 +46,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3cpresence%20to%3d%22configuration%40conference.theo-template.local%2fnick%22%3e%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%3c%2fpresence%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3cpresence%20to%3d%22configuration%40conference.xmpp.local%2fnick%22%3e%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%3c%2fpresence%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -67,8 +67,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3ciq%20type%3d%22get%22%20to%3d%22configuration%40conference.theo-template.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%2f%3e%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3ciq%20type%3d%22get%22%20to%3d%22configuration%40conference.xmpp.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%2f%3e%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -82,11 +82,11 @@
       content-length: 
       - "3733"
     body: |
-      <iq type="result" id="blather0551" from="configuration@conference.theo-template.local" to="theozaurus@theo-template.local/31288884971325786255308395">
+      <iq type="result" id="blather0551" from="configuration@conference.xmpp.local" to="theozaurus@xmpp.local/31288884971325786255308395">
         <query xmlns="http://jabber.org/protocol/muc#owner">
           <instructions>You need an x:data capable client to configure room</instructions>
           <x xmlns="jabber:x:data" type="form">
-            <title>Configuration of room configuration@conference.theo-template.local</title>
+            <title>Configuration of room configuration@conference.xmpp.local</title>
             <field type="hidden" var="FORM_TYPE">
               <value>http://jabber.org/protocol/muc#roomconfig</value>
             </field>
@@ -179,8 +179,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22configuration%40conference.theo-template.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%3cdestroy%2f%3e%3c%2fquery%3e%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3ciq%20type%3d%22set%22%20to%3d%22configuration%40conference.xmpp.local%22%3e%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%3cdestroy%2f%3e%3c%2fquery%3e%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -194,7 +194,7 @@
       content-length: 
       - "213"
     body: |
-      <iq type="result" id="blather0553" from="configuration@conference.theo-template.local" to="theozaurus@theo-template.local/31288884971325786255308395">
+      <iq type="result" id="blather0553" from="configuration@conference.xmpp.local" to="theozaurus@xmpp.local/31288884971325786255308395">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 

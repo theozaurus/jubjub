@@ -2,8 +2,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_1%40conference.theo-template.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_1%40conference.xmpp.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -23,8 +23,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_1%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_1%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -38,7 +38,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0045" from="modify_affiliations_1@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0045" from="modify_affiliations_1@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -46,8 +46,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_1%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22owner%22%20jid%3d%22ed%40theo-template.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_1%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22owner%22%20jid%3d%22ed%40xmpp.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -61,7 +61,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0047" from="modify_affiliations_1@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0047" from="modify_affiliations_1@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#admin"/>
       </iq>
 
@@ -69,8 +69,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_1%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_1%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -84,7 +84,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0049" from="modify_affiliations_1@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0049" from="modify_affiliations_1@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -92,8 +92,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_2%40conference.theo-template.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_2%40conference.xmpp.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -113,8 +113,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_2%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_2%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -128,7 +128,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather004b" from="modify_affiliations_2@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather004b" from="modify_affiliations_2@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -136,8 +136,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_2%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22owner%22%20jid%3d%22ed%40theo-template.local%22%2f%3e%0a%20%20%20%20%3citem%20affiliation%3d%22member%22%20jid%3d%22bob%40theo-template.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_2%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22owner%22%20jid%3d%22ed%40xmpp.local%22%2f%3e%0a%20%20%20%20%3citem%20affiliation%3d%22member%22%20jid%3d%22bob%40xmpp.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -151,7 +151,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather004d" from="modify_affiliations_2@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather004d" from="modify_affiliations_2@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#admin"/>
       </iq>
 
@@ -159,8 +159,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_2%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_2%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -174,7 +174,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather004f" from="modify_affiliations_2@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather004f" from="modify_affiliations_2@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -182,8 +182,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_3%40conference.theo-template.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_3%40conference.xmpp.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -203,8 +203,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_3%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_3%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -218,7 +218,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0051" from="modify_affiliations_3@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0051" from="modify_affiliations_3@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -226,8 +226,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_3%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22owner%22%20jid%3d%22ed%40theo-template.local%22%2f%3e%0a%20%20%20%20%3citem%20affiliation%3d%22member%22%20jid%3d%22bob%40theo-template.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_3%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22owner%22%20jid%3d%22ed%40xmpp.local%22%2f%3e%0a%20%20%20%20%3citem%20affiliation%3d%22member%22%20jid%3d%22bob%40xmpp.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -241,7 +241,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0053" from="modify_affiliations_3@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0053" from="modify_affiliations_3@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#admin"/>
       </iq>
 
@@ -249,8 +249,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_3%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_3%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -264,7 +264,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0055" from="modify_affiliations_3@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0055" from="modify_affiliations_3@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -272,8 +272,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_4%40conference.theo-template.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3cpresence%20to%3d%22modify_affiliations_4%40conference.xmpp.local%2ffoo%22%3e%0a%20%20%3cx%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%22%2f%3e%0a%3c%2fpresence%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -293,8 +293,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_4%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_4%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cx%20xmlns%3d%22jabber%3ax%3adata%22%20type%3d%22submit%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -308,7 +308,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather0057" from="modify_affiliations_4@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather0057" from="modify_affiliations_4@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 
@@ -316,8 +316,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_4%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22WIBBLE%22%20jid%3d%22ed%40theo-template.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_4%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23admin%22%3e%0a%20%20%20%20%3citem%20affiliation%3d%22WIBBLE%22%20jid%3d%22ed%40xmpp.local%22%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -331,9 +331,9 @@
       content-length: 
       - "492"
     body: |
-      <iq type="error" id="blather0059" from="modify_affiliations_4@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="error" id="blather0059" from="modify_affiliations_4@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#admin">
-          <item affiliation="WIBBLE" jid="ed@theo-template.local"/>
+          <item affiliation="WIBBLE" jid="ed@xmpp.local"/>
         </query>
         <error code="406" type="modify">
           <not-acceptable xmlns="urn:ietf:params:xml:ns:xmpp-stanzas"/>
@@ -345,8 +345,8 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://theozaurus%40theo-template.local:secret@127.0.0.1:8000/
-    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_4%40conference.theo-template.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
+    uri: http://theozaurus%40xmpp.local:secret@127.0.0.1:8000/
+    body: stanza=%3c%3fxml%20version%3d%221.0%22%3f%3e%0a%3ciq%20type%3d%22set%22%20to%3d%22modify_affiliations_4%40conference.xmpp.local%22%3e%0a%20%20%3cquery%20xmlns%3d%22http%3a%2f%2fjabber.org%2fprotocol%2fmuc%23owner%22%3e%0a%20%20%20%20%3cdestroy%2f%3e%0a%20%20%3c%2fquery%3e%0a%3c%2fiq%3e%0a
     headers: 
       content-type: 
       - application/x-www-form-urlencoded
@@ -360,7 +360,7 @@
       content-length: 
       - "220"
     body: |
-      <iq type="result" id="blather005b" from="modify_affiliations_4@conference.theo-template.local" to="theozaurus@theo-template.local/1140458601131054813180286">
+      <iq type="result" id="blather005b" from="modify_affiliations_4@conference.xmpp.local" to="theozaurus@xmpp.local/1140458601131054813180286">
         <query xmlns="http://jabber.org/protocol/muc#owner"/>
       </iq>
 

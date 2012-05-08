@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Jubjub::Connection::XmppGateway do
 
   before do
-    @connection = Jubjub::Connection::XmppGateway.new('theozaurus@theo-template.local','secret', {:host => '127.0.0.1', :port => '8000'})
+    @connection = Jubjub::Connection::XmppGateway.new('theozaurus@xmpp.local','secret', {:host => '127.0.0.1', :port => '8000'})
   end
 
   describe "muc" do
@@ -13,9 +13,9 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc create', :record => :new_episodes
 
       it "return a Jubjub::Muc" do
-        @room = @connection.muc.create( Jubjub::Jid.new 'room@conference.theo-template.local/nick' )
+        @room = @connection.muc.create( Jubjub::Jid.new 'room@conference.xmpp.local/nick' )
         @room.should be_a_kind_of_response_proxied Jubjub::Muc
-        @room.jid.should == Jubjub::Jid.new( 'room@conference.theo-template.local' )
+        @room.jid.should == Jubjub::Jid.new( 'room@conference.xmpp.local' )
       end
 
       after do
@@ -31,9 +31,9 @@ describe Jubjub::Connection::XmppGateway do
       it "return a Jubjub::Muc" do
         @config = Jubjub::Muc::Configuration.new("allow_query_users" => { :type => "boolean", :value => "1", :label => "Allow users to query other users" })
 
-        @room = @connection.muc.create( Jubjub::Jid.new( 'room@conference.theo-template.local/nick' ), @config )
+        @room = @connection.muc.create( Jubjub::Jid.new( 'room@conference.xmpp.local/nick' ), @config )
         @room.should be_a_kind_of_response_proxied Jubjub::Muc
-        @room.jid.should == Jubjub::Jid.new( 'room@conference.theo-template.local' )
+        @room.jid.should == Jubjub::Jid.new( 'room@conference.xmpp.local' )
       end
 
       after do
@@ -47,7 +47,7 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc configuration', :record => :new_episodes
 
       before do
-        @jid = Jubjub::Jid.new 'configuration@conference.theo-template.local/nick'
+        @jid = Jubjub::Jid.new 'configuration@conference.xmpp.local/nick'
         @room = @connection.muc.create @jid
       end
 
@@ -107,19 +107,19 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc list', :record => :new_episodes
 
       before do
-        @connection.muc.create Jubjub::Jid.new( 'test_1@conference.theo-template.local/nick' )
-        @connection.muc.create Jubjub::Jid.new( 'test_2@conference.theo-template.local/nick' )
+        @connection.muc.create Jubjub::Jid.new( 'test_1@conference.xmpp.local/nick' )
+        @connection.muc.create Jubjub::Jid.new( 'test_2@conference.xmpp.local/nick' )
       end
 
       it "return an array of Jubjub::Muc" do
-        list = @connection.muc.list( Jubjub::Jid.new 'conference.theo-template.local' )
+        list = @connection.muc.list( Jubjub::Jid.new 'conference.xmpp.local' )
         list.should be_a_kind_of_response_proxied Array
 
         list.size.should eql(2)
         list[0].should be_a_kind_of Jubjub::Muc
-        list[0].jid.should == Jubjub::Jid.new( 'test_1@conference.theo-template.local' )
+        list[0].jid.should == Jubjub::Jid.new( 'test_1@conference.xmpp.local' )
         list[1].should be_a_kind_of Jubjub::Muc
-        list[1].jid.should == Jubjub::Jid.new( 'test_2@conference.theo-template.local' )
+        list[1].jid.should == Jubjub::Jid.new( 'test_2@conference.xmpp.local' )
       end
 
     end
@@ -129,7 +129,7 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc retrieve_affiliations', :record => :new_episodes
 
       before do
-        @room_full = Jubjub::Jid.new( 'retrieve_affiliations@conference.theo-template.local/theozaurus' )
+        @room_full = Jubjub::Jid.new( 'retrieve_affiliations@conference.xmpp.local/theozaurus' )
         @room = Jubjub::Jid.new @room_full.node, @room_full.domain
 
         @connection.muc.create @room_full
@@ -141,7 +141,7 @@ describe Jubjub::Connection::XmppGateway do
 
         list.size.should eql(1)
         list[0].should be_a_kind_of Jubjub::Muc::Affiliation
-        list[0].jid.should == Jubjub::Jid.new( 'theozaurus@theo-template.local' )
+        list[0].jid.should == Jubjub::Jid.new( 'theozaurus@xmpp.local' )
         list[0].role.should == nil
         list[0].affiliation.should == "owner"
         list[0].nick.should == nil
@@ -158,12 +158,12 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc modify_affiliations', :record => :new_episodes
 
       it "should return true when successful" do
-        room_full = Jubjub::Jid.new 'modify_affiliations_1@conference.theo-template.local/foo'
+        room_full = Jubjub::Jid.new 'modify_affiliations_1@conference.xmpp.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
 
         affiliation = muc_affiliation_factory :muc_jid => room,
-                                              :jid => 'ed@theo-template.local',
+                                              :jid => 'ed@xmpp.local',
                                               :affiliation => 'owner',
                                               :connection => @connection
 
@@ -173,16 +173,16 @@ describe Jubjub::Connection::XmppGateway do
       end
 
       it "should allow affiliations to be specified as an array" do
-        room_full = Jubjub::Jid.new 'modify_affiliations_2@conference.theo-template.local/foo'
+        room_full = Jubjub::Jid.new 'modify_affiliations_2@conference.xmpp.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
 
         affiliation_1 = muc_affiliation_factory :muc_jid => room,
-                                                :jid => 'ed@theo-template.local',
+                                                :jid => 'ed@xmpp.local',
                                                 :affiliation => 'owner',
                                                 :connection => @connection
         affiliation_2 = muc_affiliation_factory :muc_jid => room,
-                                                :jid => 'bob@theo-template.local',
+                                                :jid => 'bob@xmpp.local',
                                                 :affiliation => 'member',
                                                 :connection => @connection
 
@@ -192,16 +192,16 @@ describe Jubjub::Connection::XmppGateway do
       end
 
       it "should allow affiliations to be specified as arguments" do
-        room_full = Jubjub::Jid.new 'modify_affiliations_3@conference.theo-template.local/foo'
+        room_full = Jubjub::Jid.new 'modify_affiliations_3@conference.xmpp.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
 
         affiliation_1 = muc_affiliation_factory :muc_jid => room,
-                                                :jid => 'ed@theo-template.local',
+                                                :jid => 'ed@xmpp.local',
                                                 :affiliation => 'owner',
                                                 :connection => @connection
         affiliation_2 = muc_affiliation_factory :muc_jid => room,
-                                                :jid => 'bob@theo-template.local',
+                                                :jid => 'bob@xmpp.local',
                                                 :affiliation => 'member',
                                                 :connection => @connection
 
@@ -211,12 +211,12 @@ describe Jubjub::Connection::XmppGateway do
       end
 
       it "should return false if unsuccessful" do
-        room_full = Jubjub::Jid.new 'modify_affiliations_4@conference.theo-template.local/foo'
+        room_full = Jubjub::Jid.new 'modify_affiliations_4@conference.xmpp.local/foo'
         room = Jubjub::Jid.new room_full.node, room_full.domain
         @connection.muc.create room_full
 
         affiliation = muc_affiliation_factory :muc_jid => room,
-                                              :jid => 'ed@theo-template.local',
+                                              :jid => 'ed@xmpp.local',
                                               :affiliation => 'WIBBLE',
                                               :connection => @connection
 
@@ -231,8 +231,8 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc message', :record => :new_episodes
 
       before do
-        @full_jid = Jubjub::Jid.new 'message@conference.theo-template.local/nick'
-        @jid = Jubjub::Jid.new 'message@conference.theo-template.local'
+        @full_jid = Jubjub::Jid.new 'message@conference.xmpp.local/nick'
+        @jid = Jubjub::Jid.new 'message@conference.xmpp.local'
         @connection.muc.create(@full_jid)
       end
 
@@ -253,8 +253,8 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc exit', :record => :new_episodes
 
       before do
-        @full_jid = Jubjub::Jid.new 'extra@conference.theo-template.local/nick'
-        @jid = Jubjub::Jid.new 'extra@conference.theo-template.local'
+        @full_jid = Jubjub::Jid.new 'extra@conference.xmpp.local/nick'
+        @jid = Jubjub::Jid.new 'extra@conference.xmpp.local'
         @connection.muc.create(@full_jid)
       end
 
@@ -276,8 +276,8 @@ describe Jubjub::Connection::XmppGateway do
       use_vcr_cassette 'muc destroy', :record => :new_episodes
 
       before do
-        @jid      = Jubjub::Jid.new 'extra@conference.theo-template.local'
-        @full_jid = Jubjub::Jid.new 'extra@conference.theo-template.local/nick'
+        @jid      = Jubjub::Jid.new 'extra@conference.xmpp.local'
+        @full_jid = Jubjub::Jid.new 'extra@conference.xmpp.local/nick'
         @connection.muc.create @full_jid
       end
 

@@ -133,22 +133,26 @@ module Jubjub
         #   </pubsub>
         # </iq>
         def default_configuration(jid)
-          request = Nokogiri::XML::Builder.new do |xml|
-            xml.iq_(:to => jid, :type => 'get') {
-              xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
-                xml.default_
+          cache_key = [jid.to_s, @connection.jid.to_s].join(" ")
+          @default_configuration ||= {}
+          @default_configuration[cache_key] ||= begin
+            request = Nokogiri::XML::Builder.new do |xml|
+              xml.iq_(:to => jid, :type => 'get') {
+                xml.pubsub_('xmlns' => namespaces['pubsub_owner']) {
+                  xml.default_
+                }
               }
-            }
-          end
+            end
 
-          Jubjub::Response.new( write request ){|stanza|
-            config = stanza.xpath(
-              # Pull out required parts
-              "/iq[@type='result']/pubsub_owner:pubsub/pubsub_owner:default/x_data:x[@type='form']",
-              namespaces
-            )
-            Jubjub::Pubsub::Configuration.new config if config
-          }.proxy_result
+            Jubjub::Response.new( write request ){|stanza|
+              config = stanza.xpath(
+                # Pull out required parts
+                "/iq[@type='result']/pubsub_owner:pubsub/pubsub_owner:default/x_data:x[@type='form']",
+                namespaces
+              )
+              Jubjub::Pubsub::Configuration.new config if config
+            }.proxy_result
+          end
         end
 
         # http://xmpp.org/extensions/xep-0060.html#owner-delete

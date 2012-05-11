@@ -53,6 +53,30 @@ shared_examples_for "any data form" do
       config.fields.should == params
     end
 
+    it "should understand hash with string keys" do
+      params = {
+        "muc#roomconfig_allowvisitornickchange" => { "type" => "boolean", "value" => "1", "label" => "Allow visitors to change nickname" },
+        "muc#roomconfig_roomname" => { "type" => "text-single", "value" => "", "label" => "Room title" },
+        "muc#roomconfig_whois" => {
+          "type"    => "list-single",
+          "value"   => "moderators",
+          "label"   => "Present real Jabber IDs to",
+          "options" => [
+            { "value" =>"moderators", "label" => "moderators only" },
+            { "value" =>"anyone",     "label" => "anyone" } ],
+        },
+        "muc#roomconfig_passwordprotectedroom" => { "type" => "boolean", "value" => "0", "label" => "Make room password protected" }
+      }
+
+      config = subject.class.new params
+
+      config.should be_a_kind_of subject.class
+
+      config["muc#roomconfig_roomname"].should eql("")
+      config["muc#roomconfig_allowvisitornickchange"].should be_true
+      config["muc#roomconfig_whois"].should be_true
+    end
+
     it "should throw an error if an unknown key is sent" do
       expect{
         subject.class.new( "foo" => { :type => "boolean", :value => "1", :label => "Foo", :oh_no => nil } )

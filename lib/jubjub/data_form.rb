@@ -6,7 +6,11 @@ module Jubjub
     attr_reader :fields
 
     def initialize(config={})
-      config = convert_xml config if config.respond_to? :xpath
+      if config.respond_to? :xpath
+        config = convert_xml config
+      else
+        config = clean_config config if config.is_a? Hash
+      end
 
       check_config config
 
@@ -75,6 +79,11 @@ module Jubjub
       ) if invalid_options.any?
     end
 
+    def clean_config(config)
+      # Symbolize the keys
+      Hash[config.map{|name, arguments| [name, recursive_symbolize_keys(arguments)] }]
+    end
+
     def check_config(config)
       required = []
       understood = required + [:type, :label, :options, :value]
@@ -117,6 +126,31 @@ module Jubjub
 
     def namespaces
       { 'x_data' => 'jabber:x:data' }
+    end
+
+    def recursive_symbolize_keys(hash)
+      new_hash = symbolize_keys hash
+      new_hash.each{|k,v|
+        r = case v
+        when Array
+          v.map{|vv| vv.is_a?( Hash ) ? recursive_symbolize_keys(vv) : vv }
+        when Hash
+          recursive_symbolize_keys v
+        else
+          v
+        end
+        new_hash[k] = r
+      }
+
+      new_hash
+    end
+
+    def symbolize_keys(hash)
+      new_hash = {}
+      hash.keys.each do |key|
+        new_hash[(key.to_sym rescue key) || key] = hash[key]
+      end
+      new_hash
     end
 
   end

@@ -96,6 +96,14 @@ describe Jubjub::Pubsub::Collection do
           config.should == @config
         }
       end
+
+      it "should use supplied configuration if available and no block is given" do
+        @config = Jubjub::Pubsub::Configuration.new( "foo" => { :type => "boolean", :value => "1", :label => "Foo" } )
+
+        @mock_connection.pubsub.should_receive( :create ).with( Jubjub::Jid.new( 'pubsub.foo.com' ), 'node', @config )
+
+        Jubjub::Pubsub::Collection.new( "pubsub.foo.com", @mock_connection ).create( 'node', @config)
+      end
     end
 
     describe "[]" do

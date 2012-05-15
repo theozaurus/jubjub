@@ -12,13 +12,15 @@ class Jubjub::Muc::Collection
     @connection = connection
   end
 
-  def create(node, nick = nil, &block)
+  def create(node, nick = nil, config = nil, &block)
     full_jid = Jubjub::Jid.new node, @jid.domain, nick || @connection.jid.node
 
     if block_given?
       # Reserved room
-      config = @connection.muc.configuration full_jid
-      yield config
+      c = @connection.muc.configuration full_jid
+      yield c
+      @connection.muc.create full_jid, c
+    elsif config
       @connection.muc.create full_jid, config
     else
       # Instant room

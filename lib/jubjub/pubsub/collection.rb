@@ -16,8 +16,7 @@ class Jubjub::Pubsub::Collection
     @connection.pubsub.create jid, node
   end
 
-  def create(node, &block)
-    config = nil
+  def create(node, config = nil, &block)
     if block_given?
       # Configure node
       config = @connection.pubsub.default_configuration jid

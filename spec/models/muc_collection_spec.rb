@@ -29,6 +29,14 @@ describe Jubjub::Muc::Collection do
         }
       end
 
+      it "should use supplied configuration if available and no block is given" do
+        @config = Jubjub::Muc::Configuration.new( "allow_query_users" => { :type => "boolean", :value => "1", :label => "Foo" } )
+
+        @mock_connection.muc.should_receive( :create ).with( Jubjub::Jid.new( 'hello@conference.foo.com/admin' ), @config )
+
+        Jubjub::Muc::Collection.new("conference.foo.com", @mock_connection).create("hello", nil, @config)
+      end
+
     end
 
     describe "jid" do

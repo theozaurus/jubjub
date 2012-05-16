@@ -21,6 +21,10 @@ module Jubjub
       end
     end
 
+    def bare
+      Jubjub::Jid.new node, domain
+    end
+
     def to_s
       (node ? "#{node}@" : '') + domain + (resource ? "/#{resource}" : '')
     end

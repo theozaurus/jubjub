@@ -90,6 +90,24 @@ describe Jubjub::Jid do
 
   describe "instance method" do
 
+    describe "bare" do
+
+      it "should return Jubjub::Jid without the resource" do
+        j = Jubjub::Jid.new 'bob', 'foo.bar', 'wibble'
+        j.bare.should == Jubjub::Jid.new( 'bob', 'foo.bar' )
+
+        j = Jubjub::Jid.new 'bob', 'foo.bar'
+        j.bare.should == Jubjub::Jid.new( 'bob', 'foo.bar' )
+
+        j = Jubjub::Jid.new nil, 'foo.bar', 'wibble'
+        j.bare.should == Jubjub::Jid.new( nil, 'foo.bar' )
+
+        j = Jubjub::Jid.new nil, 'foo.bar', nil
+        j.bare.should == Jubjub::Jid.new( nil, 'foo.bar' )
+      end
+
+    end
+
     describe "to_s" do
 
       it "should support just a domain" do

@@ -47,8 +47,17 @@ class Jubjub::Pubsub
     SubscriptionCollection.new jid, node, @connection
   end
 
+  def add_subscriptions(subscriptions)
+    @connection.pubsub.set_subscriptions( jid, node, subscriptions )
+  end
+
   def affiliations
     AffiliationCollection.new jid, node, @connection
+  end
+
+  def add_affiliations(affiliations)
+    a = affiliations.map{|j,a| Jubjub::Pubsub::Affiliation.new( jid, node, j, a, @connection ) }
+    @connection.pubsub.modify_affiliations( jid, node, a )
   end
 
   def uri

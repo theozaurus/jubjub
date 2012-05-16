@@ -39,6 +39,35 @@ describe Jubjub::Muc do
       end
     end
 
+    describe "affiliations" do
+      it "create an affiliations collection" do
+        muc_jid = Jubjub::Jid.new("hello@conference.foo.com")
+        nick = nil
+        connection = mock
+
+        Jubjub::Muc::AffiliationCollection.should_receive(:new).with(muc_jid, connection).and_return("TA DA")
+
+        result = Jubjub::Muc.new(muc_jid,nick,connection).affiliations
+        result.should == "TA DA"
+      end
+    end
+
+    describe "add_affiliations" do
+      it "call add_affiliations" do
+        jid = Jubjub::Jid.new("hello@conference.foo.com")
+        affiliations = {"foo@foo.com" => "owner"}
+        connection = mock
+
+        connection.stub_chain( :muc, :modify_affiliations ).with(
+          jid,
+          [Jubjub::Muc::Affiliation.new( jid, "foo@foo.com", nil, nil, "owner", @connection )]
+        ).and_return("TA DA")
+
+        result = Jubjub::Muc.new(jid,nil,connection).add_affiliations affiliations
+        result.should == "TA DA"
+      end
+    end
+
     describe "message" do
 
       before do

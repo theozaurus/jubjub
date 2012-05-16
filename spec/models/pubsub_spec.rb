@@ -82,6 +82,64 @@ describe Jubjub::Pubsub do
 
     end
 
+    describe "subscriptions" do
+      it "create an subscriptions collection" do
+        jid = Jubjub::Jid.new("pubsub.foo.com")
+        node = "node"
+        connection = mock
+
+        Jubjub::Pubsub::SubscriptionCollection.should_receive(:new).with(jid, node, connection).and_return("TA DA")
+
+        result = Jubjub::Pubsub.new(jid,node,connection).subscriptions
+        result.should == "TA DA"
+      end
+    end
+
+    describe "add_subscriptions" do
+      it "call set_subscriptions" do
+        jid = Jubjub::Jid.new("pubsub.foo.com")
+        node = "node"
+        subscriptions = {"foo@foo.com" => "subscribed"}
+        connection = mock
+
+        connection.stub_chain( :pubsub, :set_subscriptions ).with( jid, node, subscriptions ).and_return("TA DA")
+
+        result = Jubjub::Pubsub.new(jid,node,connection).add_subscriptions subscriptions
+        result.should == "TA DA"
+      end
+    end
+
+    describe "affiliations" do
+      it "create an affiliations collection" do
+        jid = Jubjub::Jid.new("pubsub.foo.com")
+        node = "node"
+        connection = mock
+
+        Jubjub::Pubsub::AffiliationCollection.should_receive(:new).with(jid, node, connection).and_return("TA DA")
+
+        result = Jubjub::Pubsub.new(jid,node,connection).affiliations
+        result.should == "TA DA"
+      end
+    end
+
+    describe "add_affiliations" do
+      it "call add_affiliations" do
+        jid = Jubjub::Jid.new("pubsub.foo.com")
+        node = "node"
+        affiliations = {"foo@foo.com" => "owner"}
+        connection = mock
+
+        connection.stub_chain( :pubsub, :modify_affiliations ).with(
+          jid,
+          node,
+          [Jubjub::Pubsub::Affiliation.new( jid, node, "foo@foo.com", "owner", connection )]
+        ).and_return("TA DA")
+
+        result = Jubjub::Pubsub.new(jid,node,connection).add_affiliations affiliations
+        result.should == "TA DA"
+      end
+    end
+
     describe "publish" do
 
       before do

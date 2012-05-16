@@ -29,6 +29,11 @@ module Jubjub
       AffiliationCollection.new jid, @connection
     end
 
+    def add_affiliations(affiliations)
+      a = affiliations.map{|j,a| Jubjub::Muc::Affiliation.new( jid, j, nil, nil, a, @connection ) }
+      @connection.muc.modify_affiliations( jid, a )
+    end
+
     def roles
       RoleCollection.new jid, @connection
     end

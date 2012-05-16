@@ -87,6 +87,9 @@ Examples
     # or
     room.affiliations['bot@test.com'].set('admin')
     => true
+    # or
+    room.add_affiliations {"bot@test.com" => "admin", "theozaurus@jabber.org" => "owner"}
+    => true
     
     # Message a room
     room.message "I am an invisible man."
@@ -139,6 +142,10 @@ Examples
     u.pubsub["new_thing"].subscriptions["foo@jabber.org"].subscribe
     => true
     
+    # Subscribe multiple jids
+    u.pubsub["new_thing"].add_subscriptions {"foo@jabber.org" => "subscribed", "bar@jabber.org" => "subscribed"}
+    => true
+
     # Show subscriptions
     u.pubsub["new_thing"].subscriptions
     => [#<Jubjub::Pubsub::Subscription:0x7f99fda76c48 @jid="pubsub.jabber.org" @node="new_thing" @subscriber="theozaurus@jabber.org" @subid="5129CD7935528" @subscription="subscribed">, #<Jubjub::Pubsub::Subscription:0x7f99fda76770 @jid="pubsub.jabber.org" @node="new_thing" @subscriber="foo@jabber.org" @subid="53876943C09A7" @subscription="subscribed">] 
@@ -188,6 +195,9 @@ Examples
     => true
     # or
     u.pubsub['node_1'].affiliations['theozaurus@jabber.org'].set('publisher')
+    => true
+    # or
+    u.pubsub['node_1'].add_affiliations {'theozaurus@jabber.org' => 'publisher, "foo@bar.com" => "owner"}
     => true
         
     # Purge a node
@@ -264,7 +274,6 @@ TODO
 ====
 
  - MUC user role control
- - Bulk Pubsub and MUC affiliation control
  - Better exception handling
  - Service discovery
  - Operations that are not IQ based, such as rosters and two way messaging
